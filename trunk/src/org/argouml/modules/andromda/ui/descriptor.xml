@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  The frame is used only in the sample application use for the tests -->
+<frame name="mainframe" id="mainFrame" size="800,600" bundle="org.argouml.i18n.andromda" resizable="true" title="Sample MDA Launcher" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+  <menubar id="MENUBAR" name="menubar" constraints="BorderLayout.NORTH" Bounds="0,0,640,30" Visible="true">
+    <!-- File menu -->
+    <menu id="menu_file" mnemonic="VK_F" text="File">
+      <menuitem id="mi_open" text="Open..." macos_openfile="true" mnemonic="VK_O" action="openAction"/>
+      <menuitem id="mi_save" text="Save" mnemonic="VK_S" action="saveAction" disabled="true"/>
+      <menuitem id="mi_saveAs" text="Save as..." action="saveAsAction" disabled="true"/>
+      <menuitem id="mi_close" text="Close" mnemonic="VK_W" action="closeAction" disabled="true"/>
+      <separator/>
+      <menuitem id="mi_exit" mnemonic="VK_Q" text="Exit" macos_quit="true" action="quitAction"/>
+    </menu>
+    <!-- Tool menu -->
+    <menu id="menu_tools" mnemonic="VK_T" text="Tools">
+      <menuitem id="mi_newProj" macos_openapp="true" text="andromda.menu.create" action="createProject"/>
+      <menuitem id="mi_maven" text="andromda.menu.launch" action="launchMaven"/>
+    </menu>
+    
+  </menubar>  
+    <desktoppane constraints="BorderLayout.CENTER">
+      <internalframe id="prefsFrame" resizable="true" location="10,10" preferredSize="320,280" size="320,280" title="Preferences" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+	<panel layout="FlowLayout(FlowLayout.CENTER)" id="andromdaSettings" visible="true">
+		<vbox>
+			<hbox>
+				<label labelfor="mavenHome" text="andromda.settings.maven.home"
+					preferredSize="80,20" size="80,20" />
+				<textfield id="mavenHome" columns="25"
+					preferredSize="180,20" size="180,20" />
+				<button text="Browse" action="chooseMavenHomeFolder"></button>
+			</hbox>
+			<hbox>
+				<label labelfor="andromdaHome" text="andromda.settings.andromda.home"
+					preferredSize="80,20" size="80,20" />
+				<textfield id="andromdaHome" columns="25"
+					preferredSize="180,20" size="180,20" />
+				<button text="Browse"
+					action="chooseAndroMdaHomeFolder">
+				</button>
+			</hbox>
+			<!-- 
+				<hbox>
+				<label labelfor="antHome" text="Ant Home" preferredSize="100,20" size="100,20"/>
+				<textfield id="antHome" columns="30" preferredSize="200,20" size="200,20"/>			 	
+				<button text="Browse" action="selectFolder"></button>
+				</hbox>
+				<hbox>
+				<label labelfor="j2eeHome" text="J2EE Home" preferredSize="100,20" size="100,20"/>
+				<textfield id="j2eeHome" columns="30" preferredSize="200,20" size="200,20"/>			 	
+				<button text="Browse" action="selectFolder"></button>
+				</hbox>
+			-->
+		</vbox>
+	</panel>
+      </internalframe>
+      <internalframe id="toolsFrame" resizable="true" location="10,10" preferredSize="640,480" size="640,480" title="Project" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+	<panel layout="FlowLayout(FlowLayout.CENTER)" id="mavenPanel" preferredSize="640,480" size="640,480">
+		<vbox>
+			<hbox preferredSize="640,300" size="640,300" border="TitledBorder(Maven output)">
+				<scrollpane horizontalScrollBarPolicy="0" verticalScrollBarPolicy="0" >
+				<textarea id="mavenOutput" columns="80" rows="10" lineWrap="true"/>
+				</scrollpane>
+			</hbox>
+			<hbox preferredSize="640,150" size="640,150" border="TitledBorder(Maven error)">
+				<scrollpane horizontalScrollBarPolicy="0" verticalScrollBarPolicy="0" >
+				<textarea id="mavenError" columns="80" rows="5" lineWrap="true"/>
+				</scrollpane>
+			</hbox>
+		</vbox>
+	</panel>
+      </internalframe>
+    </desktoppane>
+  
+</frame>
