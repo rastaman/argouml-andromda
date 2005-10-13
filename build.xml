@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!-- ===========================================================================
-$Id$
+$ Id $
 // Copyright (c) 2005 The Regents of the University of California. All
 // Rights Reserved. Permission to use, copy, modify, and distribute this
 // software and its documentation without fee, and without a written
@@ -36,7 +36,7 @@ and unpacked in a directory argouml/build alongside this one. Like this:
 argouml-andromda/build.xml <- This file.
 argouml/build/argouml-model.jar
 argouml/build/argouml.jar
-argouml/build/argouml-mdr.jar <-- The module depend also on ArgoUML-MDR
+argouml/build/argouml-mdr.jar <- The module depend also on ArgoUML-MDR
 argouml/build/log4j.jar
 argouml/build/xml-apis.jar
 argouml/build/xercesImpl.jar
