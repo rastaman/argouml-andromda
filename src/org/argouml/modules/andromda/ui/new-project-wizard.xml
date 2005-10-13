@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog size="450,380" name="project.title" bundle="org.argouml.i18n.andromda-new-project" constraints="BorderLayout.CENTER">
+
+  <wizardpage id="NEW_PROJECT_GENERAL" preferredSize="440,360" size="440,360" visible="true" 
+  	name="newProject1" title="New AndroMDA Project"
+  	layout="FlowLayout(FlowLayout.CENTER)">    
+  	<vbox>
+          <textarea text="project.labels.author" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
+          <textfield id="projectCreator" size="420,20" preferredSize="420,20" border="EtchedBorder"/>
+          <textarea text="project.labels.app.name" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
+          <textfield id="projectName" border="EtchedBorder"/>
+          <textarea text="project.labels.app.id" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
+          <textfield id="projectId" border="EtchedBorder"/>
+          <textarea text="project.labels.app.version" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
+          <textfield id="projectVersion" border="EtchedBorder"/>
+          <textarea text="project.labels.app.package" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />          
+          <textfield id="baseProjectPackage" border="EtchedBorder"/>
+          <textarea text="project.labels.app.type" 
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />          
+          <textfield id="projectType" border="EtchedBorder"/>
+	</vbox>      
+  </wizardpage>
+
+  <wizardpage id="NEW_PROJECT_WAR" preferredSize="440,360" size="440,360" visible="false" name="newProject2" title="EAR/WAR Properties">
+      <vbox>          
+          <textarea text="project.labels.app.persistence"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />   
+          <textfield id="persistenceType" size="420,20" preferredSize="420,20" border="EtchedBorder"/>
+          <textarea text="project.labels.app.jbpm"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />   
+          <textfield id="jbpm" border="EtchedBorder"/>
+          <textarea text="project.labels.hibernate.version"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />   
+          <textfield id="hibernateVersion" border="EtchedBorder"/>
+          <textarea text="project.labels.app.webapp"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />   
+          <textfield id="webComponent" border="EtchedBorder"/>
+          <textarea text="project.labels.app.ws"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />   
+          <textfield id="exposeAsWebService" border="EtchedBorder"/>
+        </vbox>
+  </wizardpage>
+
+  <wizardpage id="NEW_PROJECT_FINISH" preferredSize="440,360" size="440,360" 
+  	visible="false" name="newProject5" title="Finish">
+      <vbox>
+          <textarea text="project.labels.app.parentFolder"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />  
+          <hbox>
+          <textfield id="parentFolder" size="400,20" preferredSize="400,20" border="EtchedBorder"/>
+          <button id="parentFolderBt" action="chooseParentFolder" size="30,20" preferredSize="30,20" text="..." enabled="true"/>
+          </hbox>
+    	  <textarea text="project.labels.thanks"
+          	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />  
+      </vbox>
+  </wizardpage>
+
+</dialog>
