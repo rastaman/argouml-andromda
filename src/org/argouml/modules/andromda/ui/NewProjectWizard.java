@@ -61,8 +61,8 @@ public class NewProjectWizard extends WizardDialog {
 		super(AndroMDAModule.getArgoUMLParentFrame(),WIZARD_DESCRIPTOR);	
 		setValues(projectProperties);
          wizard = this;
-         parentFolder = (JTextField) swix.find("parentFolder");
-         parentFolderBt = (JButton) swix.find("parentFolderBt");
+         parentFolder = (JTextField) swingEngine.find("parentFolder");
+         parentFolderBt = (JButton) swingEngine.find("parentFolderBt");
          parentFolderBt.setAction(chooseParentFolder);
 		LOG.info("Wizard is initialized.");	
 	}
