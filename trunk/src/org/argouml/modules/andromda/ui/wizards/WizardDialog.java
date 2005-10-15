@@ -55,7 +55,7 @@ public abstract class WizardDialog extends JDialog {
     
     private Logger LOG = Logger.getLogger(WizardDialog.class);
 
-	protected SwingEngine swix = new SwingEngine(this);
+	protected SwingEngine swingEngine = new SwingEngine(this);
 
 	protected Vector wizardListener = new Vector();
 	
@@ -87,7 +87,7 @@ public abstract class WizardDialog extends JDialog {
 	
 	public JPanel getPage(String id) {
 		try {
-			return (JPanel) swix.find(id);
+			return (JPanel) swingEngine.find(id);
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}
@@ -96,12 +96,13 @@ public abstract class WizardDialog extends JDialog {
 	
 	public WizardDialog(Frame owner,String wizardDescriptor) {
         super(owner);
+        swingEngine.setClassLoader(this.getClass().getClassLoader());        
 		setModal(true);
 		next = new JButton("Next");
 		previous = new JButton("Previous");
 		finish = new JButton("Finish");
-		jp.add(next);
 		jp.add(previous);
+		jp.add(next);
 		jp.add(finish);
 		this.getContentPane().add(jp, BorderLayout.SOUTH);
 		this.getContentPane().add(jp1, BorderLayout.CENTER);
@@ -111,12 +112,12 @@ public abstract class WizardDialog extends JDialog {
 		try {
             ConverterLibrary.getInstance().register(WizardColorConverter.TEMPLATE, 
                     new WizardColorConverter());
-			swix.getTaglib().registerTag("wizardpage",WizardPage.class);
-			swix.cleanup();
+			swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);
+			swingEngine.cleanup();
             URL descriptor = this.getClass().getResource(wizardDescriptor);
-			swix.insert(descriptor,this);
+			swingEngine.insert(descriptor,this);
 			_title=getName();
-			Iterator i = swix.getAllComponentItertor();
+			Iterator i = swingEngine.getAllComponentItertor();
 			while (i.hasNext()) {
 				Component c = (Component) i.next();
 				if (c instanceof WizardPage)
@@ -206,7 +207,7 @@ public abstract class WizardDialog extends JDialog {
 
 	public String getId(Component c) {
 		String result = null;
-		Map ids = swix.getIdMap();
+		Map ids = swingEngine.getIdMap();
 		Iterator i = ids.keySet().iterator();
 		while (i.hasNext()) {
 			String id = (String) i.next();
@@ -242,7 +243,7 @@ public abstract class WizardDialog extends JDialog {
 	 */
 	public Map getValues() {
 		Map values = new HashMap();
-		Iterator k = swix.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
 		Component o;
 		String id;
 		while (k.hasNext()) {
@@ -263,7 +264,7 @@ public abstract class WizardDialog extends JDialog {
 	 */
 	public Map getValuesForPage(int pageCounter) {
 		Map values = new HashMap();
-		Iterator k = swix.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
 		Component o;
 		String id;
 		while (k.hasNext()) {
@@ -282,7 +283,7 @@ public abstract class WizardDialog extends JDialog {
 	 * @param values
 	 */
 	public void setValues(Map values) {
-		Iterator k = swix.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
 		Component o = null;
 		String id = null;
 		while (k.hasNext()) {
@@ -302,7 +303,7 @@ public abstract class WizardDialog extends JDialog {
 	 * @param values
 	 */
 	public void setValuesForPage(int pageCounter,Map values) {
-		Iterator k = swix.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
 		Component o = null;
 		String id = null;
 		while (k.hasNext()) {
