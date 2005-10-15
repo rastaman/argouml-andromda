@@ -39,7 +39,8 @@ public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface,
     private JMenuItem launchMavenMenuItem;
 
     public AndroMDAModule() {
-        swingEngine = new SwingEngine( this );        
+        swingEngine = new SwingEngine( this );
+        swingEngine.setClassLoader(this.getClass().getClassLoader());
         try {
             // Load the menu
             URL uiDef = this.getClass().getResource("descriptor.xml");
