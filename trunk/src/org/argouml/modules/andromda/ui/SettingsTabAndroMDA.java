@@ -116,6 +116,7 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
         setLayout(new BorderLayout());
         swingEngine = new SwingEngine( this );
         URL uiDef = this.getClass().getResource("descriptor.xml");
+        swingEngine.setClassLoader(this.getClass().getClassLoader());        
         LOG.info("SettingsTabAndroMDA being created...");
         try {
             swingEngine.render( uiDef );
