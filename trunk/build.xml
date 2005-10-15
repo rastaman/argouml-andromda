@@ -42,7 +42,6 @@ argouml/build/xml-apis.jar
 argouml/build/xercesImpl.jar
 etc.
 
-
 ============================================================================ -->
 
 <project name="andromda-module" default="usage" basedir=".">
@@ -66,9 +65,9 @@ etc.
 
 		<property name="argo.root" value="../argouml" />
 
-		<property name="module.root" value="${argo.root}/modules/${argo.module.name}" />
+		<property name="module.root" value="${basedir}" />
 		<property name="argo.src.dir" value="${argo.root}/src_new" />
-		<property name="module.src.dir" value="${module.root}/src" />
+		<property name="module.src.dir" value="src" />
 
 		<property name="argo.build.dir" value="${argo.root}/build" />
 		<property name="argo.build.src" value="${argo.root}/src_new" />
@@ -76,7 +75,7 @@ etc.
 		<property name="jdom.jar" value="jdom-1.0.jar" />
 		<property name="swixml.jar" value="swixml-1.5.jar" />
 
-		<property name="module.lib.dir" value="${module.root}/lib" />
+		<property name="module.lib.dir" value="lib" />
 		<property name="module.lib.jars" value="${jdom.jar},${swixml.jar}" />
 
 		<property name="classpath" value="${module.lib.dir}/${jdom.jar}:${module.lib.dir}/${swixml.jar}:${argo.build.dir}/ocl-argo.jar:${argo.build.dir}/gef.jar:${argo.build.dir}/antlrall.jar:${argo.build.dir}/log4j.jar" />
