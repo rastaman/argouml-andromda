@@ -142,7 +142,6 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Compiles the source directory                                       -->
 	<!-- =================================================================== -->
-	<!-- <target name="compile" depends="generateparser,prepare"> -->
 
 	<target name="compile" depends="prepare">
 
@@ -175,42 +174,45 @@ etc.
 	<!-- Creates the class package                                           -->
 	<!-- =================================================================== -->
 	<target name="package" depends="compile">
+		<manifest file="${module.build.dest}/${manifest}">
+			<attribute name="Class-Path" value="${swixml.jar} ${jdom.jar}" />
+		</manifest>
 		<antcall target="add-manifest-entry">
-			<param name="entry.name" value="org/argouml/modules/andromda/ui/AndroMDAModule.class"/>
-			<param name="entry.ext" value="module.andromda.ui.launcher"/>
-			<param name="plugin.name" value="ArgoUML AndroMDA Plugin"/>
+			<param name="entry.name" value="org/argouml/modules/andromda/ui/AndroMDAModule.class" />
+			<param name="entry.ext" value="module.andromda.ui.launcher" />
+			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
 		</antcall>
 		<antcall target="add-manifest-entry">
-			<param name="entry.name" value="org/argouml/modules/andromda/ui/SettingsTabAndroMDA.class"/>
-			<param name="entry.ext" value="module.andromda.ui.settings"/>
-			<param name="plugin.name" value="ArgoUML AndroMDA Plugin"/>
+			<param name="entry.name" value="org/argouml/modules/andromda/ui/SettingsTabAndroMDA.class" />
+			<param name="entry.ext" value="module.andromda.ui.settings" />
+			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
 		</antcall>
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
-				    <include name="**/*.xml"/>
-				    <include name="**/*.properties"/>
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
 			</fileset>
 		</copy>
 		<jar jarfile="${module.jarfile}" basedir="${module.build.dest}" includes="org/argouml/**" excludes="${manifest}" manifest="${module.build.dest}/${manifest}" />
 	</target>
 
-	
-    <!-- - - - - - - - - - - - - - - - - - 
+
+	<!-- - - - - - - - - - - - - - - - - - 
           target: add-manifest-entry                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="add-manifest-entry">
-	<manifest file="${module.build.dest}/${manifest}" mode="update">
-		<section name="${entry.name}">
-			<attribute name="Extension-name" value="${entry.ext}" />
-			<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module" />
-			<attribute name="Specification-Version" value="${version}" />
-			<attribute name="Specification-Vendor" value="University of California" />
-			<attribute name="Implementation-Title" value="${plugin.name}" />
-			<attribute name="Implementation-Version" value="${version} ${TODAY}" />
-			<attribute name="Implementation-Vendor" value="${user.name}" />
-		</section>
-	</manifest>
-    </target>
+	<target name="add-manifest-entry">
+		<manifest file="${module.build.dest}/${manifest}" mode="update">
+			<section name="${entry.name}">
+				<attribute name="Extension-name" value="${entry.ext}" />
+				<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module" />
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Vendor" value="University of California" />
+				<attribute name="Implementation-Title" value="${plugin.name}" />
+				<attribute name="Implementation-Version" value="${version} ${TODAY}" />
+				<attribute name="Implementation-Vendor" value="${user.name}" />
+			</section>
+		</manifest>
+	</target>
 
 
 	<!-- =================================================================== -->
@@ -233,7 +235,7 @@ etc.
 					<include name="antlrall.jar" />
 					<include name="log4j.jar" />
 					<include name="gef.jar" />
-					<include name="swidgets.jar"/>
+					<include name="swidgets.jar" />
 				</fileset>
 			</classpath>
 
