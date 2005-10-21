@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+ Copyright (c) 2005 The Regents of the University of California. All
+ Rights Reserved. Permission to use, copy, modify, and distribute this
+ software and its documentation without fee, and without a written
+ agreement is hereby granted, provided that the above copyright notice
+ and this paragraph appear in all copies.  This software program and
+ documentation are copyrighted by The Regents of the University of
+ California. The software program and documentation are supplied "AS
+ IS", without any accompanying services from The Regents. The Regents
+ does not warrant that the operation of the program will be
+ uninterrupted or error-free. The end-user understands that the program
+ was developed for research purposes and is advised not to rely
+ exclusively on the program for any reason.  IN NO EVENT SHALL THE
+ UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE. THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+ PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
+UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ -->
+
+<project name="ArgoUML AndroMDA Module">
+	<!-- Page Title -->
+	<title>ArgoUML AndroMDA Module</title>
+	<body>
+		<!-- Links defined across the top right of the site -->
+		<links>
+			<item name="ArgoUML"
+				href="http://argouml.tigris.org/" />
+			<item name="ArgoUML-MDR"
+				href="http://argouml-mdr.tigris.org/" />
+			<item name="ArgoUML-AndroMDA Module"
+				href="http://argouml-andromda.tigris.org/" />
+			<item name="AndroMDA"
+				href="http://www.andromda.org/" />
+			<item name="PDF Documentation"
+				href="http://argouml-andromda.tigris.org/doc/aa-manual.pdf" />
+		</links>
+		<!-- Menu in the Left Navigation -->
+		<menu name="Module documentation">
+			<!-- Standalone item -->
+			<item name="Main" href="/index.html" />
+			<item name="Deliverables" href="/distributions.html" />
+
+			<!-- Uncollapsed Submenu -->
+			<item name="Documentation">
+				<item name="Installation" href="/installation.html" />
+				<item name="Configuration" href="/setup.html" />
+				<item name="Usage" href="/usage.html" />
+				<item name="Options" href="/options.html" />
+				<item name="Bugs and limitations" href="/bugs.html" />
+				<item name="Todo" href="/todo.html" />
+			</item>
+		</menu>
+	</body>
+</project>
