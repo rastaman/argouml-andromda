@@ -181,11 +181,13 @@ etc.
 			<param name="entry.name" value="org/argouml/modules/andromda/ui/AndroMDAModule.class" />
 			<param name="entry.ext" value="module.andromda.ui.launcher" />
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
+			<param name="the.manifest" value="${module.build.dest}/${manifest}"/>
 		</antcall>
 		<antcall target="add-manifest-entry">
 			<param name="entry.name" value="org/argouml/modules/andromda/ui/SettingsTabAndroMDA.class" />
 			<param name="entry.ext" value="module.andromda.ui.settings" />
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
+			<param name="the.manifest" value="${module.build.dest}/${manifest}"/>
 		</antcall>
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
@@ -200,8 +202,8 @@ etc.
 	<!-- - - - - - - - - - - - - - - - - - 
           target: add-manifest-entry                      
          - - - - - - - - - - - - - - - - - -->
-	<target name="add-manifest-entry">
-		<manifest file="${module.build.dest}/${manifest}" mode="update">
+	<target name="add-manifest-entry" depends="init">
+		<manifest file="${the.manifest}" mode="update">
 			<section name="${entry.name}">
 				<attribute name="Extension-name" value="${entry.ext}" />
 				<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module" />
