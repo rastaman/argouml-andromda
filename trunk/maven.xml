@@ -1,0 +1,32 @@
+<project xmlns:j="jelly:core" xmlns:ant="jelly:ant">
+
+ <!-- Add entries for the classes declared as Modules in the manifest file --> 
+ <preGoal name="jar:jar">
+    <ant:ant dir="${basedir}" antfile="build.xml" target="add-manifest-entry">
+	<ant:property name="entry.name" value="org/argouml/modules/andromda/ui/AndroMDAModule.class" />
+	<ant:property name="entry.ext" value="module.andromda.ui.launcher" />
+	<ant:property name="plugin.name" value="ArgoUML AndroMDA Plugin" />
+	<ant:property name="the.manifest" value="${maven.build.dir}/${pom.artifactId}-manifest.mf" />
+    </ant:ant>
+    <ant:ant dir="${basedir}" antfile="build.xml" target="add-manifest-entry">
+	<ant:property name="entry.name" value="org/argouml/modules/andromda/ui/SettingsTabAndroMDA.class" />
+	<ant:property name="entry.ext" value="module.andromda.ui.settings" />
+	<ant:property name="plugin.name" value="ArgoUML AndroMDA Plugin" />
+	<ant:property name="the.manifest" value="${maven.build.dir}/${pom.artifactId}-manifest.mf" />
+    </ant:ant>
+ </preGoal>
+
+ <!-- Prepare a binary zipped version of the module --> 
+ <postGoal name="dist">
+    <ant:zip destfile="${pom.distributionDirectory}/${pom.artifactId}-${pom.currentVersion}.zip">
+	<ant:zipfileset dir="${maven.build.dir}" includes="${pom.artifactId}-${pom.currentVersion}.jar"/>    
+	<j:forEach var="lib" items="${pom.artifacts}">
+    	  <j:set var="dep" value="${lib.dependency}"/>
+﻿           <j:if test="${(dep.getProperty('jar.manifest.classpath')=='true')}">
+	      <ant:zipfileset file="${lib.path}"/>
+          </j:if>
+         </j:forEach>  
+    </ant:zip>
+ </postGoal>
+
+</project>

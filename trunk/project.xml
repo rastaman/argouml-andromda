@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===========================================================================
+$ Id $
+// Copyright (c) 2005 The Regents of the University of California. All
+// Rights Reserved. Permission to use, copy, modify, and distribute this
+// software and its documentation without fee, and without a written
+// agreement is hereby granted, provided that the above copyright notice
+// and this paragraph appear in all copies.  This software program and
+// documentation are copyrighted by The Regents of the University of
+// California. The software program and documentation are supplied "AS
+// IS", without any accompanying services from The Regents. The Regents
+// does not warrant that the operation of the program will be
+// uninterrupted or error-free. The end-user understands that the program
+// was developed for research purposes and is advised not to rely
+// exclusively on the program for any reason.  IN NO EVENT SHALL THE
+// UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+// THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE. THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+// PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+// CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
+// UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+                  ArgoUML AndroMDA Module build file
+
+This is the build file for building the ArgoUML module for AndroMDA.
+
+For this file to work you need to have argouml and argouml-mdr either checked out 
+alongside this directory and built using the package target or downloaded a release
+and unpacked in a directory argouml/build alongside this one. Like this:
+
+argouml-andromda/build.xml <- This file.
+argouml/build/argouml-model.jar
+argouml/build/argouml.jar
+argouml/build/argouml-mdr.jar <- The module depend also on ArgoUML-MDR
+argouml/build/log4j.jar
+argouml/build/xml-apis.jar
+argouml/build/xercesImpl.jar
+etc.
+
+============================================================================ -->
+
+
+<project>
+  <pomVersion>3</pomVersion>
+
+  <id>argouml-andromda-module</id>
+  <name>ArgoUML AndroMDA Module</name>
+
+  <currentVersion>0.4</currentVersion>
+  
+  <organization>
+    <name>Tigris</name>
+    <url>http://www.tigris.org/</url>
+    <logo>http://www.tigris.org/branding/images/logo.gif</logo>
+  </organization>
+  <inceptionYear>2005</inceptionYear>
+  <package>org.argouml.modules.andromda</package>
+  <description>An ArgoUML module which allow to use AndroMDA from inside Argo.</description>
+  <shortDescription>An ArgoUML module for driving AndroMDA</shortDescription>
+  <url>http://argouml-andromda.tigris.org/</url>
+  <issueTrackingUrl>http://argouml.tigris.org/project_bugs.html</issueTrackingUrl>
+  <siteAddress>argouml-andromda.tigris.org</siteAddress>
+  <siteDirectory>www/project</siteDirectory>
+  <distributionDirectory>www/maven/argouml/dists</distributionDirectory>
+  <repository>
+    <connection>scm:cvs:pserver:rastaman@cvs.tigris.org:/cvs:argouml-andromda</connection>
+    <url>http://argouml-andromda.tigris.org/source/browse/argouml-andromda/</url>
+  </repository>
+  <mailingLists>
+    <mailingList>
+      <name>Main list for developers</name>
+      <subscribe>dev-subscribe@argouml-andromda.tigris.org</subscribe>
+      <unsubscribe>dev-unsubscribe@argouml-andromda.tigris.org</unsubscribe>
+      <post>dev@argouml-andromda.tigris.org</post>
+      <archive>http://argouml-andromda.tigris.org/servlets/SummarizeList?listName=dev</archive>
+    </mailingList>  
+    <mailingList>
+      <name>Mailing list for version control commit messages</name>
+      <subscribe>cvs-subscribe@argouml-andromda.tigris.org</subscribe>
+      <unsubscribe>cvs-unsubscribe@argouml-andromda.tigris.org</unsubscribe>
+      <post>cvs@argouml-andromda.tigris.org</post>
+      <archive>http://argouml-andromda.tigris.org/servlets/SummarizeList?listName=cvs</archive>
+    </mailingList>  
+    <mailingList>
+      <name>Mailing list for issue or artifact creation and changes</name>
+      <subscribe>issues-subscribe@argouml-andromda.tigris.org</subscribe>
+      <unsubscribe>issues-unsubscribe@argouml-andromda.tigris.org</unsubscribe>
+      <post>issues@argouml-andromda.tigris.org</post>
+      <archive>http://argouml-andromda.tigris.org/servlets/SummarizeList?listName=issues</archive>
+    </mailingList>  
+    <mailingList>
+      <name>General discussion list for the projects end users</name>
+      <subscribe>users-subscribe@argouml-andromda.tigris.org</subscribe>
+      <unsubscribe>users-unsubscribe@argouml-andromda.tigris.org</unsubscribe>
+      <post>users@argouml-andromda.tigris.org</post>
+      <archive>http://argouml-andromda.tigris.org/servlets/SummarizeList?listName=users</archive>
+    </mailingList>  
+  </mailingLists>
+
+  <developers>
+    <developer>
+      <id>rastaman</id>
+      <name>Ludovic Maitre</name>
+      <email>rastaman dot tigris.org</email>
+      <url>http://projects.ubik-products.com/</url>
+      <organization>Ubik Products</organization>
+      <organizationUrl>http://www.ubik-products.com/</organizationUrl>
+      <roles>
+      	<role>Project Manager</role>
+      	<role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>  
+  </developers>
+  <dependencies>
+    <dependency>
+      <groupId>argouml</groupId>
+      <artifactId>argouml</artifactId>
+      <version>0.19.6</version>
+      <url>http://argouml.tigris.org</url>
+    </dependency>
+    <dependency>
+      <groupId>argouml</groupId>
+      <artifactId>argouml-model</artifactId>
+      <version>0.19.6</version>
+      <url>http://argouml.tigris.org</url>
+    </dependency>
+    <dependency>
+      <groupId>tigris</groupId>
+      <artifactId>gef</artifactId>
+      <version>0.11.2</version>
+      <url>http://gef.tigris.org</url>
+    </dependency>
+    <dependency>
+      <groupId>jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>1.0</version>
+      <url>http://www.jdom.org</url>
+      <properties>
+      	<jar.manifest.classpath>true</jar.manifest.classpath>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.9</version>
+      <url>http://logging.apache.org/log4j</url>
+    </dependency>
+    <dependency>
+      <groupId>tigris</groupId>
+      <artifactId>toolbar</artifactId>
+      <version>1.1.0</version>
+      <url>http://toolbar.tigris.org</url>
+    </dependency>
+    <dependency>
+      <groupId>tigris</groupId>
+      <artifactId>swidgets</artifactId>
+      <version>0.1.1</version>
+      <url>http://swidgets.tigris.org</url>
+    </dependency>
+    <dependency>
+      <groupId>swixml</groupId>
+      <artifactId>swixml</artifactId>
+      <version>1.5</version>
+      <url>http://www.swixml.org</url>
+      <properties>
+      	<jar.manifest.classpath>true</jar.manifest.classpath>
+      </properties>
+    </dependency>
+  </dependencies>
+  <build>
+    <nagEmailAddress>turbine-maven-dev@jakarta.apache.org</nagEmailAddress>
+    <sourceDirectory>src</sourceDirectory>
+    <unitTestSourceDirectory>tests</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+</project>
