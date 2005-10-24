@@ -2,7 +2,7 @@
           @import url("./style/maven-base.css");
           
 			    @import url("css/tigris.css");</style><link rel="stylesheet" href="./style/print.css" type="text/css" media="print"></link><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></meta><meta name="author" content="Ludovic Maitre"></meta><meta name="email" content="rastaman@tigris.org"></meta></head><body class="composite"><div id="banner"><a href="http://www.tigris.org/" id="organizationLogo"><img alt="Tigris" src="http://www.tigris.org/branding/images/logo.gif"></img></a><a href="http://argouml-andromda.tigris.org/" id="projectLogo"><span>ArgoUML AndroMDA Module</span></a><div class="clear"><hr></hr></div></div><div id="breadcrumbs"><div class="xleft">
-                	Last published: 20 October 2005
+                	Last published: 24 October 2005
                   | Doc for 0.4</div><div class="xright">
         
         <a href="http://argouml.tigris.org/" class="externalLink" title="External Link">ArgoUML</a>
@@ -34,58 +34,31 @@
           
         
         <a href="http://argouml-andromda.tigris.org/doc/aa-manual.pdf" class="externalLink" title="External Link">PDF Documentation</a>
-      </div><div class="clear"><hr></hr></div></div><div id="leftColumn"><div id="navcolumn"><div id="menuModule_documentation"><h5>Module documentation</h5><ul><li class="none"><a href="index.html">Main</a></li><li class="none"><a href="distributions.html">Deliverables</a></li><li class="expanded"><a href="">Documentation</a><ul><li class="none"><a href="installation.html">Installation</a></li><li class="none"><a href="setup.html">Configuration</a></li><li class="none"><strong><a href="usage.html">Usage</a></strong></li><li class="none"><a href="options.html">Options</a></li><li class="none"><a href="bugs.html">Bugs and limitations</a></li><li class="none"><a href="todo.html">Todo</a></li></ul></li></ul></div><div id="menuProject_Documentation"><h5>Project Documentation</h5><ul><li class="none"><a href="index.html">About ArgoUML AndroMDA Module</a></li><li class="none"><a href="downloads.html">Downloads</a></li><li class="collapsed"><a href="project-info.html">Project Info</a></li><li class="collapsed"><a href="maven-reports.html">Project Reports</a></li><li class="none"><a href="http://argouml-andromda.tigris.org/servlets/ProjectDocumentList" class="externalLink" title="External Link">Development Process</a></li></ul></div><a href="http://www.collab.net" title="Built by Maven" id="poweredBy"><img alt="Built by Maven" src="./images/logos/poweredby_036.gif"></img></a></div></div><div id="bodyColumn"><div class="contentBox"><div class="section"><a name="Usage"></a><h2>Usage</h2><p>
-				To use the task into your build files you should use it
-				like this:
-			</p>
-    <div class="source"><pre>
-				
-&lt;target name="test-one-diff" depends="init,taskdefs" 
-    	description="--&gt; Test the Ant Diff task"&gt;
-  &lt;echo&gt;Compare file to file in Unified format&lt;/echo&gt;
-  &lt;diff compare="${file1}" to="${file2}" type="unified" 
-    output="patch.txt" error="errs.txt"/&gt;    	
-  &lt;!-- folder to folder --&gt;
-  &lt;echo&gt;Compare dir to dir&lt;/echo&gt;
-  &lt;diff compare="${dir1}" to="${dir2}"/&gt;
-  &lt;echo&gt;Compare dir to dir with inclusion filter&lt;/echo&gt;
-  &lt;diff compare="${dir1}" to="${dir2}"&gt;
-    &lt;include name="*/*.txt"/&gt;
-  &lt;/diff&gt;
-&lt;/target&gt;
-
-			</pre></div>
-  <p>
-				It is also possible to use the batch file
-				<strong>antdiff.bat</strong>
-				, packaged in the distribution to install, remove and
-				compare files.
-			</p><p>
-				To compare 2 files or folders with the batch file,
-				simply give it the original file or folder as first
-				argument and the revised file or folder as second
-				argument:
-			</p>
-    <div class="source"><pre>
-				
-D:\Workspaces\SoftwareEngineering\antdiff-1.0-dev&gt;antdiff src\test\toto1.txt src
-\test\toto2.txt
-Buildfile: antdiff.xml
-
-init:
-
-diff:
-     [diff] ------
-     [diff] 2c2
-     [diff] &lt; toto2=tatiana
-     [diff] ---
-     [diff] &gt; toto2=tatina
-     [diff] 3a4
-     [diff] &gt; toto4=coucou
-     [diff] ------Wed Sep 14 13:50:52 CEST 2005
-
-BUILD SUCCESSFUL
-Total time: 0 seconds
-
-			</pre></div>
-  </div></div></div><div class="clear"><hr></hr></div><div id="footer"><div class="xright">© 2005, Tigris</div><div class="clear"><hr></hr></div></div></body></html>
+      </div><div class="clear"><hr></hr></div></div><div id="leftColumn"><div id="navcolumn"><div id="menuModule_documentation"><h5>Module documentation</h5><ul><li class="none"><a href="index.html">Main</a></li><li class="none"><a href="distributions.html">Deliverables</a></li><li class="expanded"><a href="">Documentation</a><ul><li class="none"><a href="installation.html">Installation</a></li><li class="none"><a href="setup.html">Configuration</a></li><li class="none"><strong><a href="usage.html">Usage</a></strong></li><li class="none"><a href="options.html">Options</a></li><li class="none"><a href="bugs.html">Bugs and limitations</a></li><li class="none"><a href="todo.html">Todo</a></li></ul></li></ul></div><div id="menuProject_Documentation"><h5>Project Documentation</h5><ul><li class="none"><a href="index.html">About ArgoUML AndroMDA Module</a></li><li class="none"><a href="downloads.html">Downloads</a></li><li class="collapsed"><a href="project-info.html">Project Info</a></li><li class="collapsed"><a href="maven-reports.html">Project Reports</a></li><li class="none"><a href="http://argouml-andromda.tigris.org/servlets/ProjectDocumentList" class="externalLink" title="External Link">Development Process</a></li></ul></div><a href="http://www.collab.net" title="Built by Maven" id="poweredBy"><img alt="Built by Maven" src="./images/logos/poweredby_036.gif"></img></a></div></div><div id="bodyColumn"><div class="contentBox"><div class="section"><a name="Create_a_new_project"></a><h2>Create a new project</h2><p>This functionnality help you create a new AndroMDA project from inside ArgoUML.
+			To use it, select the menu <strong>tool</strong> and then the menu item <strong>Create new Project</strong>.
+			</p><p><em>When you click on the <strong>Create new project item</strong> a dialog appear on the screen.</em></p><p>Use the buttons <strong>Next</strong> and <strong>Previous</strong> to navigate among the screens of the dialog.</p><p>Use the button <strong>Finish</strong> in the last screen of the dialog to validate your choices and launch Maven.</p><p>The first screen of the dialog allow toe set general properties of the project:</p><p>
+                <div align="center">
+                        <img src="images/argomda_project_1.jpg" alt=""></img>
+                </div>
+            </p><p>The second screen of the dialog allow to set properties of the project:</p><p>
+                <div align="center">
+                        <img src="images/argomda_project_2.jpg" alt=""></img>
+                </div>
+            </p><p>The third screen of the dialog allow to set general properties of the project:</p><p>
+                <div align="center">
+                        <img src="images/argomda_project_3.jpg" alt=""></img>
+                </div>
+            </p><p>The fourth screen of the dialog allow to choose the folder where will be generated the project:</p><p>
+                <div align="center">
+                        <img src="images/argomda_project_4.jpg" alt=""></img>
+                </div>
+            </p><p>To launch the creation of the project by Maven, click on the <strong>Finish</strong> button.</p><p><em>After having clicked on the <strong>Finish</strong> button, a window presenting the output of the Maven
+             process appear.</em></p></div><div class="section"><a name="Launch_Maven_on_current_project"></a><h2>Launch Maven on current project</h2><p>This functionnality launch Maven on the current model.
+			To use it, save your project in XMI and select the menu <strong>Tool</strong> and then the menu item <strong>Launch Maven</strong>.
+			</p><p><em>When you click on the <strong>Create new project item</strong> a dialog appear on the screen.</em></p><p>
+                <div align="center">
+                    <p style="margin-top: 80px;">
+                        <img src="images/argomda_launch.jpg" style="padding: 50px;" alt=""></img>
+                    </p>
+                </div>
+            </p><p>Use the buttons <strong>Close</strong> to hide the Maven output. Artifacts for the project are now generated and you can see them in subfolders of the project root.</p></div></div></div><div class="clear"><hr></hr></div><div id="footer"><div class="xright">© 2005, Tigris</div><div class="clear"><hr></hr></div></div></body></html>
