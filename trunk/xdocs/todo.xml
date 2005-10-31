@@ -43,6 +43,9 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 				<li>
 					Extended launch mode which allow to specify which cartridge to use before running Maven.
 				</li>
+				<li>
+					Parameters of the cartridges
+				</li>
 			</ul>
 		</section>
 	</body>
