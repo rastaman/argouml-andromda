@@ -34,6 +34,7 @@ public class AndroMDAModule extends AbstractModuleContainer implements ModuleInt
             instance=this;
         context = new ArgoUMLContext();
         actionManager = new AndroMDAModuleActionManager( this );
+        parentFrame = ProjectBrowser.getInstance();
         initSwingEngine();
         try {
             // Load the menu

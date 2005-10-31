@@ -3,6 +3,7 @@
  */
 package org.argouml.modules.container;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
 import java.util.HashMap;
@@ -10,9 +11,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Action;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 
 import org.argouml.modules.actions.ActionManager;
 import org.argouml.modules.context.ModuleContext;
+import org.argouml.ui.ArgoDialog;
 import org.swixml.ConverterLibrary;
 import org.swixml.SwingEngine;
 
@@ -20,7 +26,7 @@ import org.swixml.SwingEngine;
  * @author lmaitre
  *
  */
-public class AbstractModuleContainer implements ModuleContainer {
+public abstract class AbstractModuleContainer implements ModuleContainer {
 
     protected Map componentsToId;
     
@@ -142,4 +148,29 @@ public class AbstractModuleContainer implements ModuleContainer {
         }
         return result;
     }
+    
+    public void showFeedback(String msg) {
+        final String mess = msg;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                ArgoDialog dialog = new ArgoDialog(getParentFrame(),
+                        getName(), 0, true);
+                JLabel message = new JLabel(mess);
+                message.setBackground((Color)UIManager.get("Label.background"));
+                dialog.setContent(message);
+                dialog.show();
+            }
+        });
+    }
+
+    public void showError(String errorKey) {
+        showFeedback(localize(errorKey));
+    }
+
+    public void showError(String errorKey, String arg) {
+        showFeedback(localize(errorKey)+arg);        
+    }
+    
+    abstract public String getName();
+    
 }

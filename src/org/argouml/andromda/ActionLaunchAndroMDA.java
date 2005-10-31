@@ -97,19 +97,23 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     public void actionPerformed(ActionEvent event) {
         MavenLauncher launcher = new MavenLauncher();
         if (projectPath==null)
-            try {
-                projectPath = parent.getContext().getProjectPath();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            projectPath = parent.getContext().getProjectPath();
+        if (projectPath==null) {
+            parent.showError("error.project.not.exist");
+            return;
+        }
         if (mavenHome == null)
             mavenHome = parent.getContext().getMavenHome();
+        if (mavenHome == null) {
+            parent.showError("error.maven.not.set");
+            return;
+        }
         if (parentFrame == null)
             parentFrame = parent.getParentFrame();
         if (dialog==null)
             buildDialog(parentFrame);
         if (mavenHome!=null &&(projectPath != null)) {
-            LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
+            //LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
             try {
                 String projectRoot = getProjectRoot(projectPath); 
                 launcher.setMavenHome(mavenHome);
@@ -122,10 +126,10 @@ public final class ActionLaunchAndroMDA extends UMLAction {
                 dialog.setVisible(true);
                 launcher.start();
             } catch (Exception e) {
-                throw new RuntimeException("Problem executing AndroMDA: "+e.getMessage());
+                parent.showError("error.maven.runtime",e.getMessage());
             }
         } else {
-            throw new RuntimeException("Problem executing AndroMDA: "+ mavenHome +"/"+projectPath);            
+            parent.showError("error.maven.runtime","Project is "+projectPath+", Maven home is "+mavenHome);
         }
     }
 

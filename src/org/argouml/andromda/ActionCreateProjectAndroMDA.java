@@ -99,16 +99,23 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
         MavenLauncher launcher = new MavenLauncher();
         launcher.addGoal("andromdapp:generate");
         launcher.setProperties(properties);
-        if (projectPath==null)
-            throw new IllegalArgumentException();
+        if (projectPath==null) {
+            parent.showError("error.project.not.exist");
+            return;
+        }
         if (mavenHome == null)
             mavenHome = parent.getContext().getMavenHome();
+        if (mavenHome == null) {
+            parent.showError("error.maven.not.set");
+            return;
+        }
+
         if (parentFrame == null)
             parentFrame = parent.getParentFrame();
         if (dialog==null)
             buildDialog(parentFrame);
         if (mavenHome!=null &&(parentFrame != null)) {
-            LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
+            //LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
             try {
                 String projectRoot = projectPath; 
                 launcher.setMavenHome(mavenHome);
@@ -121,12 +128,11 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
                 dialog.setVisible(true);
                 launcher.start();
             } catch (Exception e) {
-                throw new RuntimeException("Problem executing AndroMDA: "+e.getMessage());
+                parent.showError("error.maven.runtime",e.getMessage());
             }
         } else {
-            throw new RuntimeException("Problem executing AndroMDA: "+ mavenHome +"/"+projectPath);            
+            parent.showError("error.maven.runtime","Project is "+projectPath+", Maven home is "+mavenHome);
         }
-        
     }
 
     private void buildDialog(Frame owner) {

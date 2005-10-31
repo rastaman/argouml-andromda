@@ -20,5 +20,13 @@ public interface ModuleContainer {
     public String localize(String key);
     
     public String getId(Component comp);
+
+    public String getName();
+
+    public void showFeedback(String msg);
+
+    public void showError(String key);
+
+    public void showError(String key, String arg);
     
 }
