@@ -14,7 +14,6 @@ import javax.swing.Action;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.text.JTextComponent;
 
 import org.argouml.modules.actions.ActionManager;
 import org.argouml.modules.context.ModuleContext;
