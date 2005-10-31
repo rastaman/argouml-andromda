@@ -1,4 +1,4 @@
-package org.argouml.modules.andromda.exec;
+package org.argouml.modules.exec;
 
 import java.io.File;
 import java.io.OutputStream;

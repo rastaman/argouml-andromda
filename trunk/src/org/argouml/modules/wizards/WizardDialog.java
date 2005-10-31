@@ -21,13 +21,12 @@
 // PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
 // CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 // UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-package org.argouml.modules.andromda.ui.wizards;
+package org.argouml.modules.wizards;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -39,31 +38,29 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
-import org.swixml.ConverterLibrary;
+import org.argouml.modules.container.ModuleContainer;
 import org.swixml.SwingEngine;
+import org.tigris.swidgets.Dialog;
 
 /**
  * This is the class which define a Wizard.
  * @author lmaitre
  */
-public abstract class WizardDialog extends JDialog {
+public abstract class WizardDialog extends Dialog {
     
     private Logger LOG = Logger.getLogger(WizardDialog.class);
-
-	protected SwingEngine swingEngine = new SwingEngine(this);
 
 	protected Vector wizardListener = new Vector();
 	
 	protected Vector pages = new Vector();
 	
-	protected static JPanel jp = new JPanel();
+	protected JPanel jp = new JPanel();
 	
-	protected static JPanel jp1 = new JPanel();
+	protected JPanel jp1 = new JPanel();
 	
 	protected JPanel jp2;
 
@@ -84,55 +81,61 @@ public abstract class WizardDialog extends JDialog {
 	protected boolean finishStatus = false;
 
 	protected String _title;
-	
+
+    private ModuleContainer parent;
+
+    private WizardDialog wizard;
+    
 	public JPanel getPage(String id) {
 		try {
-			return (JPanel) swingEngine.find(id);
+			return (JPanel) parent.getSwingEngine().find(id);
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}
 		return null;
 	}
 	
-	public WizardDialog(Frame owner,String wizardDescriptor) {
-        super(owner);
-        swingEngine.setClassLoader(this.getClass().getClassLoader());        
-		setModal(true);
-		next = new JButton("Next");
-		previous = new JButton("Previous");
-		finish = new JButton("Finish");
-		jp.add(previous);
-		jp.add(next);
-		jp.add(finish);
-		this.getContentPane().add(jp, BorderLayout.SOUTH);
-		this.getContentPane().add(jp1, BorderLayout.CENTER);
-		next.addMouseListener(new NextPage());
-		previous.addMouseListener(new PreviousPage());
-		finish.addMouseListener(new FinishPage());
+	public WizardDialog(ModuleContainer p, String title, String wizardDescriptor) {
+        super(p.getParentFrame(),title,0,true);
+        parent = p;
+        SwingEngine swingEngine = parent.getSwingEngine();
 		try {
-            ConverterLibrary.getInstance().register(WizardColorConverter.TEMPLATE, 
-                    new WizardColorConverter());
-			swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);
-			swingEngine.cleanup();
-            URL descriptor = this.getClass().getResource(wizardDescriptor);
-			swingEngine.insert(descriptor,this);
+            if (!swingEngine.getIdMap().containsKey(wizardDescriptor)) {
+                swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);
+                 URL descriptor = parent.getClass().getResource(wizardDescriptor);
+                 swingEngine.insert(descriptor,this);
+                 swingEngine.getIdMap().put(wizardDescriptor,this);
+            }
 			_title=getName();
 			Iterator i = swingEngine.getAllComponentItertor();
 			while (i.hasNext()) {
 				Component c = (Component) i.next();
-				if (c instanceof WizardPage)
+				if (c instanceof WizardPage) {
+                     LOG.info("Add "+c.getName());
 					pages.addElement(c);
+                }
 			}
+            //Add buttons
+            next = (JButton)swingEngine.find("wizard_next");
+            previous = (JButton)swingEngine.find("wizard_previous");
+            finish = (JButton)swingEngine.find("wizard_finish");     
+            jp = (JPanel)swingEngine.find("WIZARD_BUTTONS");
+            this.getContentPane().add(jp, BorderLayout.SOUTH);
+            this.getContentPane().add(jp1, BorderLayout.CENTER);
+            next.addMouseListener(new NextPage());
+            previous.addMouseListener(new PreviousPage());
+            finish.addMouseListener(new FinishPage());            
+            LOG.info("Go to page "+pageCounter);
             goToPage(pageCounter);
 		} catch (Exception e) {
-			System.err.println("Error while loading wizard pages from '"+wizardDescriptor+"'");
+			LOG.error("Error while loading wizard pages from '"+wizardDescriptor+"'");
 			e.printStackTrace();
 		}
         centerOnParent();
         this.pack();
 		wm = this;
 	}
-	
+
 	private WizardListener m_wiz;
 	
 	public void addListener(WizardListener wl) {
@@ -207,7 +210,7 @@ public abstract class WizardDialog extends JDialog {
 
 	public String getId(Component c) {
 		String result = null;
-		Map ids = swingEngine.getIdMap();
+		Map ids = parent.getSwingEngine().getIdMap();
 		Iterator i = ids.keySet().iterator();
 		while (i.hasNext()) {
 			String id = (String) i.next();
@@ -234,26 +237,6 @@ public abstract class WizardDialog extends JDialog {
         }
         return values;
     }
-	/**
-	 * Return the values on the current page as a hashmap,
-	 * keyed by swixml components id's and valued with
-	 * the text of the components. 
-	 * @param pageCounter
-	 * @return
-	 */
-	public Map getValues() {
-		Map values = new HashMap();
-		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
-		Component o;
-		String id;
-		while (k.hasNext()) {
-			o = (Component)k.next();
-			id = getId(o);
-			if (id !=null &&(o instanceof JTextComponent))				
-				values.put(id,((JTextComponent)o).getText());
-		}
-		return values;
-	}
 	
 	/**
 	 * Return the values on the given page as a hashmap,
@@ -264,7 +247,7 @@ public abstract class WizardDialog extends JDialog {
 	 */
 	public Map getValuesForPage(int pageCounter) {
 		Map values = new HashMap();
-		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
 		Component o;
 		String id;
 		while (k.hasNext()) {
@@ -275,26 +258,6 @@ public abstract class WizardDialog extends JDialog {
 		}
 		return values;
 	}
-
-	/**
-	 * Assign the values contained in a map to the specified swing components
-	 * used in the current page. 
-	 * @param pageCounter
-	 * @param values
-	 */
-	public void setValues(Map values) {
-		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
-		Component o = null;
-		String id = null;
-		while (k.hasNext()) {
-			o = (Component)k.next();
-			id = getId(o);
-			if ((id!=null)&&(o instanceof JTextComponent)&&(values.containsKey(id))) {
-					((JTextComponent)o).setText((String) values.get(id));
-					LOG.info("Value for id '"+id+"' is '"+(String) values.get(id)+"'");
-			}
-		}	
-	}
     
 	/**
 	 * Assign the values contained in a map to the specified swing components
@@ -303,7 +266,7 @@ public abstract class WizardDialog extends JDialog {
 	 * @param values
 	 */
 	public void setValuesForPage(int pageCounter,Map values) {
-		Iterator k = swingEngine.getDescendants((JPanel) pageAt(pageCounter));
+		Iterator k = parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
 		Component o = null;
 		String id = null;
 		while (k.hasNext()) {
@@ -341,7 +304,8 @@ public abstract class WizardDialog extends JDialog {
         }	
         if (jp2!=null)
             jp2.setVisible(false);
-        this.getContentPane().remove(1);
+        this.getContentPane().removeAll();
+        this.getContentPane().add(jp,BorderLayout.SOUTH);
         jp2 = (JPanel) pageAt(pageCounter);
         if (jp2!=null)
             jp2.setVisible(true);
@@ -403,5 +367,13 @@ public abstract class WizardDialog extends JDialog {
         int y = (getParent().getY() - size.height)
         + (int) ((size.height + p.height) / 2d);
         setLocation(x, y);
+    }
+
+    /**
+     * @see org.tigris.swidgets.Dialog#nameButtons()
+     */
+    protected void nameButtons() {
+        //      
     }    
+
 }

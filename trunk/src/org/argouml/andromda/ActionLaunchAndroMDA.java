@@ -22,18 +22,23 @@
 // CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 // UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
-package org.argouml.modules.andromda.ui;
+package org.argouml.andromda;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.andromda.exec.MavenLauncher;
+import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.exec.MavenLauncher;
+import org.argouml.modules.exec.TextAreaOutputStream;
 import org.argouml.ui.ArgoDialog;
 import org.argouml.uml.ui.UMLAction;
+import org.swixml.SwingEngine;
 
 /**
  * AndroMDA Module, for launching AndroMDA on the current model.<p>
@@ -62,12 +67,12 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     
     private Frame parentFrame;
 
-    private SwixMLContainer parent;
+    private ModuleContainer parent;
     
     /**
      * This is creatable from the module loader.
      */
-    public ActionLaunchAndroMDA(SwixMLContainer module) {
+    public ActionLaunchAndroMDA(ModuleContainer module) {
         super("AndroMDA Launcher", false);
         parent=module;
     }
@@ -93,14 +98,14 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         MavenLauncher launcher = new MavenLauncher();
         if (projectPath==null)
             try {
-                projectPath= AndroMDAModule.getArgoUMLProjectPath();
+                projectPath = parent.getContext().getProjectPath();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
         if (mavenHome == null)
-            mavenHome = AndroMDAModule.getArgoUMLMavenHome();
+            mavenHome = parent.getContext().getMavenHome();
         if (parentFrame == null)
-            parentFrame = AndroMDAModule.getArgoUMLParentFrame();
+            parentFrame = parent.getParentFrame();
         if (dialog==null)
             buildDialog(parentFrame);
         if (mavenHome!=null &&(projectPath != null)) {
@@ -126,10 +131,14 @@ public final class ActionLaunchAndroMDA extends UMLAction {
 
     private void buildDialog(Frame owner) {
         dialog = new ArgoDialog(owner, "Maven output", false);
-        mavenPanel = (JPanel) parent.getSwingEngine().find("mavenPanel");   
-        mavenOutput = (JTextArea) parent.getSwingEngine().find("mavenOutput");
-        mavenError = (JTextArea) parent.getSwingEngine().find("mavenError");
-        dialog.setContent(mavenPanel);  
+        SwingEngine swingEngine = parent.getSwingEngine();
+        mavenPanel = (JPanel) swingEngine.find("mavenPanel");   
+        mavenOutput = (JTextArea) swingEngine.find("mavenOutput");
+        mavenError = (JTextArea) swingEngine.find("mavenError");
+        JButton clear = (JButton) swingEngine.find("clearButton");
+        clear.setAction(new ClearAction(new JTextArea[] { mavenOutput, mavenError }));
+        dialog.addButton(clear);
+        dialog.setContent(mavenPanel);
     }
     
     /**
@@ -173,4 +182,18 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     public void setProjectPath(String projectPath) {
         this.projectPath = projectPath;
     }
+    
+    class ClearAction extends AbstractAction {
+        
+        private JTextArea[] textAreas;
+        
+        public ClearAction(JTextArea[] tas) {
+            textAreas = tas;
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            for (int i=0;i<textAreas.length;i++)
+                textAreas[i].setText("");
+        }        
+    }    
 }

@@ -6,39 +6,59 @@
     <!-- File menu -->
     <menu id="menu_file" mnemonic="VK_F" text="File">
       <menuitem id="mi_open" text="Open..." macos_openfile="true" mnemonic="VK_O" action="openAction"/>
-      <menuitem id="mi_save" text="Save" mnemonic="VK_S" action="saveAction" disabled="true"/>
-      <menuitem id="mi_saveAs" text="Save as..." action="saveAsAction" disabled="true"/>
-      <menuitem id="mi_close" text="Close" mnemonic="VK_W" action="closeAction" disabled="true"/>
+      <menuitem id="mi_save" text="Save" mnemonic="VK_S" action="saveAction" enabled="false"/>
+      <separator/>
+      <menuitem id="mi_settings" text="Settings..." mnemonic="VK_W" action="settingsAction"/>
       <separator/>
       <menuitem id="mi_exit" mnemonic="VK_Q" text="Exit" macos_quit="true" action="quitAction"/>
     </menu>
     <!-- Tool menu -->
-    <menu id="menu_tools" mnemonic="VK_T" text="Tools">
-      <menuitem id="mi_newProj" macos_openapp="true" text="andromda.menu.create" action="createProject"/>
-      <menuitem id="mi_maven" text="andromda.menu.launch" action="launchMaven"/>
+    <menu id="menu_andromda_module" mnemonic="VK_T" text="Tools">
+      <menuitem id="mi_newProj" macos_openapp="true" text="andromda.menu.create" action="createProjectAction"/>
+      <menuitem id="mi_maven" text="andromda.menu.launch" action="launchMavenAction"/>
+      <!-- 
+      <menuitem id="mi_start_server" text="andromda.menu.server.start" action="startServerAction"/>
+      <menuitem id="mi_stop_server" text="andromda.menu.server.stop" action="stopServerAction"/>
+      <menuitem id="mi_show_console" text="andromda.menu.console.show" action="showConsoleAction"/>
+       -->
     </menu>
     
   </menubar>  
-    <desktoppane constraints="BorderLayout.CENTER">
-      <internalframe id="prefsFrame" resizable="true" location="10,10" preferredSize="320,280" size="320,280" title="Preferences" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
-	<panel layout="FlowLayout(FlowLayout.CENTER)" id="andromdaSettings" visible="true">
+  <panel visible="false">
+  	<textfield id="TMPL_TF" 
+  	font="Arial-PLAIN-10" 
+  	size="260,20" 
+  	preferredSize="260,20" 
+  	minimumSize="260,20"
+  	maximumSize="260,20"
+  	border="EtchedBorder"/>
+  	<textfield id="TMPL_LBL" 
+  	minimumSize="80,20"
+  	maximumSize="80,20"  	
+  	preferredSize="80,20"
+  	size="80,20"/>
+  </panel>
+    <desktoppane>
+      <internalframe id="prefsFrame" resizable="true" preferredSize="320,280" size="320,280" title="Preferences" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+	<panel layout="FlowLayout(FlowLayout.LEFT)" id="andromdaSettings" visible="true">
 		<vbox>
 			<hbox>
 				<label labelfor="mavenHome" text="andromda.settings.maven.home"
-					preferredSize="80,20" size="80,20" />
-				<textfield id="mavenHome" columns="25"
-					preferredSize="180,20" size="180,20" />
-				<button text="Browse" action="chooseMavenHomeFolder"></button>
+					 refid="TMPL_LBL"/>
+				<textfield id="mavenHome" refid="TMPL_TF"/>
+				<button text="select.browse" action="chooseMavenHomeAction"/>
 			</hbox>
 			<hbox>
 				<label labelfor="andromdaHome" text="andromda.settings.andromda.home"
-					preferredSize="80,20" size="80,20" />
-				<textfield id="andromdaHome" columns="25"
-					preferredSize="180,20" size="180,20" />
-				<button text="Browse"
-					action="chooseAndroMdaHomeFolder">
-				</button>
+					refid="TMPL_LBL"/>
+				<textfield id="andromdaHome" refid="TMPL_TF" actionListener="settingsTabAndroMDA"/>
+				<button text="select.browse" id="btAndromdaHome"
+					action="chooseAndroMdaHomeAction"/>
 			</hbox>
+			<hbox>
+				<checkbox id="useAndromdaProfile"/>
+				<label text="andromda.settings.use.profile.default"/>
+			</hbox>			
 			<!-- 
 				<hbox>
 				<label labelfor="antHome" text="Ant Home" preferredSize="100,20" size="100,20"/>
@@ -69,7 +89,10 @@
 			</hbox>
 		</vbox>
 	</panel>
-      </internalframe>
+	<panel>
+		<button id="clearButton" text="andromda.console.clear"/>
+	</panel>
+	</internalframe>
     </desktoppane>
   
 </frame>

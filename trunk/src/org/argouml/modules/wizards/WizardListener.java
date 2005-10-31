@@ -21,7 +21,7 @@
 // PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
 // CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 // UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-package org.argouml.modules.andromda.ui.wizards;
+package org.argouml.modules.wizards;
 
 import java.util.EventListener;
 

@@ -1,22 +1,19 @@
-package org.argouml.modules.andromda.ui;
+package org.argouml.andromda;
 
-import java.awt.Frame;
-import java.io.File;
-import java.net.URI;
 import java.net.URL;
 
-import javax.swing.Action;
 import javax.swing.JMenuItem;
 
 import org.apache.log4j.Logger;
-import org.argouml.application.api.Configuration;
-import org.argouml.kernel.Project;
-import org.argouml.kernel.ProjectManager;
+import org.argouml.application.modules.ModuleLoader;
+import org.argouml.moduleloader.ModuleInterface;
+import org.argouml.modules.container.AbstractModuleContainer;
+import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ArgoUMLContext;
 import org.argouml.ui.ProjectBrowser;
 import org.argouml.ui.cmd.GenericArgoMenuBar;
-import org.swixml.SwingEngine;
 
-public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface, SwixMLContainer {
+public class AndroMDAModule extends AbstractModuleContainer implements ModuleInterface, ModuleContainer {
 
     private static final Logger LOG = Logger.getLogger(AndroMDAModule.class);
     
@@ -28,19 +25,16 @@ public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface,
     
     public final static String INFO = "This module aims at integrating AndroMDA inside ArgoUML.";
     
-    private SwingEngine swingEngine;
-    
-    public Action createProject = new ActionCreateProjectAndroMDA(this);
-    
-    public Action launchMaven = new ActionLaunchAndroMDA(this);
-    
     private JMenuItem createProjectMenuItem;
     
     private JMenuItem launchMavenMenuItem;
-
-    public AndroMDAModule() {
-        swingEngine = new SwingEngine( this );
-        swingEngine.setClassLoader(this.getClass().getClassLoader());
+    
+    public AndroMDAModule() { 
+        if (instance==null)
+            instance=this;
+        context = new ArgoUMLContext();
+        actionManager = new AndroMDAModuleActionManager( this );
+        initSwingEngine();
         try {
             // Load the menu
             URL uiDef = this.getClass().getResource("descriptor.xml");
@@ -48,19 +42,6 @@ public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface,
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    static String getArgoUMLProjectPath() throws Exception {
-        Project p = ProjectManager.getManager().getCurrentProject();
-        return new File(new URI(p.getURL().toExternalForm())).getCanonicalPath();
-    }
-
-    static Frame getArgoUMLParentFrame() {
-        return ProjectBrowser.getInstance();        
-    }
-
-    static String getArgoUMLMavenHome() {
-        return Configuration.getString(SettingsTabAndroMDA.KEY_MAVEN_HOME);
     }
 
     /**
@@ -87,7 +68,13 @@ public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface,
             (GenericArgoMenuBar) ProjectBrowser.getInstance().getJMenuBar();
             menubar.getTools().add(createProjectMenuItem);
             menubar.getTools().add(launchMavenMenuItem);
-            LOG.debug("AndroMDA Module created!");            
+            LOG.info("Add AndroMDA Settings tab");
+            ModuleLoader settingsTabLoader = ModuleLoader.getInstance();
+            settingsTabLoader.loadClassFromLoader(this.getClass().getClassLoader(),
+                    SettingsTabAndroMDA.class.getName(),
+                    "org.argouml.andromda.SettingsTabAndroMDA",
+                    true);
+            LOG.info("AndroMDA Module created!");            
         } catch (Throwable e) {
             LOG.debug("Some problem when adding the module.", e);
             disable();
@@ -119,7 +106,4 @@ public class AndroMDAModule implements org.argouml.moduleloader.ModuleInterface,
         return AndroMDAModule.NAME;
     }
 
-    public SwingEngine getSwingEngine() {
-        return swingEngine;
-    }
 }
