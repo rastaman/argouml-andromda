@@ -51,7 +51,7 @@
 			<hbox>
 				<label labelfor="andromdaHome" text="andromda.settings.andromda.home"
 					refid="TMPL_LBL"/>
-				<textfield id="andromdaHome" refid="TMPL_TF" actionListener="settingsTabAndroMDA"/>
+				<textfield id="andromdaHome" refid="TMPL_TF"/>
 				<button text="select.browse" id="btAndromdaHome"
 					action="chooseAndroMdaHomeAction"/>
 			</hbox>
