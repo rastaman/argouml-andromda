@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.argouml.modules.andromda.ui;
+package org.argouml.modules.exec;
 
 import java.io.OutputStream;
 import java.util.ArrayList;

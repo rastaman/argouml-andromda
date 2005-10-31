@@ -1,5 +1,5 @@
 
-package org.argouml.modules.andromda.ui.wizards;
+package org.argouml.modules.container;
 
 import java.awt.Color;
 
@@ -9,11 +9,13 @@ import org.jdom.Attribute;
 import org.swixml.Localizer;
 
 /**
- * This WizardColorConverter class add the color 'LABEL_BG' and 'LABEL_FG' which 
+ * The ModuleColorConverter class add the color 'LABEL_BG' and 'LABEL_FG' which 
  * return the color of the JLabel. This is used for the filling the JTextAreas with 
- * an adequate color.
+ * an adequate color. 
+ * This converter could also be used to apply specific colors holds in the Container.
+ * (standalone app or ArgoUML for instance)
  */
-public class WizardColorConverter extends org.swixml.converters.ColorConverter {
+public class ModuleColorConverter extends org.swixml.converters.ColorConverter {
   
   /** converter's return type */
   public static final Class TEMPLATE = Color.class;

@@ -21,7 +21,7 @@
 // PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
 // CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 // UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-package org.argouml.modules.andromda.ui;
+package org.argouml.andromda;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -32,10 +32,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.andromda.exec.MavenLauncher;
-import org.argouml.modules.andromda.ui.wizards.WizardDialog;
-import org.argouml.modules.andromda.ui.wizards.WizardEvent;
-import org.argouml.modules.andromda.ui.wizards.WizardListener;
+import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.exec.MavenLauncher;
+import org.argouml.modules.exec.TextAreaOutputStream;
+import org.argouml.modules.wizards.DefaultWizardDialog;
+import org.argouml.modules.wizards.WizardDialog;
+import org.argouml.modules.wizards.WizardEvent;
+import org.argouml.modules.wizards.WizardListener;
 import org.argouml.ui.ArgoDialog;
 import org.argouml.uml.ui.UMLAction;
 
@@ -46,10 +49,14 @@ import org.argouml.uml.ui.UMLAction;
  */
 public class ActionCreateProjectAndroMDA  extends UMLAction 
     implements WizardListener {
+   
+    public final static String WIZARD_DESCRIPTOR = "new-project-wizard.xml";
+
+    public final static String WIZARD_TITLE_KEY = "project.title";
     
     private Logger LOG = Logger.getLogger(ActionCreateProjectAndroMDA.class);
 
-    private SwixMLContainer parent;
+    private ModuleContainer parent;
     
     private JTextArea mavenOutput;
     
@@ -66,13 +73,13 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     /**
      * This is creatable from the module loader.
      */
-    public ActionCreateProjectAndroMDA(SwixMLContainer module) {
+    public ActionCreateProjectAndroMDA(ModuleContainer module) {
         super("AndroMDA Create Project Module", false);
         parent = module;
     }
     
     /**
-     * @see org.argouml.modules.andromda.ui.wizards.WizardListener#finishEvent(org.argouml.modules.andromda.ui.wizards.WizardEvent)
+     * @see org.argouml.modules.wizards.WizardListener#finishEvent(org.argouml.modules.wizards.WizardEvent)
      */
     public void finishEvent(WizardEvent evt) {
         LOG.info("Finished completing wizard!");
@@ -93,9 +100,9 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
         if (projectPath==null)
             throw new IllegalArgumentException();
         if (mavenHome == null)
-            mavenHome = AndroMDAModule.getArgoUMLMavenHome();
+            mavenHome = parent.getContext().getMavenHome();
         if (parentFrame == null)
-            parentFrame = AndroMDAModule.getArgoUMLParentFrame();
+            parentFrame = parent.getParentFrame();
         if (dialog==null)
             buildDialog(parentFrame);
         if (mavenHome!=null &&(parentFrame != null)) {
@@ -129,14 +136,14 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     }
     
     /**
-     * @see org.argouml.modules.andromda.ui.wizards.WizardListener#nextEvent(org.argouml.modules.andromda.ui.wizards.WizardEvent)
+     * @see org.argouml.modules.wizards.WizardListener#nextEvent(org.argouml.modules.wizards.WizardEvent)
      */
     public void nextEvent(WizardEvent evt) {
         // NI
     }
 
     /**
-     * @see org.argouml.modules.andromda.ui.wizards.WizardListener#previousEvent(org.argouml.modules.andromda.ui.wizards.WizardEvent)
+     * @see org.argouml.modules.wizards.WizardListener#previousEvent(org.argouml.modules.wizards.WizardEvent)
      */
     public void previousEvent(WizardEvent evt) {
         // NI
@@ -145,12 +152,16 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     /**
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
-    public void actionPerformed(ActionEvent e) {        
-        NewProjectWizard wizard = new NewProjectWizard();
+    public void actionPerformed(ActionEvent e) {  
+        LOG.info("Creating wizard");
+        String title = parent.getSwingEngine().getLocalizer().getString(WIZARD_TITLE_KEY);
+        DefaultWizardDialog wizard = new DefaultWizardDialog(parent,
+                title ,WIZARD_DESCRIPTOR);
         wizard.addListener(this);
         wizard.pack();
         wizard.toFront();
         wizard.setVisible(true);
+        LOG.info("Wizard is initialized");
     }
 
 }

@@ -21,58 +21,22 @@
 // PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
 // CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
 // UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-package org.argouml.modules.andromda.ui.wizards;
+package org.argouml.modules.wizards;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import org.argouml.modules.container.ModuleContainer;
 
 /**
- * A Wizard(test)Frame
- * @author lmaitre
+ * This is a sample and empty implementation of the Wizard.
+ * @author lmaitre / Factory Productions
  */
-
-public class WizardFrame extends JFrame
-{
-	
-	private String descriptor;
-	
-	public JTextArea content;
-	
-	public WizardFrame(String desc)
-	{
-		try{
-            descriptor = desc;
-			setSize(800,600);
-			JPanel container = new JPanel();
-			content = new JTextArea();
-			content.setColumns(80);
-			content.setRows(20);
-			container.add(content);
-			show();
-			DefaultWizardDialog wm = new DefaultWizardDialog(this,descriptor);			
-			wm.show();
-			this.addWindowListener(new WindowAdapter(){
-				public void windowClosing(WindowEvent we)
-				{
-					System.exit(0);
-				}
-			});
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
+public class DefaultWizardDialog extends WizardDialog {
+    
+	/**
+	 * @param wizardDescriptor
+	 */
+	public DefaultWizardDialog(ModuleContainer owner, String title, String wizardDescriptor) {
+		super(owner,title,wizardDescriptor);
 	}
 
-	public static void main(String args[])
-	{
-		new WizardFrame(args[0]);
-	}
+
 }
-
-
-
-
-
