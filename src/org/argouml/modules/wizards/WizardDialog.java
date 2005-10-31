@@ -72,7 +72,7 @@ public abstract class WizardDialog extends Dialog {
 
 	protected int pageCounter = 0;
 	
-	protected static WizardDialog wm;
+	//protected static WizardDialog wm;
 	
 	protected boolean nextStatus = true;
 	
@@ -113,6 +113,7 @@ public abstract class WizardDialog extends Dialog {
 				if (c instanceof WizardPage) {
                      LOG.info("Add "+c.getName());
 					pages.addElement(c);
+                    ((WizardPage)c).setModuleContainer(parent);
                 }
 			}
             //Add buttons
@@ -133,7 +134,7 @@ public abstract class WizardDialog extends Dialog {
 		}
         centerOnParent();
         this.pack();
-		wm = this;
+		wizard = this;
 	}
 
 	private WizardListener m_wiz;
@@ -176,20 +177,20 @@ public abstract class WizardDialog extends Dialog {
 	public void setSize(int w, int h) {
 		super.setSize(w, h);
 	}
-	public void setPage(int index, Object page) {
+	public void setPage(int index, WizardPage page) {
 		pages.set(index, page);
 	}
-	public Object getPage(int index) {
-		return pages.get(index);
+	public WizardPage getPage(int index) {
+		return (WizardPage) pages.get(index);
 	}
-	public Object firstPage() {
-		return pages.firstElement();
+	public WizardPage firstPage() {
+		return (WizardPage) pages.firstElement();
 	}
-	public Object lastPage() {
-		return pages.lastElement();
+	public WizardPage lastPage() {
+		return (WizardPage) pages.lastElement();
 	}
-	public Object pageAt(int index) {
-		return pages.elementAt(index);
+	public WizardPage pageAt(int index) {
+		return (WizardPage) pages.elementAt(index);
 	}
 	
 	public Vector getChildren(Container container) {		
@@ -207,19 +208,6 @@ public abstract class WizardDialog extends Dialog {
 		}
 		return children;
 	}
-
-	public String getId(Component c) {
-		String result = null;
-		Map ids = parent.getSwingEngine().getIdMap();
-		Iterator i = ids.keySet().iterator();
-		while (i.hasNext()) {
-			String id = (String) i.next();
-			Object idtmp = ids.get(id);
-			if (idtmp.equals(c))
-				result=id;
-		}
-		return result;
-	}
 	
     /**
      * Return the values for all the pages
@@ -227,13 +215,14 @@ public abstract class WizardDialog extends Dialog {
      */
     public Map getAllValues() {
         Map values = new HashMap();
-        for (int i=0;i<pages.size();i++) {
-            Map pageMap = getValuesForPage(i);
+        Iterator it = pages.iterator();
+        while (it.hasNext()) {
+            Map pageMap = ((WizardPage)it.next()).getValues();
             Iterator keys = pageMap.keySet().iterator();
             while (keys.hasNext()) {
                 Object key = keys.next();
                 values.put(key,pageMap.get(key));
-            }
+            }            
         }
         return values;
     }
@@ -246,17 +235,7 @@ public abstract class WizardDialog extends Dialog {
 	 * @return
 	 */
 	public Map getValuesForPage(int pageCounter) {
-		Map values = new HashMap();
-		Iterator k = parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
-		Component o;
-		String id;
-		while (k.hasNext()) {
-			o = (Component)k.next();
-			id = getId(o);
-			if (id !=null &&(o instanceof JTextComponent))				
-				values.put(id,((JTextComponent)o).getText());
-		}
-		return values;
+        return pageAt(pageCounter).getValues();
 	}
     
 	/**
@@ -266,15 +245,7 @@ public abstract class WizardDialog extends Dialog {
 	 * @param values
 	 */
 	public void setValuesForPage(int pageCounter,Map values) {
-		Iterator k = parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
-		Component o = null;
-		String id = null;
-		while (k.hasNext()) {
-			o = (Component)k.next();
-			id = getId(o);
-			if ((id!=null)&&(o instanceof JTextComponent)&&(values.containsKey(id)))
-					((JTextComponent)o).setText((String) values.get(id));
-		}	
+	    pageAt(pageCounter).setValues(values);
 	}
     
 	/**
@@ -324,7 +295,7 @@ public abstract class WizardDialog extends Dialog {
 				pageCounter++;
 				goToPage(pageCounter);
 				getValuesForPage(pageCounter);
-				wm.notifyNextEvent();
+				wizard.notifyNextEvent();
 			}
 		}
 	}
@@ -339,7 +310,7 @@ public abstract class WizardDialog extends Dialog {
 				pageCounter--;
 				goToPage(pageCounter);
 				getValuesForPage(pageCounter);
-				wm.notifyPreviousEvent();
+				wizard.notifyPreviousEvent();
 			}
 		}
 	}
@@ -351,7 +322,7 @@ public abstract class WizardDialog extends Dialog {
 
 		public void mouseClicked(MouseEvent me) {
 			if (me.getSource() == finish && finishStatus) {
-				wm.notifyFinishEvent();
+				wizard.notifyFinishEvent();
 			}
 		}
     }
@@ -376,4 +347,12 @@ public abstract class WizardDialog extends Dialog {
         //      
     }    
 
+    public void reset() {
+        Iterator it = pages.iterator();
+        while (it.hasNext()) {
+            ((WizardPage)it.next()).reset();
+        }
+        pageCounter = 0;
+        goToPage(pageCounter);
+    }
 }

@@ -3,7 +3,11 @@
  */
 package org.argouml.modules.container;
 
+import java.awt.Component;
 import java.awt.Frame;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.Action;
 
@@ -18,6 +22,8 @@ import org.swixml.SwingEngine;
  */
 public class AbstractModuleContainer implements ModuleContainer {
 
+    protected Map componentsToId;
+    
     protected ActionManager actionManager;
     
     protected SwingEngine swingEngine;
@@ -45,7 +51,8 @@ public class AbstractModuleContainer implements ModuleContainer {
         //The action manager must be set by the child class instance before init
         ConverterLibrary.getInstance().register(Action.class, actionManager);
         ConverterLibrary.getInstance().register(ModuleColorConverter.TEMPLATE, 
-                new ModuleColorConverter());        
+                new ModuleColorConverter());
+        componentsToId = new HashMap();
     }
     
     /**
@@ -112,4 +119,27 @@ public class AbstractModuleContainer implements ModuleContainer {
         return swingEngine.getLocalizer().getString(key);
     }
 
+    /**
+     * Return the id of a Swing component.
+     * Use a Map to improve time of lookup (but this is more long when the component
+     * isn't registered)
+     * @param c
+     * @return String the id of the component
+     */
+    public String getId(Component c) {
+        String result = (String) componentsToId.get(c);
+        if (result == null) {
+            Map ids = getSwingEngine().getIdMap();
+            Iterator i = ids.keySet().iterator();
+            while (i.hasNext()) {
+                String id = (String) i.next();
+                Object idtmp = ids.get(id);
+                if (idtmp.equals(c)) {
+                    result=id;
+                    componentsToId.put(c,id);
+                }
+            }
+        }
+        return result;
+    }
 }

@@ -1,5 +1,6 @@
 package org.argouml.modules.container;
 
+import java.awt.Component;
 import java.awt.Frame;
 
 import org.argouml.modules.actions.ActionManager;
@@ -17,5 +18,7 @@ public interface ModuleContainer {
     public ModuleContext getContext();
     
     public String localize(String key);
+    
+    public String getId(Component comp);
     
 }
