@@ -70,6 +70,8 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     
     private Frame parentFrame;
         
+    private WizardDialog wizard;
+    
     /**
      * This is creatable from the module loader.
      */
@@ -155,13 +157,17 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     public void actionPerformed(ActionEvent e) {  
         LOG.info("Creating wizard");
         String title = parent.getSwingEngine().getLocalizer().getString(WIZARD_TITLE_KEY);
-        DefaultWizardDialog wizard = new DefaultWizardDialog(parent,
-                title ,WIZARD_DESCRIPTOR);
-        wizard.addListener(this);
+        if (wizard==null) {
+            wizard = new DefaultWizardDialog(parent,
+                    title ,WIZARD_DESCRIPTOR);
+            wizard.addListener(this);
+            LOG.info("Wizard is initialized");            
+        } else {
+            wizard.reset();
+        }
         wizard.pack();
         wizard.toFront();
-        wizard.setVisible(true);
-        LOG.info("Wizard is initialized");
+        wizard.setVisible(true);        
     }
 
 }

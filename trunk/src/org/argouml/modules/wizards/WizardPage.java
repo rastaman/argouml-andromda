@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
+import javax.swing.JTextField;
 
 import org.argouml.modules.container.ModuleContainer;
 
@@ -40,34 +40,28 @@ import org.argouml.modules.container.ModuleContainer;
 
 public class WizardPage extends JPanel {
 
-    private Map values = new HashMap();
-
     private ModuleContainer moduleContainer;
 
     /**
      * Return the values on the current page as a hashmap,
      * keyed by swixml components id's and valued with
      * the text of the components. 
-     * @param pageCounter
-     * @return
+     * @return A Map with the content of the fields of the page
      * TODO: Implement and use from WizardDialog
      */
     public Map getValues() {
+        Map values = new HashMap();
         Component[] comps = getComponents();
         Component o;
         String id;
         for (int i=0;i<comps.length;i++) {
-            if (comps[i] instanceof JTextComponent) {
-                //id = SwingEngine..getId(o);
-                values.put(null/*id*/,((JTextComponent)null).getText());         
+            id = moduleContainer.getId(comps[i]);
+            if (id!=null) {
+                if (comps[i] instanceof JTextField) {
+                    values.put(id,((JTextField)comps[i]).getText());         
+                }
+                //TODO: Handle other types of components
             }
-        }
-        Iterator k = null;//parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
-        while (k.hasNext()) {
-            o = (Component)k.next();
-            id = null;//getId(o);
-            if (id !=null &&(o instanceof JTextComponent))              
-                values.put(id,((JTextComponent)o).getText());
         }
         return values;
     }
@@ -75,22 +69,48 @@ public class WizardPage extends JPanel {
     /**
      * Assign the values contained in a map to the specified swing components
      * used in the current page. 
-     * @param pageCounter
      * @param values
-     * TODO: Implement and use from WizardDialog
      */
     public void setValues(Map values) {
-        Iterator k = null;//parent.getSwingEngine().getDescendants((JPanel) pageAt(pageCounter));
+        Iterator k = moduleContainer.getSwingEngine().getDescendants(this);
         Component o = null;
         String id = null;
         while (k.hasNext()) {
             o = (Component)k.next();
-            id = null;//getId(o);
-            if ((id!=null)&&(o instanceof JTextComponent)&&(values.containsKey(id))) {
-                    ((JTextComponent)o).setText((String) values.get(id));
-                    //LOG.info("Value for id '"+id+"' is '"+(String) values.get(id)+"'");
+            id = moduleContainer.getId(o);
+            if ( id!=null && values.containsKey(id) ) {
+                if (o instanceof JTextField) {
+                    ((JTextField)o).setText((String) values.get(id));
+                }
+                //TODO: Do other types of components (checkboxes...)
             }
         }   
+    }
+
+    public void reset() {
+        Iterator k = moduleContainer.getSwingEngine().getDescendants(this);
+        Component o = null;
+        while (k.hasNext()) {
+            o = (Component)k.next();
+            if (o instanceof JTextField) {
+                    ((JTextField)o).setText("");
+            }
+            //TODO: Do other types of components (checkboxes...)
+        }      
+    }
+
+    /**
+     * @return Returns the moduleContainer.
+     */
+    public ModuleContainer getModuleContainer() {
+        return moduleContainer;
+    }
+
+    /**
+     * @param moduleContainer The moduleContainer to set.
+     */
+    public void setModuleContainer(ModuleContainer moduleContainer) {
+        this.moduleContainer = moduleContainer;
     }
 
 }
