@@ -102,6 +102,29 @@ etc.
 		<property name="deprecation" value="off" />
 		<property name="developer.lib.dir" value="${argo.build.dir}" />
 
+		<!-- Settings for AndroMDA -->
+		<property name="andromda.version" value="3.1-RC1"/>
+		<property name="andromda.home" value="${user.home}/apps/andromda-bin-${andromda.version}"/>
+		
+		<path id="argouml.path">
+			<fileset dir="${argo.build.dir}">
+				<include name="argouml.jar" />
+				<include name="argouml-model.jar" />
+				<include name="argouml-mdr.jar" />
+				<include name="java-interfaces.jar" />
+				<include name="mdrapi.jar" />
+				<include name="mof.jar" />
+				<include name="nbmdr.jar" />
+				<include name="jmi.jar" />
+				<include name="jmiutils.jar" />
+				<include name="ocl-argo.jar" />
+				<include name="antlrall.jar" />
+				<include name="log4j.jar" />
+				<include name="gef.jar" />
+				<include name="swidgets.jar" />
+				<include name="toolbar.jar" />
+			</fileset>
+		</path>
 	</target>
 
 	<!-- Note this file can only make Ant display values set in the file correctly, -->
@@ -121,6 +144,7 @@ etc.
 		<echo message="   compile      --> compiles the source code to the tree under ${module.build.dir}" />
 		<echo message="   package      --> generates the ${argo.module.jarfile}.jar file" />
 		<echo message="   run          --> runs ArgoUML ${argo.module.jarfile}.jar" />
+		<echo message="   debug        --> runs ArgoUML ${argo.module.jarfile}.jar" />
 		<echo message="   install      --> merges ./org into ../src_new/org tree" />
 		<echo message="   usage        --> show this message (default)" />
 		<echo message="" />
@@ -152,19 +176,11 @@ etc.
 
 		<javac srcdir="${module.build.src}" destdir="${module.build.dest}" excludes="*.txt,*.bat,*.xml,*.sh" debug="${debug}" deprecation="${deprecation}" optimize="${optimize}">
 			<classpath>
-				<fileset dir="${argo.build.dir}">
-					<include name="argouml.jar" />
-					<include name="argouml-model.jar" />
-					<include name="ocl-argo.jar" />
-					<include name="antlrall.jar" />
-					<include name="log4j.jar" />
-					<include name="gef.jar" />
-					<include name="swidgets.jar" />
-				</fileset>
 				<fileset dir="${module.lib.dir}">
 					<include name="${swixml.jar}" />
 					<include name="${jdom.jar}" />
 				</fileset>
+				<path refid="argouml.path"/>
 			</classpath>
 		</javac>
 	</target>
@@ -178,17 +194,19 @@ etc.
 			<attribute name="Class-Path" value="${swixml.jar} ${jdom.jar}" />
 		</manifest>
 		<antcall target="add-manifest-entry">
-			<param name="entry.name" value="org/argouml/modules/andromda/ui/AndroMDAModule.class" />
+			<param name="entry.name" value="org/argouml/andromda/AndroMDAModule.class" />
 			<param name="entry.ext" value="module.andromda.ui.launcher" />
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
-			<param name="the.manifest" value="${module.build.dest}/${manifest}"/>
+			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
 		</antcall>
+		<!--
 		<antcall target="add-manifest-entry">
-			<param name="entry.name" value="org/argouml/modules/andromda/ui/SettingsTabAndroMDA.class" />
+			<param name="entry.name" value="org/argouml/andromda/SettingsTabAndroMDA.class" />
 			<param name="entry.ext" value="module.andromda.ui.settings" />
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
-			<param name="the.manifest" value="${module.build.dest}/${manifest}"/>
+			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
 		</antcall>
+		-->
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
 				<include name="**/*.xml" />
@@ -216,29 +234,64 @@ etc.
 		</manifest>
 	</target>
 
-
 	<!-- =================================================================== -->
 	<!-- Run ArgoUML from compiled sources                                   -->
 	<!-- =================================================================== -->
-	<target name="run" depends="package">
+	<target name="run" depends="install">
 		<echo message="--- Executing ${Name} ---" />
-		<java classname="org.argouml.application.Main" fork="yes">
+		<java classname="org.argouml.application.Main" fork="yes"
+			taskname="argouml-andromda"
+		    	maxmemory="500M">
+			<sysproperty key="argo.defaultModel"
+	                   value="${andromda.home}/andromda/xml.zips/andromda-profile-${andromda.version}.xml.zip"/>		
+			<sysproperty key="log4j.configuration"
+	                   value="org/argouml/resource/error_console.lcf"/>
 			<classpath>
+				<!--
 				<fileset dir="${module.build.dir}">
 					<include name="${module.jarfile.name}" />
+				</fileset>
+				-->
+				<fileset dir="${module.lib.dir}">
 					<include name="${swixml.jar}" />
 					<include name="${jdom.jar}" />
 				</fileset>
-				<fileset dir="${argo.build.dir}">
-					<include name="argouml.jar" />
-					<include name="argouml-model.jar" />
-					<include name="nsuml.jar" />
-					<include name="ocl-argo.jar" />
-					<include name="antlrall.jar" />
-					<include name="log4j.jar" />
-					<include name="gef.jar" />
-					<include name="swidgets.jar" />
+				<path refid="argouml.path"/>				
+			</classpath>
+		</java>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Debug ArgoUML from compiled sources                                   -->
+	<!-- =================================================================== -->
+	<target name="debug" depends="install">
+		<echo message="--- Executing ${Name} ---" />
+		<java classname="org.argouml.application.Main" fork="yes"		          
+			taskname="argouml-andromda"
+		    	maxmemory="500M">
+			<sysproperty key="argo.defaultModel"
+	                   value="${andromda.home}/andromda/xml.zips/andromda-profile-${andromda.version}.xml.zip"/>		
+			<sysproperty key="log4j.configuration"
+	                   value="org/argouml/resource/info_console.lcf"/>
+			<sysproperty key="argouml.model.implementation"
+	                   value="org.argouml.model.mdr.MDRModelImplementation"/>
+			<sysproperty key="org.netbeans.mdr.storagemodel.StorageFactoryClassName"
+	                   value="org.netbeans.mdr.persistence.btreeimpl.btreestorage.BtreeFactory"/>
+			<sysproperty key="org.netbeans.lib.jmi.Logger"
+	                   value="0"/>
+			<sysproperty key="org.netbeans.mdr.Logger"
+	                   value="0"/>
+			<classpath>
+				<!--
+				<fileset dir="${module.build.dir}">
+					<include name="${module.jarfile.name}" />
 				</fileset>
+				-->
+				<fileset dir="${module.lib.dir}">
+					<include name="${swixml.jar}" />
+					<include name="${jdom.jar}" />
+				</fileset>
+				<path refid="argouml.path"/>				
 			</classpath>
 
 		</java>
@@ -256,7 +309,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Move the jar file into the extension directory.                     -->
 	<!-- =================================================================== -->
-	<target name="install" depends="clean,package">
+	<target name="install" depends="init,clean,package">
 		<copy todir="${argo.build.dir}/ext">
 			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
 			<fileset dir="${module.lib.dir}" includes="*.jar" />

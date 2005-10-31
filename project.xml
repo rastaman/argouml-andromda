@@ -61,7 +61,7 @@ etc.
   <package>org.argouml.modules.andromda</package>
   <description>An ArgoUML module which allow to use AndroMDA from inside Argo.</description>
   <shortDescription>An ArgoUML module for driving AndroMDA</shortDescription>
-  <url>http://argouml-andromda.tigris.org/</url>
+  <url>http://argouml-andromda.tigris.org/nonav/project</url>
   <issueTrackingUrl>http://argouml.tigris.org/project_bugs.html</issueTrackingUrl>
   <siteAddress>argouml-andromda.tigris.org</siteAddress>
   <siteDirectory>www/project</siteDirectory>
@@ -105,7 +105,7 @@ etc.
     <developer>
       <id>rastaman</id>
       <name>Ludovic Maitre</name>
-      <email>rastaman dot tigris.org</email>
+      <email>rastaman at tigris.org</email>
       <url>http://projects.ubik-products.com/</url>
       <organization>Ubik Products</organization>
       <organizationUrl>http://www.ubik-products.com/</organizationUrl>
