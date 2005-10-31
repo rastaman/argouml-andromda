@@ -54,6 +54,10 @@ public class SampleMdaLauncher extends AbstractModuleContainer implements Module
             LOG.info("Application is started.");
     }
 
+    public String getName() {
+        return "Sample MDA Launcher";
+    }
+    
     /**
      * @param args
      */

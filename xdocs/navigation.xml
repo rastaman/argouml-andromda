@@ -39,7 +39,7 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 			<item name="AndroMDA"
 				href="http://www.andromda.org/" />
 			<item name="PDF Documentation"
-				href="http://argouml-andromda.tigris.org/doc/aa-manual.pdf" />
+				href="argouml-andromda-module.pdf" />
 		</links>
 		<!-- Menu in the Left Navigation -->
 		<menu name="Module documentation">
