@@ -47,18 +47,18 @@ public class WizardPage extends JPanel {
      * keyed by swixml components id's and valued with
      * the text of the components. 
      * @return A Map with the content of the fields of the page
-     * TODO: Implement and use from WizardDialog
      */
     public Map getValues() {
         Map values = new HashMap();
-        Component[] comps = getComponents();
-        Component o;
+        Iterator it = moduleContainer.getSwingEngine().getDescendants(this);
+        Component comp;
         String id;
-        for (int i=0;i<comps.length;i++) {
-            id = moduleContainer.getId(comps[i]);
+        while (it.hasNext()) {
+            comp = (Component) it.next(); 
+            id = moduleContainer.getId(comp);
             if (id!=null) {
-                if (comps[i] instanceof JTextField) {
-                    values.put(id,((JTextField)comps[i]).getText());         
+                if (comp instanceof JTextField) {
+                    values.put(id,((JTextField)comp).getText());         
                 }
                 //TODO: Handle other types of components
             }
