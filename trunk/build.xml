@@ -199,14 +199,6 @@ etc.
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
 			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
 		</antcall>
-		<!--
-		<antcall target="add-manifest-entry">
-			<param name="entry.name" value="org/argouml/andromda/SettingsTabAndroMDA.class" />
-			<param name="entry.ext" value="module.andromda.ui.settings" />
-			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
-			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
-		</antcall>
-		-->
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
 				<include name="**/*.xml" />
@@ -319,6 +311,18 @@ etc.
 			<fileset dir="${module.lib.dir}" includes="*.jar" />
 		</copy>
 	</target>
+
+	
+    <!-- ================================= 
+          target: Dist              
+         ================================= -->
+    <target name="dist" depends="init,clean,package" description="--> Prepare distribution">
+        <zip destfile="${module.build.dir}/${argo.module.jarfile}-${argo.module.version}.zip">
+		<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
+		<fileset dir="${module.lib.dir}" includes="*.jar" />
+        </zip>
+    </target>
+
 
 </project>
 
