@@ -216,11 +216,15 @@ public abstract class WizardDialog extends Dialog {
     public Map getAllValues() {
         Map values = new HashMap();
         Iterator it = pages.iterator();
+        WizardPage page;
         while (it.hasNext()) {
-            Map pageMap = ((WizardPage)it.next()).getValues();
+            page = (WizardPage)it.next();
+            LOG.debug("Get values for '"+page.getName()+"'");
+            Map pageMap = page.getValues();
             Iterator keys = pageMap.keySet().iterator();
             while (keys.hasNext()) {
                 Object key = keys.next();
+                LOG.debug("Put '"+pageMap.get(key)+"' under key '"+key+"'");
                 values.put(key,pageMap.get(key));
             }            
         }
