@@ -145,7 +145,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
 
                 handleRefresh();
                 dialog.toFront();
-                dialog.setVisible(true);            
+                dialog.setVisible(true);          
         };
         
         /**
@@ -164,6 +164,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
                     ((SettingsTabPanel) o).handleSettingsTabSave();
                 }
             }
+            ((SampleMdaLauncher)parent).saveProperties();
         }
 
         /**
