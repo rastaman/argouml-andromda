@@ -25,6 +25,7 @@ package org.argouml.andromda;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -84,14 +85,14 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
      * @see org.argouml.modules.wizards.WizardListener#finishEvent(org.argouml.modules.wizards.WizardEvent)
      */
     public void finishEvent(WizardEvent evt) {
-        LOG.info("Finished completing wizard!");
+        LOG.debug("Finished completing wizard!");
         WizardDialog w = evt.getWizard();
         Map properties = w.getAllValues();
         Iterator it = properties.keySet().iterator();
         while (it.hasNext()) {
             String propertyName = (String)it.next();
             String value = (String) properties.get(propertyName);
-            LOG.info(propertyName+"="+value);
+            LOG.debug(propertyName+"="+value);
         }
         String projectPath=(String)properties.remove("parentFolder");
         w.setVisible(false);
@@ -109,7 +110,11 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
             parent.showError("error.maven.not.set");
             return;
         }
-
+        
+        if (!new File(mavenHome).exists()) {
+            parent.showError("error.maven.not.exist");            
+        }
+        
         if (parentFrame == null)
             parentFrame = parent.getParentFrame();
         if (dialog==null)
@@ -161,13 +166,13 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     public void actionPerformed(ActionEvent e) {  
-        LOG.info("Creating wizard");
+        LOG.debug("Creating wizard");
         String title = parent.getSwingEngine().getLocalizer().getString(WIZARD_TITLE_KEY);
         if (wizard==null) {
             wizard = new DefaultWizardDialog(parent,
                     title ,WIZARD_DESCRIPTOR);
             wizard.addListener(this);
-            LOG.info("Wizard is initialized");            
+            LOG.debug("Wizard is initialized");            
         } else {
             wizard.reset();
         }

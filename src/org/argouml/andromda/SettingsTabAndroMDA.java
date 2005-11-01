@@ -185,10 +185,9 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
             if (useAndromdaProfile.isSelected()) {
                 File profileFile = new File(profile);
                 if (profileFile.exists()) {
-                    LOG.info("Set profile to "+profile);
                     parent.getContext().setProperty(KEY_PROFILE, profile);                    
                 } else {
-                    LOG.error("Profile '"+profile+"' doesn't exist!");
+                    parent.showError("error.profile.not.exist",profile);
                 }
             } else {
                 if (profile.equals(parent.getContext().getProperty(KEY_PROFILE))) {

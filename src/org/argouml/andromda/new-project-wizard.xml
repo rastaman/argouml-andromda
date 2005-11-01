@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog size="450,380" name="project.title" bundle="org.argouml.i18n.andromda-new-project" constraints="BorderLayout.CENTER">
+<dialog size="450,380" name="project.title" constraints="BorderLayout.CENTER">
 
   <panel visible="false">
   <textarea id="WZ_TEMPLATE_TEXTAREA" 

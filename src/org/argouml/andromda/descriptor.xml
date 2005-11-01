@@ -88,9 +88,9 @@
 				</scrollpane>
 			</hbox>
 		</vbox>
-	</panel>
-	<panel>
-		<button id="clearButton" text="andromda.console.clear"/>
+		<panel>
+			<button id="clearButton" text="andromda.console.clear"/>
+		</panel>
 	</panel>
 	</internalframe>
     </desktoppane>
