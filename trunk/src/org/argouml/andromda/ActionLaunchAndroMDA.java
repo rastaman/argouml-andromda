@@ -26,6 +26,7 @@ package org.argouml.andromda;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -98,38 +99,35 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         MavenLauncher launcher = new MavenLauncher();
         if (projectPath==null)
             projectPath = parent.getContext().getProjectPath();
-        if (projectPath==null) {
+        if (projectPath==null||!new File(projectPath).exists()) {
             parent.showError("error.project.not.exist");
             return;
         }
         if (mavenHome == null)
             mavenHome = parent.getContext().getMavenHome();
-        if (mavenHome == null) {
+        if (mavenHome == null||!new File(mavenHome).exists()) {
             parent.showError("error.maven.not.set");
             return;
         }
+        
         if (parentFrame == null)
             parentFrame = parent.getParentFrame();
         if (dialog==null)
             buildDialog(parentFrame);
-        if (mavenHome!=null &&(projectPath != null)) {
-            //LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
-            try {
-                String projectRoot = getProjectRoot(projectPath); 
-                launcher.setMavenHome(mavenHome);
-                launcher.setProjectRoot(projectRoot);                
-                launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
-                launcher.setStdErr(new TextAreaOutputStream(mavenError));                
-                //GUI
-                dialog.pack();
-                dialog.toFront();
-                dialog.setVisible(true);
-                launcher.start();
-            } catch (Exception e) {
-                parent.showError("error.maven.runtime",e.getMessage());
-            }
-        } else {
-            parent.showError("error.maven.runtime","Project is "+projectPath+", Maven home is "+mavenHome);
+        //LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
+        try {
+            String projectRoot = getProjectRoot(projectPath); 
+            launcher.setMavenHome(mavenHome);
+            launcher.setProjectRoot(projectRoot);                
+            launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
+            launcher.setStdErr(new TextAreaOutputStream(mavenError));                
+            //GUI
+            dialog.pack();
+            dialog.toFront();
+            dialog.setVisible(true);
+            launcher.start();
+        } catch (Exception e) {
+            parent.showError("error.maven.runtime",e.getMessage());
         }
     }
 
