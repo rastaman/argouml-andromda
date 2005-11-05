@@ -75,6 +75,11 @@ public class AndroMDAModule extends AbstractModuleContainer implements ModuleInt
                     SettingsTabAndroMDA.class.getName(),
                     "org.argouml.andromda.SettingsTabAndroMDA",
                     true);
+            LOG.info("Add Debug Settings tab");
+            settingsTabLoader.loadClassFromLoader(this.getClass().getClassLoader(),
+                    SettingsTabDebug.class.getName(),
+                    "org.argouml.andromda.SettingsTabDebug",
+                    true);
             LOG.info("AndroMDA Module created!");            
         } catch (Throwable e) {
             LOG.debug("Some problem when adding the module.", e);
