@@ -62,7 +62,10 @@ public class AbstractActionManager implements ActionManager, Converter {
      */
     public Object convert(Class arg0, Attribute arg1, Localizer arg2) throws Exception {
         //LOG.debug("Return action for "+arg1.getValue()+":"+getAction(arg1.getValue()));
-        return getAction(arg1.getValue());
+        if (actionsByName.containsKey(arg1.getValue()))
+            return getAction(arg1.getValue());
+        else
+            return new ManagedAction(this, arg1.getValue());
     }
 
     /**

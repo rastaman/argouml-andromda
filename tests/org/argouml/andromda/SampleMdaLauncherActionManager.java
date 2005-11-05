@@ -116,6 +116,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
 
                         ArrayList list = new ArrayList();
                         list.add(new SettingsTabAndroMDA());
+                        list.add(new SettingsTabDebug());
                         ListIterator iterator = list.listIterator();
                         while (iterator.hasNext()) {
                             Object o = iterator.next();
