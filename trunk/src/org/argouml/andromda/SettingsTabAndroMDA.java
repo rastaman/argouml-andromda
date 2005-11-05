@@ -138,15 +138,20 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
      * @see org.argouml.application.api.SettingsTabPanel#handleSettingsTabRefresh
      */
     public void handleSettingsTabRefresh() {
-        
-        if (isEmptyOrNull(mavenHome.getText())
-                && !isEmptyOrNull(parent.getContext().getProperty(KEY_MAVEN_HOME)))
-            mavenHome.setText(parent.getContext().getProperty(KEY_MAVEN_HOME));
-        
-        if (isEmptyOrNull(andromdaHome.getText())
-                && !isEmptyOrNull(parent.getContext().getProperty(KEY_ANDROMDA_HOME)))
-            andromdaHome.setText(parent.getContext().getProperty(KEY_ANDROMDA_HOME));
-
+        if (isEmptyOrNull(mavenHome.getText())) {
+            if (!isEmptyOrNull(parent.getContext().getProperty(KEY_MAVEN_HOME)))
+                mavenHome.setText(
+                        parent.getContext().getProperty(KEY_MAVEN_HOME));
+        } else
+            parent.getContext().setProperty(KEY_MAVEN_HOME, mavenHome.getText());            
+            
+        if (isEmptyOrNull(andromdaHome.getText())) {
+            if (!isEmptyOrNull(parent.getContext().getProperty(KEY_ANDROMDA_HOME)))
+                andromdaHome.setText(
+                        parent.getContext().getProperty(KEY_ANDROMDA_HOME));
+        } else
+            parent.getContext().setProperty(KEY_ANDROMDA_HOME, andromdaHome.getText());
+            
         refreshCheckBox();
         refreshModulesPath();
     }

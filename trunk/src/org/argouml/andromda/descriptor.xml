@@ -37,10 +37,30 @@
   	maximumSize="80,20"  	
   	preferredSize="80,20"
   	size="80,20"/>
+  	<textfield id="DEBUG_LBL" 
+  	minimumSize="160,20"
+  	maximumSize="160,20"  	
+  	preferredSize="160,20"
+  	size="160,20"/>
+	<slider id="DEBUG_SLIDER" 
+	majorTickSpacing="1" 
+	minorTickSpacing="0" 
+	paintTicks="true" 
+	paintLabels="true"
+	snapToTicks="true"
+  	minimumSize="240,40"
+  	maximumSize="240,40"  	
+  	preferredSize="240,40"
+  	size="240,40"/>
+  	<panel id="TMPL_PREFPANE"
+  	minimumSize="320,512"
+  	maximumSize="320,512"  	
+  	preferredSize="320,512"
+  	size="320,512"/>
   </panel>
     <desktoppane>
-      <internalframe id="prefsFrame" resizable="true" preferredSize="320,280" size="320,280" title="Preferences" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
-	<panel layout="FlowLayout(FlowLayout.LEFT)" id="andromdaSettings" visible="true">
+      <internalframe id="prefsFrame" resizable="true" preferredSize="320,420" size="320,420" title="Preferences" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+	<panel layout="FlowLayout(FlowLayout.LEFT)" id="andromdaSettings" visible="true" refid="TMPL_PREFPANE">
 		<vbox>
 			<hbox>
 				<label labelfor="mavenHome" text="andromda.settings.maven.home"
@@ -71,6 +91,27 @@
 				<button text="Browse" action="selectFolder"></button>
 				</hbox>
 			-->
+		</vbox>
+	</panel>
+	<panel layout="FlowLayout(FlowLayout.LEFT)" id="debugSettings" visible="true" refid="TMPL_PREFPANE">
+		<label text="debug.label"/>
+		<vbox>
+			<hbox>
+				<label text="debug.argouml"
+					refid="DEBUG_LBL"/>
+				<slider id="rootLogger" initclass="org.argouml.modules.gui.DebugSliderModel(org.argouml)"
+					refid="DEBUG_SLIDER"/>
+			</hbox>
+			<hbox>
+				<label text="debug.argouml.model.mdr"
+					refid="DEBUG_LBL"/>
+				<slider id="modelImplementationLogger" initclass="org.argouml.modules.gui.DebugSliderModel(org.argouml.model.mdr)" 
+					refid="DEBUG_SLIDER"/>
+			</hbox>
+			<hbox>
+				<checkbox id="cbEventDebugMode" action="eventDebugMode"/>
+				<label text="debug.event.pump"/>
+			</hbox>
 		</vbox>
 	</panel>
       </internalframe>
