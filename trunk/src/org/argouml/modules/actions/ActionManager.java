@@ -11,5 +11,5 @@ public interface ActionManager extends Converter {
     public void addAction(String id, Action action);
     
     public void removeAction(String id);
-    
+
 }

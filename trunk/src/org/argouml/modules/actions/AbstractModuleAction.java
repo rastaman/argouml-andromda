@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 
 /**
  * @author lmaitre
@@ -16,12 +16,12 @@ import org.argouml.modules.container.ModuleContainer;
  */
 public abstract class AbstractModuleAction extends AbstractAction {
 
-    protected ModuleContainer parent;
+    protected ModuleContext parent;
     
     /**
      * 
      */
-    public AbstractModuleAction(ModuleContainer p) {
+    public AbstractModuleAction(ModuleContext p) {
         super();
         parent = p;
     }
@@ -29,7 +29,7 @@ public abstract class AbstractModuleAction extends AbstractAction {
     /**
      * @param name
      */
-    public AbstractModuleAction(ModuleContainer p, String name) {
+    public AbstractModuleAction(ModuleContext p, String name) {
         super(name);
         parent = p;
     }
@@ -38,7 +38,7 @@ public abstract class AbstractModuleAction extends AbstractAction {
      * @param name
      * @param icon
      */
-    public AbstractModuleAction(ModuleContainer p, String name, Icon icon) {
+    public AbstractModuleAction(ModuleContext p, String name, Icon icon) {
         super(name, icon);
         parent = p;
     }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 
 public class ActionChooseFolder extends AbstractModuleAction {
     
@@ -16,7 +16,7 @@ public class ActionChooseFolder extends AbstractModuleAction {
     
     private JFileChooser chooser;
     
-    public ActionChooseFolder(ModuleContainer p, String target, String lbl) { 
+    public ActionChooseFolder(ModuleContext p, String target, String lbl) { 
         super(p); 
         targetId = target;
         label = lbl;
@@ -32,8 +32,7 @@ public class ActionChooseFolder extends AbstractModuleAction {
         if (retval == JFileChooser.APPROVE_OPTION) {
             File theFile = chooser.getSelectedFile();
             try {
-                JTextField target = (JTextField) parent.getSwingEngine().
-                    find(targetId);
+                JTextField target = (JTextField) parent.find(targetId);
                 target.setText(theFile.getCanonicalPath());
             } catch (IOException e1) {
                 e1.printStackTrace();

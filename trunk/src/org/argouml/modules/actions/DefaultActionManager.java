@@ -18,22 +18,22 @@ import org.swixml.Localizer;
  * @author lmaitre
  *
  */
-public class AbstractActionManager implements ActionManager, Converter {
+public class DefaultActionManager implements ActionManager, Converter {
 
-    private Logger LOG = Logger.getLogger(AbstractActionManager.class);
+    private Logger LOG = Logger.getLogger(DefaultActionManager.class);
     
     protected Map actionsByName;
     
     /**
      * 
      */
-    public AbstractActionManager() {
+    public DefaultActionManager() {
         super();
         actionsByName = new HashMap();
     }
 
     public void addAction(String id, Action action) {
-        //
+        //LOG.info("Add action '"+id+"' with value '"+action+"'");
         actionsByName.put(id,action);
     }
     
@@ -61,7 +61,7 @@ public class AbstractActionManager implements ActionManager, Converter {
      * @see org.swixml.Converter#convert(java.lang.Class, org.jdom.Attribute, org.swixml.Localizer)
      */
     public Object convert(Class arg0, Attribute arg1, Localizer arg2) throws Exception {
-        //LOG.debug("Return action for "+arg1.getValue()+":"+getAction(arg1.getValue()));
+        //LOG.info("Return action for "+arg1.getValue()+":"+getAction(arg1.getValue()));
         if (actionsByName.containsKey(arg1.getValue()))
             return getAction(arg1.getValue());
         else
