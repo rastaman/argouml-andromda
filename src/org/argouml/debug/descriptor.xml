@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  The frame is used only in the sample application use for the tests -->
+<frame bundle="org.argouml.i18n.debug-module" visible="false">
+	<panel visible="false">
+		<textfield id="debug:label" minimumSize="160,20"
+			maximumSize="160,20" preferredSize="160,20" size="160,20" />
+		<slider id="debug:slider" majorTickSpacing="1"
+			minorTickSpacing="0" paintTicks="true" paintLabels="true"
+			snapToTicks="true" minimumSize="240,40" maximumSize="240,40"
+			preferredSize="240,40" size="240,40" />
+		<panel id="templates:prefpane" minimumSize="320,512"
+			maximumSize="320,512" preferredSize="320,512" size="320,512" />						
+	</panel>
+	<panel layout="FlowLayout(FlowLayout.CENTER)" id="debug:settings"
+		visible="true" refid="templates:prefpane">
+		<label text="debug.label" />
+		<vbox layout="FlowLayout(FlowLayout.LEFT)">
+			<hbox>
+				<label text="debug.argouml" refid="debug:label" />
+				<slider id="debug:rootLogger"
+					initclass="org.argouml.debug.DebugSliderModel(org.argouml)"
+					refid="debug:slider" />
+			</hbox>
+			<hbox>
+				<label text="debug.argouml.critics" refid="debug:label" />
+				<slider id="debug:criticsLogger"
+					initclass="org.argouml.debug.DebugSliderModel(org.argouml.uml.cognitive)"
+					refid="debug:slider" />
+			</hbox>
+			<hbox>
+				<label text="debug.argouml.model.mdr" refid="debug:label" />
+				<slider id="debug:modelImplementationLogger"
+					initclass="org.argouml.debug.DebugSliderModel(org.argouml.model.mdr)"
+					refid="debug:slider" />
+			</hbox>
+			<hbox>
+				<checkbox id="debug:cbEventDebugMode" action="debug:eventDebugMode" />
+				<label text="debug.event.pump" />
+			</hbox>
+		</vbox>
+	</panel>
+</frame>
