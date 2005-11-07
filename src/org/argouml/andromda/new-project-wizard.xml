@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog size="450,380" name="project.title" constraints="BorderLayout.CENTER">
+<dialog size="450,380" name="project.title" 
+	constraints="BorderLayout.CENTER" bundle="org.argouml.i18n.andromda">
 
+  <!-- $Id$
+  Descriptor for the "Create Project" wizard of ArgoUML-AndroMDA module.
+  Unlike the other descriptor, this one doesn't always use components ids prefixed
+  by the namespace (i.e wizard:previous). It's because the ids which aren't prefixed
+  are transmitted directly to the andromdapp maven plugin.
+  Author: L.Maitre <rastaman at tigris.org>
+  -->
+  
   <panel visible="false">
-  <textarea id="WZ_TEMPLATE_TEXTAREA" 
+  <textarea id="templates:wizard:textarea" 
   	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
-  <textarea id="WZ_TEMPLATE_TEXTFIELD" 
+  <textarea id="templates:wizard:textfield" 
   	size="420,20" preferredSize="420,20" border="EtchedBorder"/>
   </panel>
     
-  <wizardpage id="NEW_PROJECT_GENERAL" preferredSize="440,360" size="440,360" visible="false" 
+  <wizardpage id="andromda:project:general" preferredSize="440,360" size="440,360" visible="false" 
   	name="newProject1" title="New AndroMDA Project"
   	layout="FlowLayout(FlowLayout.CENTER)">    
   	<vbox>
-          <textarea text="project.labels.author" refid="WZ_TEMPLATE_TEXTAREA" />
-          <textfield id="projectCreator" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.name" refid="WZ_TEMPLATE_TEXTAREA" />
-          <textfield id="projectName" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.id" refid="WZ_TEMPLATE_TEXTAREA" />
-          <textfield id="projectId" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.version" refid="WZ_TEMPLATE_TEXTAREA" />
-          <textfield id="projectVersion" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.package" refid="WZ_TEMPLATE_TEXTAREA" />          
-          <textfield id="baseProjectPackage" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.type" refid="WZ_TEMPLATE_TEXTAREA" />          
-          <textfield id="projectType" refid="WZ_TEMPLATE_TEXTFIELD"/>
+          <textarea text="project.labels.author" refid="templates:wizard:textarea" />
+          <textfield id="projectCreator" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.name" refid="templates:wizard:textarea" />
+          <textfield id="projectName" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.id" refid="templates:wizard:textarea" />
+          <textfield id="projectId" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.version" refid="templates:wizard:textarea" />
+          <textfield id="projectVersion" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.package" refid="templates:wizard:textarea" />          
+          <textfield id="baseProjectPackage" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.type" refid="templates:wizard:textarea" />          
+          <textfield id="projectType" refid="templates:wizard:textfield"/>
 	</vbox>      
   </wizardpage>
 
-  <wizardpage id="NEW_PROJECT_WAR" preferredSize="440,360" size="440,360" visible="false" name="newProject2" title="EAR/WAR Properties">
+  <wizardpage id="andromda:project:war" preferredSize="440,360" size="440,360" visible="false" name="newProject2" title="EAR/WAR Properties">
       <vbox>          
-          <textarea text="project.labels.app.persistence" refid="WZ_TEMPLATE_TEXTAREA" />   
-          <textfield id="persistenceType" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.jbpm" refid="WZ_TEMPLATE_TEXTAREA" />   
-          <textfield id="jbpm" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.hibernate.version" refid="WZ_TEMPLATE_TEXTAREA" />   
-          <textfield id="hibernateVersion" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.webapp" refid="WZ_TEMPLATE_TEXTAREA" />   
-          <textfield id="webComponent" refid="WZ_TEMPLATE_TEXTFIELD"/>
-          <textarea text="project.labels.app.ws" refid="WZ_TEMPLATE_TEXTAREA" />   
-          <textfield id="exposeAsWebService" refid="WZ_TEMPLATE_TEXTFIELD"/>
+          <textarea text="project.labels.app.persistence" refid="templates:wizard:textarea" />   
+          <textfield id="persistenceType" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.jbpm" refid="templates:wizard:textarea" />   
+          <textfield id="jbpm" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.hibernate.version" refid="templates:wizard:textarea" />   
+          <textfield id="hibernateVersion" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.webapp" refid="templates:wizard:textarea" />   
+          <textfield id="webComponent" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.ws" refid="templates:wizard:textarea" />   
+          <textfield id="exposeAsWebService" refid="templates:wizard:textfield"/>
         </vbox>
   </wizardpage>
 
-  <wizardpage id="NEW_PROJECT_FINISH" preferredSize="440,360" size="440,360" 
+  <wizardpage id="andromda:project:finish" preferredSize="440,360" size="440,360" 
   	visible="false" name="newProject3" title="Finish">
       <vbox>
-          <textarea text="project.labels.app.parentFolder" refid="WZ_TEMPLATE_TEXTAREA" />  
+          <textarea text="project.labels.app.parentFolder" refid="templates:wizard:textarea" />  
           <hbox>
           <textfield id="parentFolder" size="400,20" preferredSize="400,20" border="EtchedBorder"/>
-          <button id="parentFolderBt" action="chooseParentFolderAction" text="select.browse" 
+          <button id="parentFolderBt" action="andromda:project:chooseparentfolder" text="select.browse" 
           	size="30,20" preferredSize="30,20" enabled="true"/>
           </hbox>
-    	  <textarea text="project.labels.thanks" refid="WZ_TEMPLATE_TEXTAREA" />  
+    	  <textarea text="project.labels.thanks" refid="templates:wizard:textarea" />  
       </vbox>
   </wizardpage>
 
-  <panel id="WIZARD_BUTTONS">
-  	<button id="wizard_previous" text="wizard.previous"/>
-  	<button id="wizard_next" text="wizard.next"/>
-  	<button id="wizard_finish" text="wizard.finish"/>
+  <panel id="wizard:buttons">
+  	<button id="wizard:previous" text="wizard.previous"/>
+  	<button id="wizard:next" text="wizard.next"/>
+  	<button id="wizard:finish" text="wizard.finish"/>
   </panel>
 
 </dialog>
