@@ -1,6 +1,11 @@
 package org.argouml.modules.context;
 
+import java.awt.Frame;
+import java.net.URL;
 import java.util.Properties;
+
+import org.argouml.modules.actions.ActionManager;
+import org.swixml.SwingEngine;
 
 /**
  * Context for the operation of the module.
@@ -10,14 +15,8 @@ import java.util.Properties;
  *
  */
 public interface ModuleContext {
-
-    public String getProjectPath();
-    
-    public String getMavenHome();
-    
-    public String getAndroMDAHome();
-    
-    public Properties getProjectProperties();
+   
+    public Properties getProperties();
 
     public void setProperty(String key, String value);
     
@@ -25,4 +24,64 @@ public interface ModuleContext {
     
     public void removeProperty(String key);
     
+    public String getProjectPath();
+    
+    /*public void setAttribute(String key, Object value);
+    
+    public Object getAttribute(String key);
+
+    public Map getAttributes();*/
+
+    public ActionManager getActionManager();
+    
+    public SwingEngine getSwingEngine();
+    
+    public Object find(String componentId);
+    
+    public Frame getParentFrame();
+    
+    public String localize(String key);
+    
+    public String getComponentId(Object component);
+    
+    public void setActionManager(ActionManager manager);
+
+    /**
+     * @param parentFrame The parentFrame to set.
+     */
+    public void setParentFrame(Frame parentFrame);
+
+    /**
+     * @param swingEngine The swingEngine to set.
+     */
+    public void setSwingEngine(SwingEngine swingEngine);
+    
+    /**
+     * 
+     * @param msg
+     */
+    public void showFeedback(String title, String msg);
+
+    /**
+     * Show the localized error indicated by the key
+     * @param errorKey
+     */
+    public void showError(String errorKey);
+    
+    /**
+     * Show the localized error indicated by the key
+     * and the arg.
+     * @param errorKey
+     * @param arg
+     */
+    public void showError(String errorKey, String arg);
+
+    /**
+     * 
+     * @param ressource
+     * @return
+     * @throws Exception
+     */
+    public Object render(URL ressource) throws Exception;
+
 }
