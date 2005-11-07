@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 import org.argouml.modules.exec.MavenLauncher;
 import org.argouml.modules.exec.TextAreaOutputStream;
 import org.argouml.ui.ArgoDialog;
@@ -68,12 +68,12 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     
     private Frame parentFrame;
 
-    private ModuleContainer parent;
+    private ModuleContext parent;
     
     /**
      * This is creatable from the module loader.
      */
-    public ActionLaunchAndroMDA(ModuleContainer module) {
+    public ActionLaunchAndroMDA(ModuleContext module) {
         super("AndroMDA Launcher", false);
         parent=module;
     }
@@ -98,13 +98,13 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     public void actionPerformed(ActionEvent event) {
         MavenLauncher launcher = new MavenLauncher();
         if (projectPath==null)
-            projectPath = parent.getContext().getProjectPath();
+            projectPath = parent.getProjectPath();
         if (projectPath==null||!new File(projectPath).exists()) {
             parent.showError("error.project.not.exist");
             return;
         }
         if (mavenHome == null)
-            mavenHome = parent.getContext().getMavenHome();
+            mavenHome = parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
         if (mavenHome == null||!new File(mavenHome).exists()) {
             parent.showError("error.maven.not.set");
             return;
@@ -132,12 +132,11 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     }
 
     private void buildDialog(Frame owner) {
-        dialog = new ArgoDialog(owner, "Maven output", false);
-        SwingEngine swingEngine = parent.getSwingEngine();
-        mavenPanel = (JPanel) swingEngine.find("mavenPanel");   
-        mavenOutput = (JTextArea) swingEngine.find("mavenOutput");
-        mavenError = (JTextArea) swingEngine.find("mavenError");
-        JButton clear = (JButton) swingEngine.find("clearButton");
+        dialog = new ArgoDialog(owner, parent.localize("maven.output"), false);
+        mavenPanel = (JPanel) parent.find("andromda:maven");   
+        mavenOutput = (JTextArea) parent.find("andromda:mavenoutput");
+        mavenError = (JTextArea) parent.find("andromda:mavenerror");
+        JButton clear = (JButton) parent.find("andromda:clear");
         clear.setAction(new ClearAction(new JTextArea[] { mavenOutput, mavenError }));
         dialog.addButton(clear);
         dialog.setContent(mavenPanel);
