@@ -1,58 +1,71 @@
 package org.argouml.andromda;
 
+import java.awt.Component;
 import java.net.URL;
 
-import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 
 import org.apache.log4j.Logger;
 import org.argouml.application.modules.ModuleLoader;
 import org.argouml.moduleloader.ModuleInterface;
-import org.argouml.modules.container.AbstractModuleContainer;
-import org.argouml.modules.container.ModuleContainer;
-import org.argouml.modules.context.ArgoUMLContext;
+import org.argouml.modules.actions.ActionChooseFolder;
+import org.argouml.modules.actions.ActionManager;
+import org.argouml.modules.context.ContextFactory;
+import org.argouml.modules.context.ModuleContext;
 import org.argouml.ui.ProjectBrowser;
 import org.argouml.ui.cmd.GenericArgoMenuBar;
 
-public class AndroMDAModule extends AbstractModuleContainer implements ModuleInterface, ModuleContainer {
+public class AndroMDAModule implements ModuleInterface {
 
     private static final Logger LOG = Logger.getLogger(AndroMDAModule.class);
-    
-    public final static String VERSION = "0.3";
-    
+
+    public final static String VERSION = "0.5.2";
+
     public final static String NAME = "AndroMDA Module";
 
     public final static String AUTHORS = "Ludovic Maitre";
-    
+
     public final static String INFO = "This module aims at integrating AndroMDA inside ArgoUML.";
-    
-    private JMenuItem createProjectMenuItem;
-    
-    private JMenuItem launchMavenMenuItem;
-    
-    public AndroMDAModule() { 
-        if (instance==null)
-            instance=this;
-        context = new ArgoUMLContext();
-        actionManager = new AndroMDAModuleActionManager( this );
-        parentFrame = ProjectBrowser.getInstance();
-        initSwingEngine();
+
+    public final static String MENU_ID = "andromda:menu";
+
+    private ModuleContext context;
+
+    public AndroMDAModule() {
+        LOG.info("AndroMDA Module being created...");
+        context = ContextFactory.getInstance().getContext();
+        ActionManager actionManager = context.getActionManager();
+        actionManager.addAction("andromda:launchmaven",
+                new ActionLaunchAndroMDA(context));
+        actionManager.addAction("andromda:createproject",
+                new ActionCreateProjectAndroMDA(context));
+        actionManager.addAction("andromda:choosehome", new ActionChooseFolder(
+                context, "andromda:home", "select.andromda.home"));
+        actionManager.addAction("andromda:choosemavenhome",
+                new ActionChooseFolder(context, "andromda:mavenhome",
+                        "select.maven.home"));
+        actionManager
+                .addAction("andromda:project:chooseparentfolder",
+                        new ActionChooseFolder(context,
+                                "parentFolder",
+                                "select.parent.folder"));
         try {
             // Load the menu
             URL uiDef = this.getClass().getResource("descriptor.xml");
-            swingEngine.render( uiDef );
+            context.render(uiDef);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        LOG.info("AndroMDA Module created!");
     }
 
     /**
      * @see org.argouml.moduleloader.ModuleInterface#disable()
      */
     public boolean disable() {
-        GenericArgoMenuBar menubar =
-            (GenericArgoMenuBar) ProjectBrowser.getInstance().getJMenuBar();
-        menubar.getTools().remove(createProjectMenuItem);
-        menubar.getTools().remove(launchMavenMenuItem);
+        GenericArgoMenuBar menubar = (GenericArgoMenuBar) ProjectBrowser
+                .getInstance().getJMenuBar();
+        removeMenuItems(menubar.getTools());
         return true;
     }
 
@@ -61,33 +74,41 @@ public class AndroMDAModule extends AbstractModuleContainer implements ModuleInt
      */
     public boolean enable() {
         try {
-            LOG.info("AndroMDA Module being created...");
-            createProjectMenuItem = (JMenuItem) swingEngine.find("mi_newProj");
-            launchMavenMenuItem = (JMenuItem) swingEngine.find("mi_maven");
-            // Register into the Tools menu.
-            GenericArgoMenuBar menubar =
-            (GenericArgoMenuBar) ProjectBrowser.getInstance().getJMenuBar();
-            menubar.getTools().add(createProjectMenuItem);
-            menubar.getTools().add(launchMavenMenuItem);
-            LOG.info("Add AndroMDA Settings tab");
-            ModuleLoader settingsTabLoader = ModuleLoader.getInstance();
-            settingsTabLoader.loadClassFromLoader(this.getClass().getClassLoader(),
-                    SettingsTabAndroMDA.class.getName(),
-                    "org.argouml.andromda.SettingsTabAndroMDA",
-                    true);
-            LOG.info("Add Debug Settings tab");
-            settingsTabLoader.loadClassFromLoader(this.getClass().getClassLoader(),
-                    SettingsTabDebug.class.getName(),
-                    "org.argouml.andromda.SettingsTabDebug",
-                    true);
-            LOG.info("AndroMDA Module created!");            
+            // Register items for this module into the Tools menu.
+            if (!ContextFactory.getInstance().isStandalone()) {
+                LOG.info("Add AndroMDA Menu items");
+                GenericArgoMenuBar menubar = (GenericArgoMenuBar) ProjectBrowser
+                        .getInstance().getJMenuBar();
+                addMenuItems(menubar.getTools());
+                LOG.info("Add AndroMDA Settings tab");
+                ModuleLoader settingsTabLoader = ModuleLoader.getInstance();
+                settingsTabLoader.loadClassFromLoader(this.getClass()
+                        .getClassLoader(), SettingsTabAndroMDA.class.getName(),
+                        "org.argouml.andromda.SettingsTabAndroMDA", true);
+            }
         } catch (Throwable e) {
-            LOG.debug("Some problem when adding the module.", e);
+            LOG.debug("Some problem when enabling the module.", e);
             disable();
             return false;
         }
-        return true;        
+        return true;
     }
+
+    public void addMenuItems(JMenu menu) {
+        JMenu holder = (JMenu) context.find(MENU_ID);
+        Component[] items = holder.getMenuComponents();
+        for (int i=0;i<items.length;i++) {
+            menu.add(items[i]); 
+        }
+    }
+
+    public void removeMenuItems(JMenu menu) {
+        JMenu holder = (JMenu) context.find(MENU_ID);
+        Component[] items = holder.getMenuComponents();
+        for (int i=0;i<items.length;i++) {
+            menu.remove(items[i]); 
+        }
+   }
 
     /**
      * @see org.argouml.moduleloader.ModuleInterface#getInfo(int)

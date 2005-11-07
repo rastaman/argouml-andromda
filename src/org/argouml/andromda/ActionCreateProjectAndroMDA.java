@@ -26,6 +26,7 @@ package org.argouml.andromda;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,10 +34,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 import org.argouml.modules.exec.MavenLauncher;
 import org.argouml.modules.exec.TextAreaOutputStream;
-import org.argouml.modules.wizards.DefaultWizardDialog;
 import org.argouml.modules.wizards.WizardDialog;
 import org.argouml.modules.wizards.WizardEvent;
 import org.argouml.modules.wizards.WizardListener;
@@ -57,7 +57,7 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     
     private Logger LOG = Logger.getLogger(ActionCreateProjectAndroMDA.class);
 
-    private ModuleContainer parent;
+    private ModuleContext parent;
     
     private JTextArea mavenOutput;
     
@@ -76,7 +76,7 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     /**
      * This is creatable from the module loader.
      */
-    public ActionCreateProjectAndroMDA(ModuleContainer module) {
+    public ActionCreateProjectAndroMDA(ModuleContext module) {
         super("AndroMDA Create Project Module", false);
         parent = module;
     }
@@ -105,7 +105,7 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
             return;
         }
         if (mavenHome == null)
-            mavenHome = parent.getContext().getMavenHome();
+            mavenHome = parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
         if (mavenHome == null) {
             parent.showError("error.maven.not.set");
             return;
@@ -141,10 +141,10 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     }
 
     private void buildDialog(Frame owner) {
-        dialog = new ArgoDialog(owner, "Maven output", false);
-        mavenPanel = (JPanel) parent.getSwingEngine().find("mavenPanel");   
-        mavenOutput = (JTextArea) parent.getSwingEngine().find("mavenOutput");
-        mavenError = (JTextArea) parent.getSwingEngine().find("mavenError");
+        dialog = new ArgoDialog(owner, parent.localize("maven.output"), false);
+        mavenPanel = (JPanel) parent.find("andromda:maven");
+        mavenOutput = (JTextArea) parent.find("andromda:mavenoutput");
+        mavenError = (JTextArea) parent.find("andromda:mavenerror");
         dialog.setContent(mavenPanel);  
     }
     
@@ -167,10 +167,11 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
      */
     public void actionPerformed(ActionEvent e) {  
         LOG.debug("Creating wizard");
-        String title = parent.getSwingEngine().getLocalizer().getString(WIZARD_TITLE_KEY);
+        String title = parent.localize(WIZARD_TITLE_KEY);
         if (wizard==null) {
-            wizard = new DefaultWizardDialog(parent,
-                    title ,WIZARD_DESCRIPTOR);
+            URL wizardDescriptor = this.getClass().getResource(WIZARD_DESCRIPTOR);
+            wizard = new WizardDialog(parent,
+                    title ,wizardDescriptor);
             wizard.addListener(this);
             LOG.debug("Wizard is initialized");            
         } else {

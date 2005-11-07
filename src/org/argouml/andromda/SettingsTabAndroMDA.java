@@ -38,8 +38,8 @@ import org.apache.log4j.Logger;
 import org.argouml.application.ArgoVersion;
 import org.argouml.application.api.SettingsTabPanel;
 import org.argouml.application.helpers.SettingsTabHelper;
-import org.argouml.modules.container.AbstractModuleContainer;
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ContextFactory;
+import org.argouml.modules.context.ModuleContext;
 
 
 /**
@@ -72,7 +72,7 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
     
     private JPanel settingsTab;
     
-    private ModuleContainer parent;
+    private ModuleContext parent;
     
     /**
      * Creates the widgets but do not initialize them with the values
@@ -80,18 +80,18 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
      */
     public SettingsTabAndroMDA() {
         super();
-        parent = AbstractModuleContainer.getInstance();
+        parent = ContextFactory.getInstance().getContext();
         setLayout(new BorderLayout());
         LOG.info("SettingsTabAndroMDA being created...");
-        settingsTab = (JPanel) parent.getSwingEngine().find("andromdaSettings");
+        settingsTab = (JPanel) parent.find("andromda:settings");
         add(settingsTab , BorderLayout.NORTH);
-        mavenHome = (JTextField) parent.getSwingEngine().find("mavenHome");
-        andromdaHome = (JTextField) parent.getSwingEngine().find("andromdaHome");
-        useAndromdaProfile = (JCheckBox) parent.getSwingEngine().find("useAndromdaProfile");
+        mavenHome = (JTextField) parent.find("andromda:mavenhome");
+        andromdaHome = (JTextField) parent.find("andromda:home");
+        useAndromdaProfile = (JCheckBox) parent.find("andromda:useprofile");
         andromdaHome.getDocument().addDocumentListener(this);
         handleSettingsTabRefresh();
         LOG.debug("SettingsTabAndroMDA created!");
-    }    
+    }
 
     private String getAndroMdaProfileFolder() {
         return andromdaHome.getText() + File.separator + "andromda" 
@@ -139,18 +139,18 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
      */
     public void handleSettingsTabRefresh() {
         if (isEmptyOrNull(mavenHome.getText())) {
-            if (!isEmptyOrNull(parent.getContext().getProperty(KEY_MAVEN_HOME)))
+            if (!isEmptyOrNull(parent.getProperty(KEY_MAVEN_HOME)))
                 mavenHome.setText(
-                        parent.getContext().getProperty(KEY_MAVEN_HOME));
+                        parent.getProperty(KEY_MAVEN_HOME));
         } else
-            parent.getContext().setProperty(KEY_MAVEN_HOME, mavenHome.getText());            
+            parent.setProperty(KEY_MAVEN_HOME, mavenHome.getText());            
             
         if (isEmptyOrNull(andromdaHome.getText())) {
-            if (!isEmptyOrNull(parent.getContext().getProperty(KEY_ANDROMDA_HOME)))
+            if (!isEmptyOrNull(parent.getProperty(KEY_ANDROMDA_HOME)))
                 andromdaHome.setText(
-                        parent.getContext().getProperty(KEY_ANDROMDA_HOME));
+                        parent.getProperty(KEY_ANDROMDA_HOME));
         } else
-            parent.getContext().setProperty(KEY_ANDROMDA_HOME, andromdaHome.getText());
+            parent.setProperty(KEY_ANDROMDA_HOME, andromdaHome.getText());
             
         refreshCheckBox();
         refreshModulesPath();
@@ -165,7 +165,7 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
             useAndromdaProfile.setEnabled(true);
             String profile = getAndroMdaProfileFolder() + File.separator + 
                 findProfile(getAndroMdaProfileFolder(),"andromda-profile");
-            if (profile.equals(parent.getContext().getProperty(KEY_PROFILE))) {
+            if (profile.equals(parent.getProperty(KEY_PROFILE))) {
                 useAndromdaProfile.setSelected(true);
             } else {
                 useAndromdaProfile.setSelected(false);
@@ -179,10 +179,10 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
      */
     public void handleSettingsTabSave() {
         if (!isEmptyOrNull(mavenHome.getText())) {
-            parent.getContext().setProperty(KEY_MAVEN_HOME, mavenHome.getText());            
+            parent.setProperty(KEY_MAVEN_HOME, mavenHome.getText());            
         }
         if (!isEmptyOrNull(andromdaHome.getText())) {
-            parent.getContext().setProperty(KEY_ANDROMDA_HOME, andromdaHome.getText());
+            parent.setProperty(KEY_ANDROMDA_HOME, andromdaHome.getText());
             
             String profile = getAndroMdaProfileFolder() + File.separator + 
                 findProfile(getAndroMdaProfileFolder(),"andromda-profile");
@@ -190,13 +190,13 @@ public class SettingsTabAndroMDA extends SettingsTabHelper implements SettingsTa
             if (useAndromdaProfile.isSelected()) {
                 File profileFile = new File(profile);
                 if (profileFile.exists()) {
-                    parent.getContext().setProperty(KEY_PROFILE, profile);                    
+                    parent.setProperty(KEY_PROFILE, profile);                    
                 } else {
                     parent.showError("error.profile.not.exist",profile);
                 }
             } else {
-                if (profile.equals(parent.getContext().getProperty(KEY_PROFILE))) {
-                    parent.getContext().removeProperty(KEY_PROFILE);
+                if (profile.equals(parent.getProperty(KEY_PROFILE))) {
+                    parent.removeProperty(KEY_PROFILE);
                 }
             }            
         }
