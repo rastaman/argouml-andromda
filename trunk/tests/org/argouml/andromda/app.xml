@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  $Id$
+  Descriptor for the UI of the ArgoUML-AndroMDA module.
+  To avoid names collision between module the ids should be prefixed by a distinctive
+  namespace. In this descriptor the following "namespaces" are used for the ids:
+  - app: for the ids of the components used only by the standalone app
+  - andromda: for the ids of the components used by the module
+  - templates: for the ids of the templates components.
+  The actions have often the same name than the components to which they are attached,
+  perhaps we should use distincts names.
+  The frame is used only in the sample standalone application used for the tests -->
+<frame id="app:mainframe" size="800,600"
+	bundle="org.argouml.i18n.andromda" resizable="true"
+	title="Sample MDA Launcher"
+	defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+
+	<menubar id="app:menubar" name="menubar"
+		constraints="BorderLayout.NORTH" Bounds="0,0,640,30" Visible="true">
+		<!-- File menu -->
+		<menu id="app:file" mnemonic="VK_F" text="File">
+			<menuitem id="app:open" text="Open..." macos_openfile="true"
+				mnemonic="VK_O" action="app:open" />
+			<menuitem id="app:save" text="Save" mnemonic="VK_S"
+				action="app:save" enabled="false" />
+			<separator />
+			<menuitem id="app:settings" text="Settings..."
+				mnemonic="VK_W" action="app:settings" />
+			<separator />
+			<menuitem id="app:exit" mnemonic="VK_Q" text="Exit"
+				macos_quit="true" action="app:quit" />
+		</menu>
+		<menu id="app:tools" mnemonic="VK_T" text="Tools"/>
+	</menubar>
+
+	<panel id="templates" visible="false">
+	</panel>
+
+	<desktoppane/>
+
+</frame>
