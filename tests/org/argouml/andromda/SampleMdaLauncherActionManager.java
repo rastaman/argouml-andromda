@@ -17,37 +17,37 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
-import org.argouml.andromda.AndroMDAModuleActionManager;
-import org.argouml.andromda.SettingsTabAndroMDA;
 import org.argouml.application.api.PluggableSettingsTab;
 import org.argouml.application.api.SettingsTabPanel;
 import org.argouml.application.events.ArgoModuleEvent;
+import org.argouml.debug.SettingsTabDebug;
 import org.argouml.i18n.Translator;
 import org.argouml.modules.actions.AbstractModuleAction;
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.actions.ActionChooseFolder;
+import org.argouml.modules.actions.DefaultActionManager;
+import org.argouml.modules.context.ModuleContext;
 import org.argouml.ui.ArgoDialog;
 
 /**
  * @author lmaitre
  *
  */
-public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager {
+public class SampleMdaLauncherActionManager extends DefaultActionManager {
 
     private static Logger LOG = Logger.getLogger(SampleMdaLauncherActionManager.class);
     
     /**
      * @param p
      */
-    public SampleMdaLauncherActionManager(ModuleContainer p) {
-        super(p);
-        addAction("quitAction",new QuitAction(p));        
-        addAction("openAction",new OpenAction(p));        
-        addAction("settingsAction",new SettingsAction(p));        
+    public SampleMdaLauncherActionManager(ModuleContext p) {
+        super();
+        addAction("app:quit",new QuitAction(p));
+        addAction("app:open",new OpenAction(p));   
     }
 
     class QuitAction extends AbstractModuleAction {
 
-        public QuitAction(ModuleContainer p) { super(p); }
+        public QuitAction(ModuleContext p) { super(p); }
         
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
@@ -56,7 +56,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
 
     class OpenAction extends AbstractModuleAction {
         
-        public OpenAction(ModuleContainer p) { super(p); }
+        public OpenAction(ModuleContext p) { super(p); }
         
         public void actionPerformed(java.awt.event.ActionEvent e) {
             JFileChooser chooser =  new JFileChooser();
@@ -67,7 +67,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
                 File project = chooser.getSelectedFile();
                 try {
                     LOG.info("Project path set to "+project.getCanonicalPath());
-                    parent.getContext().getProjectProperties().setProperty("project.path",project.getCanonicalPath());
+                    parent.setProperty("project.path",project.getCanonicalPath());
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -81,7 +81,12 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
         
         private JTabbedPane tabs;
         
-        public SettingsAction(ModuleContainer p) { super(p); }
+        private SampleMdaLauncher app;
+
+        public SettingsAction(ModuleContext p, SampleMdaLauncher app) { 
+            super(p);
+            this.app=app;
+        }
         
         public void actionPerformed(java.awt.event.ActionEvent e) {
             if (dialog == null) {
@@ -113,7 +118,6 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
                             }
                         });
                         dialog.addButton(applyButton);
-
                         ArrayList list = new ArrayList();
                         list.add(new SettingsTabAndroMDA());
                         list.add(new SettingsTabDebug());
@@ -165,7 +169,7 @@ public class SampleMdaLauncherActionManager extends AndroMDAModuleActionManager 
                     ((SettingsTabPanel) o).handleSettingsTabSave();
                 }
             }
-            ((SampleMdaLauncher)parent).saveProperties();
+            app.saveProperties();
         }
 
         /**

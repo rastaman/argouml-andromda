@@ -9,51 +9,65 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import javax.swing.JMenu;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.argouml.modules.container.AbstractModuleContainer;
-import org.argouml.modules.container.ModuleContainer;
-import org.argouml.modules.context.StandaloneContext;
+import org.argouml.debug.DebugModule;
+import org.argouml.moduleloader.ModuleInterface;
+import org.argouml.modules.context.ContextFactory;
+import org.argouml.modules.context.ModuleContext;
 
 /**
  * @author lmaitre
- *
+ * 
  */
-public class SampleMdaLauncher extends AbstractModuleContainer implements ModuleContainer {
+public class SampleMdaLauncher {
 
-    private final static String UI_DESCRIPTOR = "org/argouml/andromda/descriptor.xml";
+    private final static String UI_DESCRIPTOR = "app.xml";
 
     private final static String LAUNCHER_PROPERTIES = "samplemdalauncher.properties";
-    
+
     private Logger LOG = Logger.getLogger(SampleMdaLauncher.class);
-    
+
+    private ModuleContext context;
+
     /**
      * 
      */
     public SampleMdaLauncher() {
-        if (instance==null)
-            instance=this;
-        PropertyConfigurator.configure(ClassLoader.getSystemResource("org/argouml/resource/mdr_console.lcf"));
-            LOG.info("Initializing GUI...");
-            try {
-                //
-                context = new StandaloneContext();
-                context.getProjectProperties().setProperty("project.path",
-                        "/Users/lmaitre/apps/andromda-bin-3.1-RC1/samples/"
-                        + "car-rental-system/mda/src/uml/CarRentalSystem.xml.zip");
-                actionManager = new SampleMdaLauncherActionManager( this );
-                initSwingEngine();
-                URL uiDef = ClassLoader.getSystemResource(UI_DESCRIPTOR);
-                File f = new File(uiDef.getFile());
-                parentFrame = (Frame) swingEngine.render(f);
-                loadProperties();
-                parentFrame.setVisible(true);
-                parentFrame.pack();
-                parentFrame.show(); 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            LOG.info("Application is started.");
+        PropertyConfigurator.configure(ClassLoader
+                .getSystemResource("org/argouml/resource/mdr_console.lcf"));
+        LOG.info("Initializing GUI...");
+        try {
+            context = ContextFactory.getInstance().createContext(
+                    LAUNCHER_PROPERTIES);
+            context.setProperty("project.path",
+                            "/Users/lmaitre/apps/andromda-bin-3.1-RC1/samples/"
+                          + "car-rental-system/mda/src/uml/CarRentalSystem.xml.zip");
+            SampleMdaLauncherActionManager manager = new SampleMdaLauncherActionManager(context);
+            context.setActionManager(manager);
+            manager.addAction("app:settings", manager.new SettingsAction(context, this));
+            URL uiDef = this.getClass().getResource(UI_DESCRIPTOR);
+            context.render(uiDef);
+            AndroMDAModule mdaModule = new AndroMDAModule();
+            ModuleInterface[] modules = new ModuleInterface[] {
+                    mdaModule,
+                    new DebugModule()
+            };
+            for (int i = 0; i < modules.length; i++)
+                modules[i].enable();
+            JMenu tools = (JMenu) context.find("app:tools");
+            mdaModule.addMenuItems(tools);      
+            Frame parentFrame = (Frame) context.getParentFrame();
+            loadProperties();
+            parentFrame.setVisible(true);
+            parentFrame.pack();
+            parentFrame.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LOG.info("Application is started.");
     }
 
     public String getName() {
@@ -64,30 +78,32 @@ public class SampleMdaLauncher extends AbstractModuleContainer implements Module
         File propFile = new File(LAUNCHER_PROPERTIES);
         if (propFile.exists()) {
             try {
-                context.getProjectProperties().load(new FileInputStream(propFile));
+                context.getProperties().load(new FileInputStream(propFile));
             } catch (Exception e) {
                 e.printStackTrace();
-                showFeedback("Error loading properties from '"+propFile.getAbsolutePath()+"'");
+                context.showError("Error loading properties from '"
+                        + propFile.getAbsolutePath() + "'");
             }
         }
     }
-    
+
     public void saveProperties() {
         File propFile = new File(LAUNCHER_PROPERTIES);
         try {
-            context.getProjectProperties().store(new FileOutputStream(propFile),"# SampleMdaLauncher properties");
+            context.getProperties().store(new FileOutputStream(propFile),
+                    "# SampleMdaLauncher properties");
         } catch (Exception e) {
             e.printStackTrace();
-            showFeedback("Error storing properties to '"+propFile.getAbsolutePath()+"'");
+            context.showError("Error storing properties to '"
+                    + propFile.getAbsolutePath() + "'");
         }
     }
-    
+
     /**
      * @param args
      */
     public static void main(String[] args) {
         SampleMdaLauncher app = new SampleMdaLauncher();
-        
     }
 
 }
