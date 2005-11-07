@@ -31,7 +31,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 
 /**
  * This is a class which is use to distinguish screens in a wizard definitions file.
@@ -40,7 +40,7 @@ import org.argouml.modules.container.ModuleContainer;
 
 public class WizardPage extends JPanel {
 
-    private ModuleContainer moduleContainer;
+    private ModuleContext context;
 
     /**
      * Return the values on the current page as a hashmap,
@@ -50,12 +50,12 @@ public class WizardPage extends JPanel {
      */
     public Map getValues() {
         Map values = new HashMap();
-        Iterator it = moduleContainer.getSwingEngine().getDescendants(this);
+        Iterator it = context.getSwingEngine().getDescendants(this);
         Component comp;
         String id;
         while (it.hasNext()) {
-            comp = (Component) it.next(); 
-            id = moduleContainer.getId(comp);
+            comp = (Component) it.next();
+            id = context.getComponentId(comp);
             if (id!=null) {
                 if (comp instanceof JTextField) {
                     values.put(id,((JTextField)comp).getText());         
@@ -72,12 +72,12 @@ public class WizardPage extends JPanel {
      * @param values
      */
     public void setValues(Map values) {
-        Iterator k = moduleContainer.getSwingEngine().getDescendants(this);
+        Iterator k = context.getSwingEngine().getDescendants(this);
         Component o = null;
         String id = null;
         while (k.hasNext()) {
             o = (Component)k.next();
-            id = moduleContainer.getId(o);
+            id = context.getComponentId(o);
             if ( id!=null && values.containsKey(id) ) {
                 if (o instanceof JTextField) {
                     ((JTextField)o).setText((String) values.get(id));
@@ -88,7 +88,7 @@ public class WizardPage extends JPanel {
     }
 
     public void reset() {
-        Iterator k = moduleContainer.getSwingEngine().getDescendants(this);
+        Iterator k = context.getSwingEngine().getDescendants(this);
         Component o = null;
         while (k.hasNext()) {
             o = (Component)k.next();
@@ -102,15 +102,15 @@ public class WizardPage extends JPanel {
     /**
      * @return Returns the moduleContainer.
      */
-    public ModuleContainer getModuleContainer() {
-        return moduleContainer;
+    public ModuleContext getContext() {
+        return context;
     }
 
     /**
      * @param moduleContainer The moduleContainer to set.
      */
-    public void setModuleContainer(ModuleContainer moduleContainer) {
-        this.moduleContainer = moduleContainer;
+    public void setContext(ModuleContext moduleContainer) {
+        this.context = moduleContainer;
     }
 
 }
