@@ -199,6 +199,12 @@ etc.
 			<param name="plugin.name" value="ArgoUML AndroMDA Plugin" />
 			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
 		</antcall>
+		<antcall target="add-manifest-entry">
+			<param name="entry.name" value="org/argouml/debug/DebugModule.class" />
+			<param name="entry.ext" value="module.debug.ui.settings" />
+			<param name="plugin.name" value="ArgoUML Debug Plugin" />
+			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
+		</antcall>
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
 				<include name="**/*.xml" />
@@ -311,7 +317,6 @@ etc.
 			<fileset dir="${module.lib.dir}" includes="*.jar" />
 		</copy>
 	</target>
-
 	
     <!-- ================================= 
           target: Dist              
