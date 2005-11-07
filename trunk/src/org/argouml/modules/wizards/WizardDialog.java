@@ -39,10 +39,9 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.container.ModuleContainer;
+import org.argouml.modules.context.ModuleContext;
 import org.swixml.SwingEngine;
 import org.tigris.swidgets.Dialog;
 
@@ -50,7 +49,7 @@ import org.tigris.swidgets.Dialog;
  * This is the class which define a Wizard.
  * @author lmaitre
  */
-public abstract class WizardDialog extends Dialog {
+public class WizardDialog extends Dialog {
     
     private Logger LOG = Logger.getLogger(WizardDialog.class);
 
@@ -71,9 +70,7 @@ public abstract class WizardDialog extends Dialog {
 	protected JButton finish;
 
 	protected int pageCounter = 0;
-	
-	//protected static WizardDialog wm;
-	
+
 	protected boolean nextStatus = true;
 	
 	protected boolean previousStatus = true;
@@ -82,29 +79,28 @@ public abstract class WizardDialog extends Dialog {
 
 	protected String _title;
 
-    private ModuleContainer parent;
+    private ModuleContext parent;
 
     private WizardDialog wizard;
     
 	public JPanel getPage(String id) {
 		try {
-			return (JPanel) parent.getSwingEngine().find(id);
+			return (JPanel) parent.find(id);
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}
 		return null;
 	}
 	
-	public WizardDialog(ModuleContainer p, String title, String wizardDescriptor) {
+	public WizardDialog(ModuleContext p, String title, URL wizardDescriptor) {
         super(p.getParentFrame(),title,0,true);
         parent = p;
         SwingEngine swingEngine = parent.getSwingEngine();
 		try {
-            if (!swingEngine.getIdMap().containsKey(wizardDescriptor)) {
+            if (!swingEngine.getIdMap().containsKey(wizardDescriptor.toExternalForm())) {
                 swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);
-                 URL descriptor = parent.getClass().getResource(wizardDescriptor);
-                 swingEngine.insert(descriptor,this);
-                 swingEngine.getIdMap().put(wizardDescriptor,this);
+                swingEngine.insert(wizardDescriptor,this);
+                swingEngine.getIdMap().put(wizardDescriptor.toExternalForm(),this);
             }
 			_title=getName();
 			Iterator i = swingEngine.getAllComponentItertor();
@@ -113,14 +109,14 @@ public abstract class WizardDialog extends Dialog {
 				if (c instanceof WizardPage) {
                      LOG.info("Add "+c.getName());
 					pages.addElement(c);
-                    ((WizardPage)c).setModuleContainer(parent);
+                    ((WizardPage)c).setContext(parent);
                 }
 			}
             //Add buttons
-            next = (JButton)swingEngine.find("wizard_next");
-            previous = (JButton)swingEngine.find("wizard_previous");
-            finish = (JButton)swingEngine.find("wizard_finish");     
-            jp = (JPanel)swingEngine.find("WIZARD_BUTTONS");
+            next = (JButton)swingEngine.find("wizard:next");
+            previous = (JButton)swingEngine.find("wizard:previous");
+            finish = (JButton)swingEngine.find("wizard:finish");     
+            jp = (JPanel)swingEngine.find("wizard:buttons");
             this.getContentPane().add(jp, BorderLayout.SOUTH);
             this.getContentPane().add(jp1, BorderLayout.CENTER);
             next.addMouseListener(new NextPage());
