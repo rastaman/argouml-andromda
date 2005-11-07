@@ -13,12 +13,13 @@ import org.argouml.application.api.Configuration;
 import org.argouml.application.api.ConfigurationKey;
 import org.argouml.kernel.Project;
 import org.argouml.kernel.ProjectManager;
+import org.argouml.ui.ProjectBrowser;
 
 /**
  * @author lmaitre
  *
  */
-public class ArgoUMLContext implements ModuleContext {
+public class ArgoUMLContext extends AbstractModuleContext implements ModuleContext {
 
     private Properties projectProperties;
     
@@ -28,6 +29,7 @@ public class ArgoUMLContext implements ModuleContext {
     public ArgoUMLContext() {
         super();
         projectProperties = new Properties();
+        parentFrame = ProjectBrowser.getInstance();
     }
 
     /**
@@ -47,27 +49,13 @@ public class ArgoUMLContext implements ModuleContext {
     }
 
     /**
-     * @see org.argouml.modules.context.ModuleContext#getMavenHome()
-     */
-    public String getMavenHome() {
-        return getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
-    }
-
-    /**
-     * @see org.argouml.modules.context.ModuleContext#getAndroMDAHome()
-     */
-    public String getAndroMDAHome() {
-        return getProperty(SettingsTabAndroMDA.KEY_ANDROMDA_HOME);
-    }
-
-    /**
      * @see org.argouml.modules.context.ModuleContext#getProjectProperties()
      */
-    public Properties getProjectProperties() {
+    public Properties getProperties() {
         return projectProperties;
     }
     
-    public void setProjectProperties(Properties props) {
+    public void setProperties(Properties props) {
         projectProperties = props;
     }
 

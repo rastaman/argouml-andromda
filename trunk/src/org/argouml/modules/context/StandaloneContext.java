@@ -3,17 +3,20 @@
  */
 package org.argouml.modules.context;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.swixml.SwingEngine;
+
 /**
  * @author lmaitre
  *
  */
-public class StandaloneContext implements ModuleContext {
+public class StandaloneContext extends AbstractModuleContext implements ModuleContext {
 
     private String propertiesFile;
     
@@ -21,7 +24,7 @@ public class StandaloneContext implements ModuleContext {
     
     public StandaloneContext() {
         super();
-        properties = new Properties();        
+        properties = new Properties();
     }
     
     /**
@@ -51,27 +54,6 @@ public class StandaloneContext implements ModuleContext {
      */
     public String getProjectPath() {
         return properties.getProperty("project.path");
-    }
-
-    /**
-     * @see org.argouml.modules.context.ModuleContext#getMavenHome()
-     */
-    public String getMavenHome() {
-        return properties.getProperty("maven.home");
-    }
-
-    /**
-     * @see org.argouml.modules.context.ModuleContext#getAndroMDAHome()
-     */
-    public String getAndroMDAHome() {
-        return properties.getProperty("andromda.home");
-    }
-
-    /**
-     * @see org.argouml.modules.context.ModuleContext#getProjectProperties()
-     */
-    public Properties getProjectProperties() {
-        return properties;
     }
 
     /**
@@ -121,6 +103,13 @@ public class StandaloneContext implements ModuleContext {
      */
     public void removeProperty(String key) {
         properties.remove(key);
+    }
+
+    /**
+     * @see org.argouml.modules.context.AbstractModuleContext#getParentFrame()
+     */
+    public Frame getParentFrame() {
+        return SwingEngine.getAppFrame();
     }
 
 }
