@@ -8,7 +8,6 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.argouml.andromda.SettingsTabAndroMDA;
 import org.argouml.application.api.Configuration;
 import org.argouml.application.api.ConfigurationKey;
 import org.argouml.kernel.Project;

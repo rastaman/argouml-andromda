@@ -8,10 +8,12 @@ import java.awt.Frame;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -51,6 +53,8 @@ public abstract class AbstractModuleContext implements ModuleContext {
         ConverterLibrary.getInstance().register(Action.class, actionManager);
         ConverterLibrary.getInstance().register(ColorConverter.TEMPLATE, 
                 new ColorConverter());
+        //read the templates
+        
     }
 
     /**
@@ -171,14 +175,17 @@ public abstract class AbstractModuleContext implements ModuleContext {
      * @see org.argouml.modules.context.ModuleContext#find(java.lang.String)
      */
     public Object find(String componentId) {
-        return swingEngine.find(componentId);
+        return swingEngine.getIdMap().get(componentId);
     }
     
     public Object render(URL ressource) throws Exception {
-        Map oldIdMap = new HashMap(swingEngine.getIdMap());
-        Object container = swingEngine.render( ressource );
-        swingEngine.getIdMap().putAll(oldIdMap);
-        return container;
+        if (parentFrame == null && ContextFactory.getInstance().isStandalone()) {
+            parentFrame = (Frame) swingEngine.render( ressource );
+        } else {
+            JPanel buffer = new JPanel();
+            swingEngine.insert( ressource , buffer );
+        }
+        return parentFrame;
     }
 
 }

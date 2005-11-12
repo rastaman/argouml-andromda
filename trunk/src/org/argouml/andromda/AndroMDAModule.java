@@ -34,6 +34,13 @@ public class AndroMDAModule implements ModuleInterface {
     public AndroMDAModule() {
         LOG.info("AndroMDA Module being created...");
         context = ContextFactory.getInstance().getContext();
+        try {
+            // Load the menu
+            URL uiDef = this.getClass().getResource("descriptor.xml");
+            context.render(uiDef);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ActionManager actionManager = context.getActionManager();
         actionManager.addAction("andromda:launchmaven",
                 new ActionLaunchAndroMDA(context));
@@ -48,14 +55,7 @@ public class AndroMDAModule implements ModuleInterface {
                 .addAction("andromda:project:chooseparentfolder",
                         new ActionChooseFolder(context,
                                 "parentFolder",
-                                "select.parent.folder"));
-        try {
-            // Load the menu
-            URL uiDef = this.getClass().getResource("descriptor.xml");
-            context.render(uiDef);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                                "select.parent.folder"));        
         LOG.info("AndroMDA Module created!");
     }
 

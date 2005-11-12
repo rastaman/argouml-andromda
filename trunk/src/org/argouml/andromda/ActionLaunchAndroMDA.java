@@ -39,7 +39,6 @@ import org.argouml.modules.exec.MavenLauncher;
 import org.argouml.modules.exec.TextAreaOutputStream;
 import org.argouml.ui.ArgoDialog;
 import org.argouml.uml.ui.UMLAction;
-import org.swixml.SwingEngine;
 
 /**
  * AndroMDA Module, for launching AndroMDA on the current model.<p>

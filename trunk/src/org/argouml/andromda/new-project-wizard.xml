@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog size="450,380" name="project.title" 
-	constraints="BorderLayout.CENTER" bundle="org.argouml.i18n.andromda">
+<frame size="450,380" name="project.title" constraints="BorderLayout.CENTER" 
+	bundle="org.argouml.i18n.andromda">
 
   <!-- $Id$
   Descriptor for the "Create Project" wizard of ArgoUML-AndroMDA module.
@@ -10,13 +10,20 @@
   Author: L.Maitre <rastaman at tigris.org>
   -->
   
-  <panel visible="false">
-  <textarea id="templates:wizard:textarea" 
-  	background="LABEL_BG" lineWrap="true" wrapStyleWord="true" editable="false" />
-  <textarea id="templates:wizard:textfield" 
-  	size="420,20" preferredSize="420,20" border="EtchedBorder"/>
+  <panel id="wizard:templates" visible="false">
+	<textarea id="templates:wizard:textarea" background="LABEL_BG" 
+		lineWrap="true" wrapStyleWord="true" editable="false" />
+	<textarea id="templates:wizard:textfield" 
+  		size="420,20" preferredSize="420,20" border="EtchedBorder"/>
   </panel>
-    
+  
+  <panel id="wizard:buttons">
+  	<button id="wizard:previous" text="wizard.previous"/>
+  	<button id="wizard:next" text="wizard.next"/>
+  	<button id="wizard:finish" text="wizard.finish"/>
+  </panel>
+
+  <panel id="andromda:wizards:new-project">    
   <wizardpage id="andromda:project:general" preferredSize="440,360" size="440,360" visible="false" 
   	name="newProject1" title="New AndroMDA Project"
   	layout="FlowLayout(FlowLayout.CENTER)">    
@@ -63,11 +70,6 @@
     	  <textarea text="project.labels.thanks" refid="templates:wizard:textarea" />  
       </vbox>
   </wizardpage>
-
-  <panel id="wizard:buttons">
-  	<button id="wizard:previous" text="wizard.previous"/>
-  	<button id="wizard:next" text="wizard.next"/>
-  	<button id="wizard:finish" text="wizard.finish"/>
   </panel>
 
-</dialog>
+</frame>
