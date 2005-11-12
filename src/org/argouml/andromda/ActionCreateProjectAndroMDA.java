@@ -54,7 +54,9 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     public final static String WIZARD_DESCRIPTOR = "new-project-wizard.xml";
 
     public final static String WIZARD_TITLE_KEY = "project.title";
-    
+
+    public final static String WIZARD_ID = "andromda:wizards:new-project";
+
     private Logger LOG = Logger.getLogger(ActionCreateProjectAndroMDA.class);
 
     private ModuleContext parent;
@@ -79,6 +81,11 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     public ActionCreateProjectAndroMDA(ModuleContext module) {
         super("AndroMDA Create Project Module", false);
         parent = module;
+        URL wizardDescriptor = this.getClass().getResource(WIZARD_DESCRIPTOR);
+        wizard = new WizardDialog(parent,
+                WIZARD_TITLE_KEY , WIZARD_ID, wizardDescriptor);
+        wizard.addListener(this);
+        LOG.debug("Wizard is initialized");            
     }
     
     /**
@@ -165,18 +172,9 @@ public class ActionCreateProjectAndroMDA  extends UMLAction
     /**
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
-    public void actionPerformed(ActionEvent e) {  
-        LOG.debug("Creating wizard");
-        String title = parent.localize(WIZARD_TITLE_KEY);
-        if (wizard==null) {
-            URL wizardDescriptor = this.getClass().getResource(WIZARD_DESCRIPTOR);
-            wizard = new WizardDialog(parent,
-                    title ,wizardDescriptor);
-            wizard.addListener(this);
-            LOG.debug("Wizard is initialized");            
-        } else {
-            wizard.reset();
-        }
+    public void actionPerformed(ActionEvent e) {
+        wizard.centerOnParent();
+        wizard.reset();
         wizard.pack();
         wizard.toFront();
         wizard.setVisible(true);        

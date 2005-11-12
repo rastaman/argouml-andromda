@@ -92,18 +92,17 @@ public class WizardDialog extends Dialog {
 		return null;
 	}
 	
-	public WizardDialog(ModuleContext p, String title, URL wizardDescriptor) {
+	public WizardDialog(ModuleContext p, String title, String id, URL wizardDescriptor) {
         super(p.getParentFrame(),title,0,true);
         parent = p;
         SwingEngine swingEngine = parent.getSwingEngine();
+        if (swingEngine.getTaglib().getFactory(WizardPage.class)==null) {
+            swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);                
+        }
 		try {
-            if (!swingEngine.getIdMap().containsKey(wizardDescriptor.toExternalForm())) {
-                swingEngine.getTaglib().registerTag("wizardpage",WizardPage.class);
-                swingEngine.insert(wizardDescriptor,this);
-                swingEngine.getIdMap().put(wizardDescriptor.toExternalForm(),this);
-            }
-			_title=getName();
-			Iterator i = swingEngine.getAllComponentItertor();
+             parent.render(wizardDescriptor);
+             _title=parent.localize(title);
+			Iterator i = swingEngine.getDescendants(swingEngine.find(id));
 			while (i.hasNext()) {
 				Component c = (Component) i.next();
 				if (c instanceof WizardPage) {
@@ -330,7 +329,7 @@ public class WizardDialog extends Dialog {
     /**
      * Moves the dialog to be centered on its parent's location on the screen.
      **/
-    private void centerOnParent() {
+    public void centerOnParent() {
         Dimension size = getSize();
         Dimension p = getParent().getSize();
         int x = (getParent().getX() - size.width)
