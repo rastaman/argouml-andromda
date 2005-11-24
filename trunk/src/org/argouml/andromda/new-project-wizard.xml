@@ -53,6 +53,8 @@
           <textfield id="hibernateVersion" refid="templates:wizard:textfield"/>
           <textarea text="project.labels.app.webapp" refid="templates:wizard:textarea" />   
           <textfield id="webComponent" refid="templates:wizard:textfield"/>
+          <textarea text="project.labels.app.webapp.type" refid="templates:wizard:textarea" />   
+          <textfield id="webComponentType" refid="templates:wizard:textfield"/>
           <textarea text="project.labels.app.ws" refid="templates:wizard:textarea" />   
           <textfield id="exposeAsWebService" refid="templates:wizard:textfield"/>
         </vbox>
