@@ -33,7 +33,7 @@ public class MavenLauncher extends Thread {
 
     public MavenLauncher() {
         sep = System.getProperty("file.separator");
-        ext = System.getProperty("os.name").matches("Windows") ? ".bat" : "";
+        ext = System.getProperty("os.name").indexOf("Windows") > -1 ? ".bat" : "";
     }
 
     public void run() {
@@ -46,6 +46,19 @@ public class MavenLauncher extends Thread {
             out.flush();
             Runtime rt = Runtime.getRuntime();
             Vector commands = new Vector();
+            //ISSUE #3681
+            String OS = System.getProperty("os.name").toLowerCase();
+            
+            if (OS.indexOf("windows 9") > -1) {
+                commands.add("command.com");
+                commands.add("/c");
+            } else if ( (OS.indexOf("nt") > -1)
+                    || (OS.indexOf("windows 2000") > -1 )
+                   || (OS.indexOf("windows 2003") > -1 )
+                   || (OS.indexOf("windows xp") > -1) ) {
+                commands.add("cmd.exe");
+                commands.add("/c");
+            }
             commands.add(mavenExec.getCanonicalPath());
             Iterator i = properties.keySet().iterator();
             while (i.hasNext()) {
