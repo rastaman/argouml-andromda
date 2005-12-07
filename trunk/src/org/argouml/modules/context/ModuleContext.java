@@ -2,6 +2,7 @@ package org.argouml.modules.context;
 
 import java.awt.Frame;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 
 import org.argouml.modules.actions.ActionManager;
@@ -26,11 +27,11 @@ public interface ModuleContext {
     
     public String getProjectPath();
     
-    /*public void setAttribute(String key, Object value);
+    public void setAttribute(String key, Object value);
     
     public Object getAttribute(String key);
 
-    public Map getAttributes();*/
+    public Map getAttributes();
 
     public ActionManager getActionManager();
     
@@ -84,4 +85,12 @@ public interface ModuleContext {
      */
     public Object render(URL ressource) throws Exception;
 
+    /**
+     * Return all elements in this namespace. A namespace in the xml gui descriptor
+     * is denotated by &lt;namespacename&gt;:objectid. This method return all elements
+     * with a id wich begin with the string argument.
+     * @param namespace
+     * @return Map Of id/elements which match the namespace.
+     */
+    public Map getAllElements(String namespace);
 }
