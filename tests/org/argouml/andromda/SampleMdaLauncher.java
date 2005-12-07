@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,8 @@ import org.argouml.debug.DebugModule;
 import org.argouml.moduleloader.ModuleInterface;
 import org.argouml.modules.context.ContextFactory;
 import org.argouml.modules.context.ModuleContext;
+import org.argouml.ui.ProjectBrowser;
+import org.swixml.SwingEngine;
 
 /**
  * @author lmaitre
@@ -42,6 +45,7 @@ public class SampleMdaLauncher {
         try {
             context = ContextFactory.getInstance().createContext(
                     LAUNCHER_PROPERTIES);
+            SwingEngine.setResourceBundleName("org.argouml.i18n.andromda");
             context.setProperty("project.path",
                             "/Users/lmaitre/apps/andromda-bin-3.1-RC1/samples/"
                           + "car-rental-system/mda/src/uml/CarRentalSystem.xml.zip");
@@ -49,8 +53,10 @@ public class SampleMdaLauncher {
             context.setActionManager(manager);
             manager.addAction("app:settings", manager.new SettingsAction(context, this));
             URL uiDef = this.getClass().getResource(UI_DESCRIPTOR);
+            if (uiDef!=null)
+                LOG.info("UI:"+uiDef.toExternalForm());
             context.render(uiDef);
-            AndroMDAModule mdaModule = new AndroMDAModule();
+            AndroMDAModule mdaModule = new AndroMDAModule();           
             ModuleInterface[] modules = new ModuleInterface[] {
                     mdaModule,
                     new DebugModule()
@@ -61,6 +67,7 @@ public class SampleMdaLauncher {
             mdaModule.addMenuItems(tools);      
             Frame parentFrame = (Frame) context.getParentFrame();
             loadProperties();
+            //initArgoUI();
             parentFrame.setVisible(true);
             parentFrame.pack();
             parentFrame.show();
@@ -70,6 +77,15 @@ public class SampleMdaLauncher {
         LOG.info("Application is started.");
     }
 
+    public void initArgoUI() {
+        ProjectBrowser instance = ProjectBrowser.getInstance();
+        JInternalFrame project = (JInternalFrame) context.getSwingEngine().find("app:frames:project-browser");
+        //project.addCsetContentPane(instance);
+        project.pack();
+        project.setVisible(true);
+        project.show();
+    }
+    
     public String getName() {
         return "Sample MDA Launcher";
     }
