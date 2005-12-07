@@ -96,6 +96,13 @@ public class MavenLauncher extends Thread {
         return goals.add(o);
     }
 
+    /**
+     * Add goals in the list.
+     */
+    public boolean addGoals(List l) {
+        return goals.addAll(l);
+    }
+    
     /* (non-Javadoc)
      * @see java.util.List#remove(java.lang.Object)
      */
