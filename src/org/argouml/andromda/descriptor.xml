@@ -1,97 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  $Id$
-	Descriptor for the UI of the ArgoUML-AndroMDA module.
-	To avoid names collision between module the ids should be prefixed by a distinctive
-	namespace. In this descriptor the following "namespaces" are used for the ids:
-	- app: for the ids of the components used only by the standalone app
-	- andromda: for the ids of the components used by the module
-	- templates: for the ids of the templates components.
-	The actions have often the same name than the components to which they are attached,
-	perhaps we should use distincts names.
-	The frame is used only in the sample standalone application used for the tests -->
+    Descriptor for the UI of the ArgoUML-AndroMDA module.
+    To avoid names collision between module the ids should be prefixed by a distinctive
+    namespace. In this descriptor the following "namespaces" are used for the ids:
+    - app: for the ids of the components used only by the standalone app
+    - andromda: for the ids of the components used by the module
+    - templates: for the ids of the templates components.
+    The actions have often the same name than the components to which they are attached,
+    perhaps we should use distincts names.
+    The frame is used only in the sample standalone application used for the tests -->
 <frame bundle="org.argouml.i18n.andromda">
 
-	<menubar>
-		<!-- Tool menu -->
-		<menu id="andromda:menu" mnemonic="VK_T" text="Tools">
-			<menuitem id="andromda:newproject"
-				text="andromda.menu.create" action="andromda:createproject" />
-			<menuitem id="andromda:launchmaven"
-				text="andromda.menu.launch" action="andromda:launchmaven" />
-			<!-- 
-				<menuitem id="andromda:menu:startserver" text="andromda.menu.server.start" action="andromda:action:startserver"/>
-				<menuitem id="andromda:menu:stopserver" text="andromda.menu.server.stop" action="andromda:action:stopserver"/>
-				<menuitem id="andromda:menu:showconsole" text="andromda.menu.console.show" action="andromda:action:showconsole"/>
-			-->
-		</menu>
-	</menubar>
+    <menubar>
+        <!-- Tool menu -->
+        <menu id="andromda:menu" mnemonic="VK_T" text="Tools">
+            <menuitem id="andromda:newproject"
+                text="andromda.menu.create"
+                action="andromda:createproject" />
+            <menuitem id="andromda:launchmaven"
+                text="andromda.menu.launch"
+                action="andromda:maven:action:launch" />
+            <menuitem id="andromda:project" 
+                text="andromda.menu.project"
+                action="andromda:maven:project:settings" />
+            <menuitem id="andromda:configuration"
+                text="andromda.menu.configuration"
+                action="andromda:maven:configuration:edit" />
+            <!-- 
+                <menuitem id="andromda:menu:startserver" text="andromda.menu.server.start" action="andromda:action:startserver"/>
+                <menuitem id="andromda:menu:stopserver" text="andromda.menu.server.stop" action="andromda:action:stopserver"/>
+                <menuitem id="andromda:menu:showconsole" text="andromda.menu.console.show" action="andromda:action:showconsole"/>
+            -->
+        </menu>
+    </menubar>
 
-	<panel visible="false">
-		<textfield id="templates:textfield" font="Arial-PLAIN-10"
-			size="260,20" preferredSize="260,20" minimumSize="260,20"
-			maximumSize="260,20" border="EtchedBorder" />
-		<textfield id="templates:label" minimumSize="80,20"
-			maximumSize="80,20" preferredSize="80,20" size="80,20" />
-		<panel id="templates:prefpane" minimumSize="320,512"
-			maximumSize="320,512" preferredSize="320,512" size="320,512" />
-	</panel>
+    <panel visible="false" id="templates">
+        <textfield id="templates:textfield" font="Arial-PLAIN-10"
+            size="260,20" preferredSize="260,20" minimumSize="260,20"
+            maximumSize="260,20" border="EtchedBorder" />
+        <textarea id="templates:textarea" background="LABEL_BG"
+            lineWrap="true" wrapStyleWord="true" editable="false" />
+        <textfield id="templates:label" minimumSize="80,20"
+            maximumSize="80,20" preferredSize="80,20" size="80,20" />
+        <panel id="templates:prefpane" minimumSize="320,512"
+            maximumSize="320,512" preferredSize="320,512"
+            size="320,512" />
+        <button id="andromda:maven:launch" text="maven.launch"
+            action="andromda:maven:action:run" />
+        <button id="andromda:clear" text="andromda.console.clear"
+            action="andromda:maven:action:clear-console" />
+    </panel>
 
-	<internalframe id="andromda:prefs" resizable="true" preferredSize="320,420"
-		size="320,420" title="Preferences" visible="false"
-		defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
-		<panel layout="FlowLayout(FlowLayout.LEFT)"
-			id="andromda:settings" visible="true" refid="templates:prefpane">
-			<vbox>
-				<hbox>
-					<label labelfor="andromda:mavenhome"
-						text="andromda.settings.maven.home" refid="templates:label" />
-					<textfield id="andromda:mavenhome"
-						refid="templates:textfield" />
-					<button text="select.browse"
-						action="andromda:choosemavenhome" />
-				</hbox>
-				<hbox>
-					<label labelfor="andromda:home"
-						text="andromda.settings.andromda.home" refid="templates:label" />
-					<textfield id="andromda:home"
-						refid="templates:textfield" />
-					<button text="select.browse" id="andromda:bthome"
-						action="andromda:choosehome" />
-				</hbox>
-				<hbox>
-					<checkbox id="andromda:useprofile" />
-					<label text="andromda.settings.use.profile.default" />
-				</hbox>
-			</vbox>
-		</panel>
-	</internalframe>
-	<internalframe resizable="true" location="10,10"
-		preferredSize="640,480" size="640,480" title="Project" visible="false"
-		defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
-		<panel layout="FlowLayout(FlowLayout.CENTER)"
-			id="andromda:maven" preferredSize="640,480" size="640,480">
-			<vbox>
-				<hbox preferredSize="640,300" size="640,300"
-					border="TitledBorder(Maven output)">
-					<scrollpane horizontalScrollBarPolicy="0"
-						verticalScrollBarPolicy="0">
-						<textarea id="andromda:mavenoutput" columns="80"
-							rows="10" lineWrap="true" />
-					</scrollpane>
-				</hbox>
-				<hbox preferredSize="640,150" size="640,150"
-					border="TitledBorder(Maven error)">
-					<scrollpane horizontalScrollBarPolicy="0"
-						verticalScrollBarPolicy="0">
-						<textarea id="andromda:mavenerror" columns="80"
-							rows="5" lineWrap="true" />
-					</scrollpane>
-				</hbox>
-			</vbox>
-			<panel>
-				<button id="andromda:clear"
-					text="andromda.console.clear" />
-			</panel>
-		</panel>
-	</internalframe>
+    <internalframe id="andromda:prefs" resizable="true"
+        preferredSize="320,420" size="320,420" title="Preferences"
+        visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
+        closable="true">
+        <panel layout="FlowLayout(FlowLayout.LEFT)"
+            id="andromda:settings" visible="true"
+            refid="templates:prefpane">
+            <vbox>
+                <hbox>
+                    <label labelfor="andromda:mavenhome"
+                        text="andromda.settings.maven.home"
+                        refid="templates:label" />
+                    <textfield id="andromda:mavenhome"
+                        refid="templates:textfield" />
+                    <button text="select.browse"
+                        action="andromda:choosemavenhome" />
+                </hbox>
+                <hbox>
+                    <label labelfor="andromda:home"
+                        text="andromda.settings.andromda.home"
+                        refid="templates:label" />
+                    <textfield id="andromda:home"
+                        refid="templates:textfield" />
+                    <button text="select.browse" id="andromda:bthome"
+                        action="andromda:choosehome" />
+                </hbox>
+                <hbox>
+                    <checkbox id="andromda:useprofile" />
+                    <label text="andromda.settings.use.profile.default" />
+                </hbox>
+            </vbox>
+        </panel>
+    </internalframe>
+    <internalframe resizable="true" location="10,10"
+        preferredSize="640,480" size="640,480" title="Project"
+        visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
+        closable="true">
+        <panel layout="FlowLayout(FlowLayout.CENTER)"
+            id="andromda:maven" preferredSize="640,480"
+            size="640,480">
+            <vbox>
+                <hbox preferredSize="640,300" size="640,300"
+                    border="TitledBorder(Maven output)">
+                    <scrollpane horizontalScrollBarPolicy="0"
+                        verticalScrollBarPolicy="0">
+                        <textarea id="andromda:mavenoutput" columns="80"
+                            rows="10" lineWrap="true" />
+                    </scrollpane>
+                </hbox>
+                <hbox preferredSize="640,150" size="640,150"
+                    border="TitledBorder(Maven error)">
+                    <scrollpane horizontalScrollBarPolicy="0"
+                        verticalScrollBarPolicy="0">
+                        <textarea id="andromda:mavenerror" columns="80"
+                            rows="5" lineWrap="true" />
+                    </scrollpane>
+                </hbox>
+            </vbox>
+        </panel>
+    </internalframe>
+    <internalframe resizable="true" location="10,10"
+        preferredSize="600,480" size="600,480" title="Project"
+        visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
+        closable="true">
+        <panel minimumSize="600,380" maximumSize="600,380"
+            preferredSize="600,380" size="600,380"
+            id="andromda:maven:panels:launch">
+            <hbox minimumSize="600,280" maximumSize="600,280"
+                preferredSize="600,280" size="600,280">
+                <vbox minimumSize="200,280" maximumSize="200,280"
+                    preferredSize="200,280" size="200,280"
+                    border="TitledBorder(Maven Goals)">
+                    <radiobutton id="maven:goal:andromda:run"
+                        text="run" />
+                    <radiobutton id="maven:goal:andromda:schema2xmi"
+                        text="schema2xmi" />
+                    <radiobutton id="maven:goal:andromda:start-server"
+                        text="start-server" />
+                    <radiobutton id="maven:goal:andromda:stop-server"
+                        text="stop-server" />
+                    <!-- <buttongroup id="maven:goals"> -->
+                    <radiobutton id="maven:goal:install" text="install" />
+                    <radiobutton id="maven:goal:mda" text="mda" />
+                    <!-- 
+                        <radiobutton
+                        id="maven:goal:mda -Dfilter=spring,java"
+                        text="mda-spring-java" />
+                    -->
+                    <radiobutton id="maven:goal:core" text="core" />
+                    <radiobutton id="maven:goal:web" text="web" />
+                    <!-- 
+                        <radiobutton id="maven:goal:core web"
+                        text="core-web" />
+                        <radiobutton
+                        id="maven:goal:mda -Dfilter=spring core deploy"
+                        text="mda-core-deploy" />
+                    -->
+                </vbox>
+                <vbox minimumSize="400,280" maximumSize="400,280"
+                    preferredSize="400,280" size="400,280"
+                    border="TitledBorder(Maven Goal Description)">
+                    <textarea preferredSize="380,280" size="380,280"
+                        id="maven:launch:goal:help"
+                        refid="templates:textarea" />
+                </vbox>
+            </hbox>
+            <vbox minimumSize="600,80" maximumSize="600,80"
+                preferredSize="600,80" size="600,80"
+                border="TitledBorder(Free Maven Goal[s])"
+                layout="FlowLayout(FlowLayout.LEFT)">
+                <label labelfor="maven:goal:free"
+                    text="maven.launch.freegoal" refid="templates:label"
+                    minimumSize="590,20" maximumSize="590,20"
+                    preferredSize="590,20" size="590,20" />
+                <textfield id="maven:goal:free"
+                    refid="templates:textfield" minimumSize="590,20"
+                    maximumSize="590,20" preferredSize="590,20"
+                    size="590,20" />
+            </vbox>
+        </panel>
+    </internalframe>
 </frame>

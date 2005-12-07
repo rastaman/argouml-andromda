@@ -2,16 +2,23 @@ package org.argouml.andromda;
 
 import java.awt.Component;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JMenu;
+import javax.swing.JRadioButton;
 
 import org.apache.log4j.Logger;
 import org.argouml.application.modules.ModuleLoader;
 import org.argouml.moduleloader.ModuleInterface;
 import org.argouml.modules.actions.ActionChooseFolder;
 import org.argouml.modules.actions.ActionManager;
+import org.argouml.modules.actions.DialogAction;
 import org.argouml.modules.context.ContextFactory;
 import org.argouml.modules.context.ModuleContext;
+import org.argouml.modules.gui.RadioBoxTextAreaUpdaterListener;
 import org.argouml.ui.ProjectBrowser;
 import org.argouml.ui.cmd.GenericArgoMenuBar;
 
@@ -37,13 +44,36 @@ public class AndroMDAModule implements ModuleInterface {
         try {
             // Load the menu
             URL uiDef = this.getClass().getResource("descriptor.xml");
-            context.render(uiDef);
+            context.render(uiDef);            
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //init all things which have properties localized now, before we load the wizard
+        //or other component. Each component must fetch his properties when instantiated,
+        //since they can be potentially unloaded later.
+        Map buttons = context.getAllElements("maven:goal");
+        RadioBoxTextAreaUpdaterListener radioListener = new RadioBoxTextAreaUpdaterListener(context,"maven:launch:goal:help");
+        radioListener.setPrefix("maven.launch.");
+        Iterator butt = buttons.values().iterator();
+        List goalsButtons = new ArrayList();
+        Object item;
+        while (butt.hasNext()) {
+            item = butt.next();
+            if (item instanceof JRadioButton) {
+                radioListener.register((JRadioButton)item);
+                goalsButtons.add(item);
+            }
+        }
+        context.setAttribute("andromda-module:maven:goals",goalsButtons);
         ActionManager actionManager = context.getActionManager();
-        actionManager.addAction("andromda:launchmaven",
-                new ActionLaunchAndroMDA(context));
+        ActionLaunchAndroMDA launchAction = new ActionLaunchAndroMDA(context);
+        actionManager.addAction("andromda:maven:action:launch",
+                launchAction);
+        actionManager.addAction("andromda:maven:configuration:edit",
+                new ActionConfigAndroMDA(context));
+        actionManager.addAction("andromda:maven:project:settings",
+                new DialogAction(context,"andromda.project.settings",
+                        this.getClass().getResource("project-settings.xml")));
         actionManager.addAction("andromda:createproject",
                 new ActionCreateProjectAndroMDA(context));
         actionManager.addAction("andromda:choosehome", new ActionChooseFolder(
@@ -51,6 +81,9 @@ public class AndroMDAModule implements ModuleInterface {
         actionManager.addAction("andromda:choosemavenhome",
                 new ActionChooseFolder(context, "andromda:mavenhome",
                         "select.maven.home"));
+        actionManager.addAction("andromda:projecthome:choose",
+                new ActionChooseFolder(context, "andromda:projecthome",
+                        "select.project.home"));
         actionManager
                 .addAction("andromda:project:chooseparentfolder",
                         new ActionChooseFolder(context,
