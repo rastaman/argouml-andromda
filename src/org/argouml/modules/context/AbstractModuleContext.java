@@ -6,9 +6,9 @@ package org.argouml.modules.context;
 import java.awt.Color;
 import java.awt.Frame;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.Action;
@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.argouml.modules.actions.ActionManager;
 import org.argouml.modules.actions.DefaultActionManager;
 import org.argouml.modules.gui.ColorConverter;
+import org.argouml.modules.gui.SwixMLUtils;
 import org.argouml.ui.ArgoDialog;
 import org.swixml.ConverterLibrary;
 import org.swixml.SwingEngine;
@@ -35,7 +36,11 @@ public abstract class AbstractModuleContext implements ModuleContext {
     
     protected Map componentsToId;
     
+    protected Map attributes;
+    
     protected ActionManager actionManager;
+    
+    protected SwixMLUtils swixFacade;
     
     protected SwingEngine swingEngine;
 
@@ -46,15 +51,15 @@ public abstract class AbstractModuleContext implements ModuleContext {
      */
     public AbstractModuleContext() {
         super();
+        attributes = Collections.synchronizedMap(new HashMap());
         actionManager = new DefaultActionManager();
-        componentsToId = new HashMap();        
+        componentsToId = new HashMap();
         swingEngine = new SwingEngine( this );
         swingEngine.setClassLoader(this.getClass().getClassLoader());
         ConverterLibrary.getInstance().register(Action.class, actionManager);
         ConverterLibrary.getInstance().register(ColorConverter.TEMPLATE, 
                 new ColorConverter());
-        //read the templates
-        
+        swixFacade = new SwixMLUtils(this);
     }
 
     /**
@@ -188,4 +193,20 @@ public abstract class AbstractModuleContext implements ModuleContext {
         return parentFrame;
     }
 
+    public Map getAllElements(String namespace) {
+        return swixFacade.getAllElements(namespace);
+    }
+
+    public void setAttribute(String key, Object value) {
+        attributes.put(key,value);
+    }
+    
+    public Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+    
+    public Map getAttributes() {
+        return attributes;
+    }
+    
 }
