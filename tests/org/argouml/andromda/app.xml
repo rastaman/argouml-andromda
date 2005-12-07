@@ -32,9 +32,19 @@
 		<menu id="app:tools" mnemonic="VK_T" text="Tools"/>
 	</menubar>
 
-	<panel id="templates" visible="false">
-	</panel>
+	<desktoppane>
+  <!-- Project screen -->
+      <internalframe id="app:frames:project-browser" resizable="true" location="10,10" preferredSize="640,480" size="640,480" title="Project" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+  </internalframe>
 
-	<desktoppane/>
+  <!-- Console screen -->
+      <internalframe id="app:frames:console" resizable="true" location="10,10" preferredSize="640,480" size="640,480" title="Console" visible="false" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" closable="true">
+    <scrollPane>
+      <panel layout="borderlayout" constraints="BorderLayout.CENTER">
+        <textarea id="ta_console" name="ta_console"/>
+      </panel>
+    </scrollPane>
+  </internalframe>      
+	</desktoppane>
 
 </frame>
