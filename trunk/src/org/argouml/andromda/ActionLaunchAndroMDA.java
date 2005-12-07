@@ -27,13 +27,19 @@ package org.argouml.andromda;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
+import org.argouml.modules.CLUtils;
+import org.argouml.modules.actions.AbstractModuleAction;
 import org.argouml.modules.context.ModuleContext;
 import org.argouml.modules.exec.MavenLauncher;
 import org.argouml.modules.exec.TextAreaOutputStream;
@@ -53,6 +59,10 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     private static final Logger LOG =
         Logger.getLogger(ActionLaunchAndroMDA.class);
 
+    private ModuleContext parent;
+    
+    private JPanel goalsPanel;
+    
     private JTextArea mavenOutput;
     
     private JTextArea mavenError;
@@ -61,13 +71,13 @@ public final class ActionLaunchAndroMDA extends UMLAction {
 
     private ArgoDialog dialog = null;
 
+    private ArgoDialog goalsDialog = null;
+
     private String mavenHome;
     
     private String projectPath;
     
     private Frame parentFrame;
-
-    private ModuleContext parent;
     
     /**
      * This is creatable from the module loader.
@@ -95,56 +105,64 @@ public final class ActionLaunchAndroMDA extends UMLAction {
      * Just let the tester know that we got executed.
      */
     public void actionPerformed(ActionEvent event) {
-        MavenLauncher launcher = new MavenLauncher();
-        if (projectPath==null)
-            projectPath = parent.getProjectPath();
-        if (projectPath==null||!new File(projectPath).exists()) {
-            parent.showError("error.project.not.exist");
-            return;
-        }
-        if (mavenHome == null)
-            mavenHome = parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
-        if (mavenHome == null||!new File(mavenHome).exists()) {
-            parent.showError("error.maven.not.set");
-            return;
-        }
-        
         if (parentFrame == null)
             parentFrame = parent.getParentFrame();
+        if (goalsDialog==null)
+            buildGoalsDialog(parentFrame);
         if (dialog==null)
             buildDialog(parentFrame);
         //LOG.info("Assume that the model is in $PROJECT/mda/src/uml/");
-        try {
-            String projectRoot = getProjectRoot(projectPath); 
-            launcher.setMavenHome(mavenHome);
-            launcher.setProjectRoot(projectRoot);                
-            launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
-            launcher.setStdErr(new TextAreaOutputStream(mavenError));                
-            //GUI
-            dialog.pack();
-            dialog.toFront();
-            dialog.setVisible(true);
-            launcher.start();
-        } catch (Exception e) {
-            parent.showError("error.maven.runtime",e.getMessage());
-        }
+        goalsDialog.pack();
+        goalsDialog.toFront();
+        goalsDialog.setVisible(true);
     }
-
+    
     private void buildDialog(Frame owner) {
         dialog = new ArgoDialog(owner, parent.localize("maven.output"), false);
         mavenPanel = (JPanel) parent.find("andromda:maven");   
         mavenOutput = (JTextArea) parent.find("andromda:mavenoutput");
         mavenError = (JTextArea) parent.find("andromda:mavenerror");
+        parent.getActionManager().addAction("andromda:maven:action:clear-console",
+                new ClearAction(new JTextArea[] { mavenOutput, mavenError }));
         JButton clear = (JButton) parent.find("andromda:clear");
-        clear.setAction(new ClearAction(new JTextArea[] { mavenOutput, mavenError }));
         dialog.addButton(clear);
         dialog.setContent(mavenPanel);
+    }
+
+    private void buildGoalsDialog(Frame owner) {
+        goalsDialog = new ArgoDialog(owner, parent.localize("maven.launch"), false);
+        parent.getActionManager().addAction("andromda:maven:action:run",
+                new LaunchAction(parent));
+        goalsPanel = (JPanel) parent.find("andromda:maven:panels:launch");   
+        goalsDialog.setContent(goalsPanel);
+        JButton launch = (JButton) parent.find("andromda:maven:launch");
+        goalsDialog.addButton(launch);
+        goalsDialog.pack();
+    }
+
+    private List getGoals() {
+        List goalsButtons = (List) parent.getAttribute("andromda-module:maven:goals");
+        List goals = new ArrayList();
+        Iterator it = goalsButtons.iterator();
+        JButton tmp;
+        while (it.hasNext()) {
+            tmp = (JButton) it.next();
+            if (tmp.isSelected())
+                goals.add(tmp.getText());
+        }
+        JTextField freeGoals = (JTextField) parent.find("maven:goal:free");
+        if (!ValidatorAndroMDA.isNullOrEmpty(freeGoals.getText())) {
+            goals.addAll(CLUtils.getArguments(freeGoals.getText()));
+        }
+        return goals;
     }
     
     /**
      * @return Returns the mavenHome.
      */
     public String getMavenHome() {
+        if (mavenHome == null)
+            mavenHome = parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
         return mavenHome;
     }
 
@@ -173,6 +191,8 @@ public final class ActionLaunchAndroMDA extends UMLAction {
      * @return Returns the projectPath.
      */
     public String getProjectPath() {
+        if (projectPath==null)
+            projectPath = parent.getProjectPath();
         return projectPath;
     }
 
@@ -195,5 +215,48 @@ public final class ActionLaunchAndroMDA extends UMLAction {
             for (int i=0;i<textAreas.length;i++)
                 textAreas[i].setText("");
         }        
-    }    
+    }
+    
+    class LaunchAction extends AbstractModuleAction {
+                
+        /**
+         * @param p
+         */
+        public LaunchAction(ModuleContext p) {
+            super(p);
+            // TODO Auto-generated constructor stub
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (!ValidatorAndroMDA.validateFile(projectPath)) {
+                parent.showError("error.project.not.exist",projectPath);
+                return;
+            }
+            if (!ValidatorAndroMDA.validateFolder(mavenHome)) {
+                parent.showError("error.maven.not.set");
+                return;
+            }
+            try {
+                String projectRoot = getProjectRoot(projectPath); 
+                if (!ValidatorAndroMDA.validateFile(projectPath+File.pathSeparator+"project.xml")) {
+                    parent.showError("error.maven.project.not.exist",projectPath);
+                    return;
+                }
+                MavenLauncher launcher = new MavenLauncher();
+                launcher.addGoals(getGoals());
+                launcher.setMavenHome(mavenHome);
+                launcher.setProjectRoot(projectRoot);                
+                launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
+                launcher.setStdErr(new TextAreaOutputStream(mavenError));                
+                //GUI
+                dialog.pack();
+                dialog.toFront();
+                dialog.setVisible(true);
+                launcher.start();
+            } catch (Exception ex) {
+                parent.showError("error.maven.runtime",ex.getMessage());
+            }               
+        };
+        
+    }
 }
