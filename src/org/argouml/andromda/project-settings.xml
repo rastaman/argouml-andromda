@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dialog specifications for project settings -->
+<dialog bundle="org.argouml.i18n.andromda" title="Project settings" visible="false" minimumSize="480,512"
+            maximumSize="480,512" preferredSize="480,512"
+            size="480,512" defaultCloseOperation="JFrame.HIDE_ON_CLOSE" layout="FlowLayout(FlowLayout.LEFT)">
+            
+    <panel layout="FlowLayout(FlowLayout.LEFT)"
+        id="andromda:panels:project-settings" visible="true"
+        refid="templates:prefpane" minimumSize="480,430"
+            maximumSize="480,430" preferredSize="480,430"
+            size="480,430" >
+        <vbox>
+            <hbox>
+                <label labelfor="andromda:projecthome"
+                    text="andromda.settings.project.home"
+                    refid="templates:label" />
+                <textfield id="andromda:projecthome" font="Arial-PLAIN-10"
+            size="260,20" preferredSize="260,20" minimumSize="260,20"
+            maximumSize="260,20" border="EtchedBorder" />
+                <button text="select.browse"
+                    action="andromda:projecthome:choose" />
+            </hbox>
+        </vbox>
+    </panel>
+   
+   <panel id="dialog:buttons" layout="FlowLayout(FlowLayout.RIGHT)"
+        visible="true" minimumSize="480,40"
+            maximumSize="480,40" preferredSize="480,40"
+            size="480,40">
+        <button id="dialog:apply" text="dialog.apply" action="dialog:action:apply"/>
+        <button id="dialog:close" text="dialog.close" action="dialog:action:close"/>
+   </panel>
+
+</dialog>
