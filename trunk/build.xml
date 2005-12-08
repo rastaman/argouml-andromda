@@ -58,7 +58,7 @@ etc.
 
 		<property name="Name" value="ArgoModule-${argo.module.name}" />
 		<property name="name" value="argomodule-${argo.module.name}" />
-		<property name="version" value="0.19.6" />
+		<property name="version" value="0.5.2" />
 		<property name="year" value="2005" />
 
 		<echo message="------------------- ${Name} ${version} [${year}] ----------------" />
@@ -222,7 +222,10 @@ etc.
 		<manifest file="${the.manifest}" mode="update">
 			<section name="${entry.name}">
 				<attribute name="Extension-name" value="${entry.ext}" />
-				<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module" />
+				<!-- NOTE: I had to add a 2 at the end of the spec title because otherwise the 
+				module(s) was initialized 2 times (by the moduleloader2 and after by the old 
+				moduleloader -->
+				<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module 2" />
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Specification-Vendor" value="University of California" />
 				<attribute name="Implementation-Title" value="${plugin.name}" />
@@ -308,11 +311,11 @@ etc.
 	<!-- Move the jar file into the extension directory.                     -->
 	<!-- =================================================================== -->
 	<target name="install" depends="init,clean,package">
-		<copy todir="${argo.build.dir}/ext">
+		<copy todir="${argo.build.dir}/ext" overwrite="true">
 			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
 			<fileset dir="${module.lib.dir}" includes="*.jar" />
 		</copy>
-		<copy todir="${developer.lib.dir}/ext">
+		<copy todir="${developer.lib.dir}/ext" overwrite="true">
 			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
 			<fileset dir="${module.lib.dir}" includes="*.jar" />
 		</copy>
