@@ -29,7 +29,7 @@ public class DialogAction extends AbstractModuleAction {
         if (dialog==null) {
             try {
                 dialog = new JDialog(parent.getParentFrame());
-                parent.getSwingEngine().insert(dialogDescriptor, dialog);
+                parent.insert(dialogDescriptor, dialog);
                 registerStandardActions();
             } catch (Exception ex) {
                 ex.printStackTrace();
