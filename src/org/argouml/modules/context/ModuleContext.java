@@ -1,5 +1,6 @@
 package org.argouml.modules.context;
 
+import java.awt.Container;
 import java.awt.Frame;
 import java.net.URL;
 import java.util.Map;
@@ -84,6 +85,8 @@ public interface ModuleContext {
      * @throws Exception
      */
     public Object render(URL ressource) throws Exception;
+
+    public void insert(URL ressource, Container container) throws Exception;
 
     /**
      * Return all elements in this namespace. A namespace in the xml gui descriptor

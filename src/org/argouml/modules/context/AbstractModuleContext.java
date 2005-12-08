@@ -4,6 +4,7 @@
 package org.argouml.modules.context;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Frame;
 import java.net.URL;
 import java.util.Collections;
@@ -188,11 +189,15 @@ public abstract class AbstractModuleContext implements ModuleContext {
             parentFrame = (Frame) swingEngine.render( ressource );
         } else {
             JPanel buffer = new JPanel();
-            swingEngine.insert( ressource , buffer );
+            insert( ressource , buffer );
         }
         return parentFrame;
     }
 
+    public void insert(URL ressource, Container container) throws Exception {
+        swingEngine.insert( ressource , container );
+    }
+    
     public Map getAllElements(String namespace) {
         return swixFacade.getAllElements(namespace);
     }
