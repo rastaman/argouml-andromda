@@ -31,6 +31,7 @@ public class DialogAction extends AbstractModuleAction {
                 dialog = new JDialog(parent.getParentFrame());
                 parent.insert(dialogDescriptor, dialog);
                 registerStandardActions();
+                populate();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -71,4 +72,19 @@ public class DialogAction extends AbstractModuleAction {
         }
     }
 
+    public void populate() {
+        Iterator it = parent.getSwingEngine().getDescendants(dialog);
+        Component comp;
+        String id;
+        while (it.hasNext()) {
+            comp = (Component) it.next();
+            id = parent.getComponentId(comp);
+            if (id!=null) {
+                if (comp instanceof JTextField && parent.getAttribute(id) != null) {
+                    ((JTextField)comp).setText(parent.getAttribute(id).toString());
+                }
+                //TODO: Handle other types of components
+            }
+        }
+    }
 }
