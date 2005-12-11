@@ -8,7 +8,9 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.util.Iterator;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,7 +79,18 @@ public class ActionConfigAndroMDA extends UMLAction {
                 dialog = new ArgoDialog(parent.getParentFrame(),
                         "AndroMDA Configuration", ArgoDialog.DEFAULT_OPTION,
                         true);
-                parent.getSwingEngine().insert(configForm, dialog);
+                JPanel contents = new JPanel();
+                parent.getSwingEngine().insert(configForm, contents);
+                dialog.setContent(contents);
+                //update buttons
+                Iterator it = parent.getSwingEngine().getDescendants(
+                        (Component)parent.find("andromda:config:buttons"));
+                Object button;
+                while (it.hasNext()) {
+                    button = it.next();
+                    if (button instanceof JButton)
+                        dialog.addButton((JButton)button);
+                }
                 SwixMLUtils.centerOnParent(dialog);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -92,7 +105,7 @@ public class ActionConfigAndroMDA extends UMLAction {
     public void actionPerformed(ActionEvent e) {
         String id = parent.getComponentId(e.getSource());
         if ("andromda:configuration".equals(id)) {
-            display(null);
+            display("default");
             return;
         }
         ComboModel model = (ComboModel) ((JComboBox) parent
