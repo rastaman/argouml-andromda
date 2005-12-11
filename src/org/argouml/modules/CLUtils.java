@@ -19,16 +19,9 @@ public class CLUtils {
             if (elem.startsWith("\"")) {
                 elem = elem.substring(1,elem.length()) + st.nextToken("\"");
             }
-            args.add(chop(elem));
+            args.add(elem.trim());
         }
         return args;
     }
-    
-    public static String chop(String str) {
-        while (str.startsWith(" "))
-            str = str.substring(1,str.length());
-        while (str.endsWith(" "))
-            str = str.substring(0,str.length()-1);
-        return str;
-    }
+
 }
