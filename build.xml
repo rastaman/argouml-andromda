@@ -208,6 +208,7 @@ etc.
 		<copy todir="${module.build.dest}">
 			<fileset dir="${module.src.dir}">
 				<include name="**/*.xml" />
+				<include name="**/*.xsl" />
 				<include name="**/*.properties" />
 			</fileset>
 		</copy>
