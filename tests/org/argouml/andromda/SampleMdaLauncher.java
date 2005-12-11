@@ -18,6 +18,7 @@ import org.argouml.debug.DebugModule;
 import org.argouml.moduleloader.ModuleInterface;
 import org.argouml.modules.context.ContextFactory;
 import org.argouml.modules.context.ModuleContext;
+import org.argouml.modules.gui.ComboModel;
 import org.argouml.ui.ProjectBrowser;
 import org.swixml.SwingEngine;
 
@@ -49,12 +50,14 @@ public class SampleMdaLauncher {
             context.setProperty("project.path",
                             "/Users/lmaitre/apps/andromda-bin-3.1-RC1/samples/"
                           + "car-rental-system/mda/src/uml/CarRentalSystem.xml.zip");
+            context.setAttribute("andromda:projecthome","/Users/lmaitre/Workspaces/ArgoUML/mdasample");
             SampleMdaLauncherActionManager manager = new SampleMdaLauncherActionManager(context);
             context.setActionManager(manager);
             manager.addAction("app:settings", manager.new SettingsAction(context, this));
             URL uiDef = this.getClass().getResource(UI_DESCRIPTOR);
             if (uiDef!=null)
                 LOG.info("UI:"+uiDef.toExternalForm());
+            ComboModel.engine = context.getSwingEngine();
             context.render(uiDef);
             AndroMDAModule mdaModule = new AndroMDAModule();           
             ModuleInterface[] modules = new ModuleInterface[] {
