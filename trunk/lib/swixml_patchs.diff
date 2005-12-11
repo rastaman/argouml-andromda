@@ -1,0 +1,63 @@
+Index: Parser.java
+===================================================================
+RCS file: /cvs/swixml/src/org/swixml/Parser.java,v
+retrieving revision 1.5
+diff -u -r1.5 Parser.java
+--- Parser.java	22 Aug 2005 21:20:02 -0000	1.5
++++ Parser.java	8 Dec 2005 22:53:46 -0000
+@@ -435,7 +435,7 @@
+         //try {
+         try {
+           if (st.hasMoreTokens()) {
+-            Class initClass = Class.forName(st.nextToken());      // load update type
++            Class initClass = engine.cl.loadClass(st.nextToken());      // load update type
+             try {                                                  // look for a getInstance() methode
+               Method factoryMethod = initClass.getMethod(Parser.GETINSTANCE, null);
+               if (Modifier.isStatic(factoryMethod.getModifiers())) {
+@@ -560,10 +560,14 @@
+       //  .. but used to add the child into this container
+       //
+       Element grandchild = child.getChild("gridbagconstraints");
++      Object swing = getSwing(child, null);
+       if (grandchild != null) {
+-        addChild((Container) obj, (Component) getSwing(child, null), getSwing(grandchild, null));
+-      } else if (!child.getName().equals("gridbagconstraints")) {
+-        addChild((Container) obj, (Component) getSwing(child, null), constrains);
++        addChild((Container) obj, (Component) swing, getSwing(grandchild, null));
++      } else if (!child.getName().equals("gridbagconstraints")
++           && swing instanceof Component) {
++        addChild((Container) obj, (Component) swing, constrains);
++      } else if (obj instanceof Collection) {
++          ((Collection)obj).add(swing);
+       }
+     }
+ 
+@@ -677,18 +681,22 @@
+             //  a getClass().getFields lookup has to be done to find the correct fields.
+             //
+             if (Action.class.equals(paraType)) {
+-              para = engine.getClient().getClass().getField(attr.getValue()).get(engine.getClient());
+-              action = (Action) para;
++                try {
++                    para = engine.getClient().getClass().getField(attr.getValue()).get(engine.getClient());
++                    action = (Action) para;                    
++                } catch (NoSuchFieldException e) {
++                    para = converter.convert(paraType, attr, engine.getLocalizer());
++                    action = (Action) para;
++                    if (para == null && SwingEngine.DEBUG_MODE) {
++                        System.err.println("Action '" + attr.getValue() + "' not set. Public Action '" + attr.getValue() + "' not found in " + engine.getClient().getClass().getName());
++                    }                    
++                }
+             } else {
+               para = converter.convert(paraType, attr, engine.getLocalizer());
+             }
+ 
+             method.invoke(obj, new Object[]{para}); // ATTR SET
+ 
+-          } catch (NoSuchFieldException e) {
+-            if (SwingEngine.DEBUG_MODE) {
+-              System.err.println("Action '" + attr.getValue() + "' not set. Public Action '" + attr.getValue() + "' not found in " + engine.getClient().getClass().getName());
+-            }
+           } catch (InvocationTargetException e) {
+             //
+             // The JFrame class is slightly incompatible with Frame.
