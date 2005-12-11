@@ -22,6 +22,8 @@ import org.apache.log4j.Logger;
 import org.argouml.modules.actions.ActionManager;
 import org.argouml.modules.actions.DefaultActionManager;
 import org.argouml.modules.gui.ColorConverter;
+import org.argouml.modules.gui.Item;
+import org.argouml.modules.gui.ItemList;
 import org.argouml.modules.gui.SwixMLUtils;
 import org.argouml.ui.ArgoDialog;
 import org.swixml.ConverterLibrary;
@@ -57,6 +59,8 @@ public abstract class AbstractModuleContext implements ModuleContext {
         componentsToId = new HashMap();
         swingEngine = new SwingEngine( this );
         swingEngine.setClassLoader(this.getClass().getClassLoader());
+        swingEngine.getTaglib().registerTag("itemList",ItemList.class);
+        swingEngine.getTaglib().registerTag("item",Item.class);        
         ConverterLibrary.getInstance().register(Action.class, actionManager);
         ConverterLibrary.getInstance().register(ColorConverter.TEMPLATE, 
                 new ColorConverter());
