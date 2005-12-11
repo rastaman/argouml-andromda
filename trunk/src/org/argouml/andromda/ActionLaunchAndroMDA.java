@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -38,7 +39,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
-import org.argouml.modules.CLUtils;
 import org.argouml.modules.actions.AbstractModuleAction;
 import org.argouml.modules.context.ModuleContext;
 import org.argouml.modules.exec.MavenLauncher;
@@ -88,8 +88,6 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     }
 
     //
-    
-
     
     private String getProjectRoot(String project) {
         String sep = System.getProperty("file.separator");
@@ -152,7 +150,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         }
         JTextField freeGoals = (JTextField) parent.find("maven:goal:free");
         if (!ValidatorAndroMDA.isNullOrEmpty(freeGoals.getText())) {
-            goals.addAll(CLUtils.getArguments(freeGoals.getText()));
+            goals.addAll(getArguments(freeGoals.getText()));
         }
         return goals;
     }
@@ -187,6 +185,20 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         this.parentFrame = parentFrame;
     }
 
+    public List getArguments(String argline) {
+        StringTokenizer st = new StringTokenizer(argline," ");
+        List args = new ArrayList();
+        String elem;
+        while (st.hasMoreTokens()) {
+            elem = st.nextToken();
+            if (elem.startsWith("\"")) {
+                elem = elem.substring(1,elem.length()) + st.nextToken("\"");
+            }
+            args.add(elem.trim());
+        }
+        return args;
+    }
+    
     /**
      * @return Returns the projectPath.
      */

@@ -14,7 +14,7 @@
     <xsl:param name="namespace">default</xsl:param>
     
     <xsl:template match="/">
-        <dialog bundle="org.argouml.i18n.andromda" minimumSize="480,700"
+        <panel bundle="org.argouml.i18n.andromda" minimumSize="480,700"
             maximumSize="480,700" preferredSize="480,700"
             size="480,700" layout="FlowLayout(FlowLayout.CENTER)">
             <vbox>
@@ -28,41 +28,30 @@
                 preferredSize="480,512" size="480,512"
                 defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
                 layout="FlowLayout(FlowLayout.LEFT)">
-                <scrollpane autoscrolls="true" VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_ALWAYS">
+                <scrollpane autoscrolls="true">
                 <xsl:apply-templates select="//namespaces" />
                 </scrollpane>
             </panel>
-            <panel id="andromda:config:buttons"
-                layout="FlowLayout(FlowLayout.RIGHT)" visible="true"
-                minimumSize="480,40" maximumSize="480,40"
-                preferredSize="480,40" size="480,40">
+            </vbox>
+            <panel id="andromda:config:buttons" visible="false">
                 <button id="andromda:config:apply" text="text.apply"
                     action="andromda:config:action:apply" />
                 <button id="andromda:config:close" text="text.close"
                     action="andromda:config:action:close" />
             </panel>
-            </vbox>
-        </dialog>
+        </panel>
     </xsl:template>
 
     <xsl:template match="repositories|server">
         <vbox>
-            <xsl:attribute name="border">
-                TitledBorder(
-                <xsl:value-of select="name()" />
-                )
-            </xsl:attribute>
+            <xsl:attribute name="border">TitledBorder(<xsl:value-of select="name()" />)</xsl:attribute>
             <xsl:apply-templates />
         </vbox>
     </xsl:template>
 
     <xsl:template match="namespaces">
         <vbox>
-            <xsl:attribute name="border">
-                TitledBorder(
-                <xsl:value-of select="name()" />
-                )
-            </xsl:attribute>
+            <xsl:attribute name="border">TitledBorder(<xsl:value-of select="name()" />)</xsl:attribute>
             <itemList id="config:listmodel">
                 <xsl:for-each select="namespace">
                     <item>
@@ -92,11 +81,7 @@
             <xsl:otherwise>false</xsl:otherwise>
             </xsl:choose>
             </xsl:attribute>
-            <xsl:attribute name="border">
-                TitledBorder(Properties for
-                <xsl:value-of select="../@name" />
-                )
-            </xsl:attribute>
+            <xsl:attribute name="border">TitledBorder(Properties for <xsl:value-of select="../@name" />)</xsl:attribute>
             <xsl:apply-templates />
         </vbox>
     </xsl:template>
@@ -159,25 +144,15 @@
     </xsl:template>
 
     <xsl:template name="getXPath">
-        /
-        <xsl:for-each select="ancestor::node()[name() != '']">
-            <xsl:call-template name="getSimpleBeanName" />
-            /
-        </xsl:for-each>
+        <xsl:text>/</xsl:text>
+        <xsl:for-each select="ancestor::node()[name() != '']"><xsl:call-template name="getSimpleBeanName" />/</xsl:for-each>
         <xsl:call-template name="getSimpleBeanName" />
     </xsl:template>
 
     <xsl:template name="getSimpleBeanName">
-        <xsl:variable name="name">
-            <xsl:value-of select="name()" />
-        </xsl:variable>
+        <xsl:variable name="name"><xsl:value-of select="name()" /></xsl:variable>
         <xsl:value-of select="name()" />
-        <xsl:if test="count(../*[name()=$name]) &gt; 1">
-            [
-            <xsl:value-of
-                select="count(preceding-sibling::node()[name()=$name])+1" />
-            ]
-        </xsl:if>
+        <xsl:if test="count(../*[name()=$name]) &gt; 1">[<xsl:value-of select="count(preceding-sibling::node()[name()=$name])+1" />]</xsl:if>
     </xsl:template>
 
     <xsl:template name="capitalize">
