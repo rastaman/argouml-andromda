@@ -30,7 +30,6 @@ import org.argouml.ui.ArgoDialog;
 import org.argouml.uml.ui.UMLAction;
 import org.jdom.Document;
 import org.jdom.transform.JDOMResult;
-import org.swixml.XVBox;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.xpath.XPathEvaluator;
@@ -42,8 +41,7 @@ public class ActionConfigAndroMDA extends UMLAction {
     /**
      * Logger.
      */
-    private static final Logger LOG = Logger
-            .getLogger(ActionLaunchAndroMDA.class);
+    private static final Logger LOG = Logger.getLogger(ActionLaunchAndroMDA.class);
 
     private ModuleContext parent;
 
@@ -67,6 +65,7 @@ public class ActionConfigAndroMDA extends UMLAction {
                 this);
         parent.getActionManager().addAction("andromda:config:action:select-namespace",
                 this);
+        int i = BoxLayout.Y_AXIS;
     }
 
     public void buildDialog() {
@@ -137,6 +136,7 @@ public class ActionConfigAndroMDA extends UMLAction {
             }
             //manage namespaces
             setVisibleNamespace(namespace);
+            dialog.validate();
             dialog.setVisible(true);
         } catch (Exception e1) {
             parent.showError("error", e1.getMessage());
@@ -151,11 +151,11 @@ public class ActionConfigAndroMDA extends UMLAction {
         while (it.hasNext()) {
             name = it.next().toString();
             namespaceVbox = parent.find(name);
-            if (namespaceVbox instanceof XVBox) {
+            if (namespaceVbox instanceof Component) {
                 if (("namespaces:properties:"+namespace).equals(name))
-                    ((XVBox)namespaceVbox).setVisible(true);
+                    ((Component)namespaceVbox).setVisible(true);
                 else
-                    ((XVBox)namespaceVbox).setVisible(false);
+                    ((Component)namespaceVbox).setVisible(false);
             }
         }
     }
