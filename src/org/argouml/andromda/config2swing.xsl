@@ -12,32 +12,23 @@
     <xsl:strip-space elements="*" />
 
     <xsl:param name="namespace">default</xsl:param>
-    
+
     <xsl:template match="/">
-        <panel bundle="org.argouml.i18n.andromda" minimumSize="480,700"
-            maximumSize="480,700" preferredSize="480,700"
-            size="480,700" layout="FlowLayout(FlowLayout.CENTER)">
+        <panel bundle="org.argouml.i18n.andromda" minimumSize="640,480"
+            maximumSize="640,480" preferredSize="640,480" size="640,480">
             <vbox>
-            <panel
-                 visible="true"
-                minimumSize="480,60" maximumSize="480,60"
-                preferredSize="480,60" size="480,60">
-                <xsl:apply-templates select="//repositories|//server" />
-            </panel>
-            <panel minimumSize="480,512" maximumSize="480,512"
-                preferredSize="480,512" size="480,512"
-                defaultCloseOperation="JFrame.HIDE_ON_CLOSE"
-                layout="FlowLayout(FlowLayout.LEFT)">
-                <scrollpane autoscrolls="true">
+                <panel>
+                    <xsl:apply-templates select="//repositories|//server" />
+                </panel>
                 <xsl:apply-templates select="//namespaces" />
-                </scrollpane>
-            </panel>
             </vbox>
             <panel id="andromda:config:buttons" visible="false">
                 <button id="andromda:config:apply" text="text.apply"
                     action="andromda:config:action:apply" />
+                <!-- 
                 <button id="andromda:config:close" text="text.close"
                     action="andromda:config:action:close" />
+                     -->
             </panel>
         </panel>
     </xsl:template>
@@ -50,63 +41,52 @@
     </xsl:template>
 
     <xsl:template match="namespaces">
-        <vbox>
-            <xsl:attribute name="border">TitledBorder(<xsl:value-of select="name()" />)</xsl:attribute>
+        <panel minimumSize="630,400" maximumSize="630,400"
+            preferredSize="630,400" size="630,400">
             <itemList id="config:listmodel">
                 <xsl:for-each select="namespace">
                     <item>
-                        <xsl:attribute name="name">
-                            <xsl:value-of select="@name"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="value">
-                            <xsl:call-template name="getXPath" />
-                        </xsl:attribute>
+                        <xsl:attribute name="name"><xsl:value-of select="@name" /></xsl:attribute>
+                        <xsl:attribute name="value"><xsl:call-template name="getXPath" /></xsl:attribute>
                     </item>
                 </xsl:for-each>
             </itemList>
-            <combobox id="andromda:config:select-namespace" action="andromda:config:action:select-namespace"
-                prototypeDisplayValue="1234567890|1234567890" 
+            <combobox id="andromda:config:select-namespace"
+                action="andromda:config:action:select-namespace"
+                prototypeDisplayValue="1234567890|1234567890"
                 initclass="org.argouml.modules.gui.ComboModel(config:listmodel)" />
-            <xsl:apply-templates
-                select="namespace/properties" />
-        </vbox>
+            <xsl:apply-templates select="namespace/properties" />
+        </panel>
     </xsl:template>
 
     <xsl:template match="namespace/properties">
-        <vbox>
-            <xsl:attribute name="id">namespaces:properties:<xsl:value-of select="../@name"/></xsl:attribute>
-            <xsl:attribute name="visible">
-            <xsl:choose>
-            <xsl:when test="../@name=$namespace">true</xsl:when>
-            <xsl:otherwise>false</xsl:otherwise>
-            </xsl:choose>
-            </xsl:attribute>
-            <xsl:attribute name="border">TitledBorder(Properties for <xsl:value-of select="../@name" />)</xsl:attribute>
-            <xsl:apply-templates />
-        </vbox>
+        <scrollpane minimumSize="626,360" maximumSize="626,360"
+            preferredSize="626,360" size="626,360">
+                <xsl:attribute name="id">namespaces:properties:<xsl:value-of select="../@name" /></xsl:attribute>
+                <xsl:attribute name="visible">
+                    <xsl:choose>
+                        <xsl:when test="../@name=$namespace">true</xsl:when>
+                        <xsl:otherwise>false</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <vbox>
+                    <xsl:attribute name="border">TitledBorder(Properties for <xsl:value-of select="../@name" />)</xsl:attribute>
+                    <xsl:apply-templates />
+                </vbox>
+        </scrollpane>
     </xsl:template>
 
     <xsl:template
         match="host|port|repository/models/model//*[text()!='']">
-        <xsl:variable name="property-id">
-            <xsl:call-template name="getXPath" />
-        </xsl:variable>
+        <xsl:variable name="property-id"><xsl:call-template name="getXPath" /></xsl:variable>
         <hbox>
             <label>
-                <xsl:attribute name="labelfor">
-                    <xsl:value-of select="$property-id" />
-                </xsl:attribute>
-                <xsl:attribute name="text">
-                    <xsl:value-of select="name()" />
-                </xsl:attribute>
+                <xsl:attribute name="labelfor"><xsl:value-of select="$property-id" /></xsl:attribute>
+                <xsl:attribute name="text"><xsl:value-of select="name()" /></xsl:attribute>
             </label>
             <textfield>
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$property-id" />
-                </xsl:attribute>
-                <xsl:attribute name="text">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
+                <xsl:attribute name="id"><xsl:value-of select="$property-id" /></xsl:attribute>
+                <xsl:attribute name="text"><xsl:value-of select="." /></xsl:attribute>
             </textfield>
         </hbox>
     </xsl:template>
@@ -115,31 +95,21 @@
         <xsl:variable name="property-id">
             <xsl:call-template name="getXPath" />
         </xsl:variable>
-        <hbox>
+        <hbox minimumSize="610,20" maximumSize="610,20"
+            preferredSize="610,20" size="610,20">
             <label>
-                <xsl:attribute name="labelfor">
-                    <xsl:value-of select="$property-id" />
-                </xsl:attribute>
-                <xsl:attribute name="text">
-                    <xsl:value-of select="@name" />
-                </xsl:attribute>
+                <xsl:attribute name="labelfor"><xsl:value-of select="$property-id" /></xsl:attribute>
+                <xsl:attribute name="text"><xsl:value-of select="@name" /></xsl:attribute>
             </label>
             <textfield>
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$property-id" />
-                </xsl:attribute>
-                <xsl:attribute name="text">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
+                <xsl:attribute name="id"><xsl:value-of select="$property-id" /></xsl:attribute>
+                <xsl:attribute name="text"><xsl:value-of select="." /></xsl:attribute>
             </textfield>
         </hbox>
     </xsl:template>
 
     <xsl:template name="getBeanName">
-        <xsl:for-each select="ancestor::node()[name() != '']">
-            <xsl:call-template name="getSimpleBeanName" />
-            .
-        </xsl:for-each>
+        <xsl:for-each select="ancestor::node()[name() != '']"><xsl:call-template name="getSimpleBeanName" />.</xsl:for-each>
         <xsl:call-template name="getSimpleBeanName" />
     </xsl:template>
 
@@ -150,7 +120,9 @@
     </xsl:template>
 
     <xsl:template name="getSimpleBeanName">
-        <xsl:variable name="name"><xsl:value-of select="name()" /></xsl:variable>
+        <xsl:variable name="name">
+            <xsl:value-of select="name()" />
+        </xsl:variable>
         <xsl:value-of select="name()" />
         <xsl:if test="count(../*[name()=$name]) &gt; 1">[<xsl:value-of select="count(preceding-sibling::node()[name()=$name])+1" />]</xsl:if>
     </xsl:template>
