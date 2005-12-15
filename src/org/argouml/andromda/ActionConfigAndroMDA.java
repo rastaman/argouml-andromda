@@ -65,7 +65,6 @@ public class ActionConfigAndroMDA extends UMLAction {
                 this);
         parent.getActionManager().addAction("andromda:config:action:select-namespace",
                 this);
-        int i = BoxLayout.Y_AXIS;
     }
 
     public void buildDialog() {
