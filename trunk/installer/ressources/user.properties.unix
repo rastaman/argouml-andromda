@@ -1,0 +1,4 @@
+# ArgoUML-AndroMDA custom properties
+argo.andromda.home=$INSTALL_PATH${FILE_SEPARATOR}andromda
+argo.defaultModel=$INSTALL_PATH${FILE_SEPARATOR}andromda${FILE_SEPARATOR}andromda${FILE_SEPARATOR}xml.zips${FILE_SEPARATOR}andromda-profile-${andromda.version}.xml.zip
+argo.maven.home=$INSTALL_PATH${FILE_SEPARATOR}maven

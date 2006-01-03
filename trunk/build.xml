@@ -50,7 +50,7 @@ etc.
 	<!-- Initialization target                                               -->
 	<!-- =================================================================== -->
 
-	<target name="init">
+	<target name="init" description="--> Define properties">
 
 		<tstamp />
 
@@ -133,7 +133,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Help on usage                                                       -->
 	<!-- =================================================================== -->
-	<target name="usage" depends="init">
+	<target name="usage" depends="init" description="--> Help">
 		<echo message="" />
 		<echo message="" />
 		<echo message="${Name} Build file" />
@@ -167,7 +167,7 @@ etc.
 	<!-- Compiles the source directory                                       -->
 	<!-- =================================================================== -->
 
-	<target name="compile" depends="prepare">
+	<target name="compile" depends="prepare" description="--> Compile">
 
 		<echo message="Compiling the sources" />
 
@@ -189,7 +189,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Creates the class package                                           -->
 	<!-- =================================================================== -->
-	<target name="package" depends="compile">
+	<target name="package" depends="compile" description="--> Create and package the module">
 		<manifest file="${module.build.dest}/${manifest}">
 			<attribute name="Class-Path" value="${swixml.jar} ${jdom.jar}" />
 		</manifest>
@@ -217,7 +217,8 @@ etc.
 
 
 	<!-- - - - - - - - - - - - - - - - - - 
-          target: add-manifest-entry                      
+          target: add-manifest-entry
+          description: Add entries to a manifest file
          - - - - - - - - - - - - - - - - - -->
 	<target name="add-manifest-entry" depends="init">
 		<manifest file="${the.manifest}" mode="update">
@@ -239,7 +240,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Run ArgoUML from compiled sources                                   -->
 	<!-- =================================================================== -->
-	<target name="run" depends="install">
+	<target name="run" depends="install" description="--> Run ArgoUML with the AndroMDA module">
 		<echo message="--- Executing ${Name} ---" />
 		<java classname="org.argouml.application.Main" fork="yes"
 			taskname="argouml-andromda"
@@ -266,7 +267,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Debug ArgoUML from compiled sources                                   -->
 	<!-- =================================================================== -->
-	<target name="debug" depends="install">
+	<target name="debug" depends="install" description="--> Run in debug mode">
 		<echo message="--- Executing ${Name} ---" />
 		<java classname="org.argouml.application.Main" fork="yes"		          
 			taskname="argouml-andromda"
@@ -302,7 +303,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Clean targets                                                       -->
 	<!-- =================================================================== -->
-	<target name="clean" depends="init">
+	<target name="clean" depends="init" description="--> Clean">
 		<delete file="${developer.lib.dir}/ext/${module.jarfile.name}" />
 		<delete file="${argo.build.dir}/ext/${module.jarfile.name}" />
 		<delete dir="${module.build.dir}" />
@@ -311,7 +312,7 @@ etc.
 	<!-- =================================================================== -->
 	<!-- Move the jar file into the extension directory.                     -->
 	<!-- =================================================================== -->
-	<target name="install" depends="init,clean,package">
+	<target name="install" depends="init,clean,package" description="--> Install the module in ArgoUML">
 		<copy todir="${argo.build.dir}/ext" overwrite="true">
 			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
 			<fileset dir="${module.lib.dir}" includes="*.jar" />

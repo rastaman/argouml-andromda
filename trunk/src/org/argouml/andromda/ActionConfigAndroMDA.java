@@ -75,7 +75,7 @@ public class ActionConfigAndroMDA extends UMLAction {
                 //TODO: Use the DOM document instead of re-parsing the file
                 configForm = getDocument(configLocation);
                 dialog = new ArgoDialog(parent.getParentFrame(),
-                        "AndroMDA Configuration", ArgoDialog.DEFAULT_OPTION,
+                        "AndroMDA Configuration", 0,
                         true);
                 JPanel contents = new JPanel();
                 parent.getSwingEngine().insert(configForm, contents);

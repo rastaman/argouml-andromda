@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<frame>
+
+    <itemList id="config:listmodel">
+        <item name="toto" value="/namespace[@name='toto']"/>
+        <item name="titi" value="/namespace[@name='titi']"/>
+    </itemList>
+
+    <panel>
+        <combobox id="config:list" initclass="org.argouml.andromda.ComboModel(config:listmodel)"/>
+    </panel>
+
+</frame>

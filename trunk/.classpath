@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="org/argouml/soffice/" kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
-	<classpathentry kind="lib" path="lib/swixml-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/argouml"/>
-	<classpathentry kind="output" path="build"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/argouml-mdr"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/swidgets"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/toolbar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/swixml"/>
+	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/swixml-1.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gef"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
