@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     27 août 2005 00:19:39                                                        
+
+     ArgoUML-AndroMDA Installer
+     Require Ant 1.6+          
+     lmaitre                                                                
+     ====================================================================== -->
+<project name="ArgoUML-AndroMDA Installer" default="build" basedir=".">
+
+	<description>ArgoUML-AndroMDA installer helper script.</description>
+
+
+	<!-- ================================= 
+          target: init
+         ================================= -->
+	<target name="init" description="--> Initialize some properties">
+		<!-- 
+		By default we assume that IzPack 3.8 is installed at the root of 
+		your workspace, (the folder which contain the folder argouml-andromda)
+		-->
+		<property name="izpack.dir" value="${basedir}/../../IzPack" />
+		<taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
+		<property name="installer.version" value="0.1" />
+		<property name="installer.name" value="argouml-andromda-installer" />
+		<property name="dist.dir" value="${basedir}/dist" />
+	</target>
+
+	<!-- ================================= 
+          target: build              
+         ================================= -->
+	<target name="build" depends="init,clean" description="--> Create the module installer">
+		<echo message="Makes the installer using IzPack" />
+		<izpack input="${basedir}/install.xml" output="${dist.dir}/${installer.name}-${installer.version}.jar" installerType="standard" basedir="${basedir}" izPackDir="${izpack.dir}" />
+		<izpack input="${basedir}/install.xml" output="${dist.dir}/download/${installer.name}-${installer.version}.jar" basedir="${basedir}" izPackDir="${izpack.dir}" />
+	</target>
+
+	<!-- ================================= 
+          target: clean              
+         ================================= -->
+	<target name="clean" depends="init" description="--> Clean dist folder">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${dist.dir}" defaultexcludes="false">
+				<include name="**" />
+			</fileset>
+			<fileset dir="${basedir}/argouml-andromda" defaultexcludes="false">
+				<include name="**" />
+			</fileset>
+		</delete>
+		<mkdir dir="argouml-andromda" />
+		<copy todir="argouml-andromda" flatten="true">
+			<fileset dir="..">
+				<include name="build/*.jar" />
+				<include name="lib/*.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/download" />
+	</target>
+
+
+	<!-- ================================= 
+          target: dist              
+         ================================= -->
+	<target name="dist" depends="init" description="--> Create source distribution of the installer">
+		<zip destfile="${dist.dir}/${installer.name}-${installer.version}-pkg-src.zip">
+			<fileset dir="${basedir}">
+				<include name="build.xml" />
+				<include name="install.xml" />
+				<include name="ressources/**" />
+				<include name="ant/**" />
+			</fileset>
+		</zip>
+	</target>
+
+	<!-- ================================= 
+	          target: install              
+	         ================================= -->
+	<target name="install" depends="init" description="--> Remove old install and launch installer">
+		<copy tofile="${user.home}/argo.user.properties" file="${user.home}/argo.user.properties.bak" overwrite="true"/>
+		<java jar="${dist.dir}/${installer.name}-${installer.version}.jar" fork="true" />
+	</target>
+
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: uninstall                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="uninstall">
+	<copy tofile="${user.home}/argo.user.properties.bak" file="${user.home}/argo.user.properties" overwrite="true"/>
+    </target>
+
+
+</project>
