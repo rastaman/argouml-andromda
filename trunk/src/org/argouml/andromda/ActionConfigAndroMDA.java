@@ -21,20 +21,18 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.apache.xpath.domapi.XPathEvaluatorImpl;
 import org.argouml.modules.context.ModuleContext;
 import org.argouml.modules.gui.ComboModel;
 import org.argouml.modules.gui.DOMWriter;
 import org.argouml.modules.gui.SwixMLUtils;
 import org.argouml.ui.ArgoDialog;
 import org.argouml.uml.ui.UMLAction;
+import org.jaxen.XPath;
+import org.jaxen.dom.DOMXPath;
 import org.jdom.Document;
 import org.jdom.transform.JDOMResult;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.xpath.XPathEvaluator;
-import org.w3c.dom.xpath.XPathNSResolver;
-import org.w3c.dom.xpath.XPathResult;
 import org.xml.sax.InputSource;
 
 public class ActionConfigAndroMDA extends UMLAction {
@@ -214,14 +212,9 @@ public class ActionConfigAndroMDA extends UMLAction {
     public void updateXPath(org.w3c.dom.Document domDoc, String xpath,
             String value) throws Exception {
 
-        // Create an XPath evaluator and pass in the document.
-        XPathEvaluator evaluator = new XPathEvaluatorImpl(domDoc);
-        XPathNSResolver resolver = evaluator.createNSResolver(domDoc);
-        // Evaluate the xpath expression
-        XPathResult result = (XPathResult) evaluator.evaluate(xpath, domDoc,
-                resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-
-        Node n = result.getSingleNodeValue();
+         // Create an XPath evaluator and pass in the document.
+		 XPath path = new DOMXPath(xpath);
+         Node n = (Node) path.selectSingleNode(domDoc.getDocumentElement());
         if (n != null) {
             LOG.info("Set " + xpath + " from " + n.getNodeValue()
                     + " to value " + value);
