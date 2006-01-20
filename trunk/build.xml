@@ -74,6 +74,7 @@ etc.
 
 		<property name="jdom.jar" value="jdom-1.0.jar" />
 		<property name="swixml.jar" value="swixml-1.5.jar" />
+		<property name="jaxen.jar" value="jaxen-1.1-beta-8.jar" />
 
 		<property name="module.lib.dir" value="lib" />
 		<property name="module.lib.jars" value="${jdom.jar},${swixml.jar}" />
@@ -177,8 +178,9 @@ etc.
 		<javac srcdir="${module.build.src}" destdir="${module.build.dest}" excludes="*.txt,*.bat,*.xml,*.sh" debug="${debug}" deprecation="${deprecation}" optimize="${optimize}">
 			<classpath>
 				<fileset dir="${module.lib.dir}">
-					<include name="${swixml.jar}" />
-					<include name="${jdom.jar}" />
+					<include name="${swixml.jar}"/>
+					<include name="${jdom.jar}"/>
+					<include name="${jaxen.jar}"/>
 				</fileset>
 				<path refid="argouml.path"/>
 			</classpath>
@@ -191,7 +193,7 @@ etc.
 	<!-- =================================================================== -->
 	<target name="package" depends="compile" description="--> Create and package the module">
 		<manifest file="${module.build.dest}/${manifest}">
-			<attribute name="Class-Path" value="${swixml.jar} ${jdom.jar}" />
+			<attribute name="Class-Path" value="${swixml.jar} ${jdom.jar} ${jaxen.jar}" />
 		</manifest>
 		<antcall target="add-manifest-entry">
 			<param name="entry.name" value="org/argouml/andromda/AndroMDAModule.class" />
