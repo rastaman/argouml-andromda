@@ -92,6 +92,11 @@ public class AndroMDAModule implements ModuleInterface {
         LOG.info("AndroMDA Module created!");
     }
 
+    public static String getProjectRoot(String project) {
+    		String sep = System.getProperty("file.separator");
+    		return project.substring(0,project.indexOf("mda"+sep+"src"+sep+"uml"));        
+    }
+
     /**
      * @see org.argouml.moduleloader.ModuleInterface#disable()
      */

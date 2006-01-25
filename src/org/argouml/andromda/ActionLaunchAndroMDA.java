@@ -26,7 +26,6 @@ package org.argouml.andromda;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +34,7 @@ import java.util.StringTokenizer;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -73,10 +73,6 @@ public final class ActionLaunchAndroMDA extends UMLAction {
 
     private ArgoDialog goalsDialog = null;
 
-    private String mavenHome;
-    
-    private String projectPath;
-    
     private Frame parentFrame;
     
     /**
@@ -88,12 +84,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
     }
 
     //
-    
-    private String getProjectRoot(String project) {
-        String sep = System.getProperty("file.separator");
-        return project.substring(0,project.indexOf("mda"+sep+"src"+sep+"uml"));        
-    }
-    
+        
     ////////////////////////////////////////////////////////////////
     // Main methods.
 
@@ -142,11 +133,11 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         List goalsButtons = (List) parent.getAttribute("andromda-module:maven:goals");
         List goals = new ArrayList();
         Iterator it = goalsButtons.iterator();
-        JButton tmp;
+        JRadioButton tmp;
         while (it.hasNext()) {
-            tmp = (JButton) it.next();
-            if (tmp.isSelected())
-                goals.add(tmp.getText());
+        		tmp = (JRadioButton) it.next();
+        		if (tmp.isSelected())
+        			goals.add(tmp.getText());        			
         }
         JTextField freeGoals = (JTextField) parent.find("maven:goal:free");
         if (!ValidatorAndroMDA.isNullOrEmpty(freeGoals.getText())) {
@@ -159,16 +150,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
      * @return Returns the mavenHome.
      */
     public String getMavenHome() {
-        if (mavenHome == null)
-            mavenHome = parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
-        return mavenHome;
-    }
-
-    /**
-     * @param mavenHome The mavenHome to set.
-     */
-    public void setMavenHome(String mavenHome) {
-        this.mavenHome = mavenHome;
+        return parent.getProperty(SettingsTabAndroMDA.KEY_MAVEN_HOME);
     }
 
     /**
@@ -203,16 +185,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
      * @return Returns the projectPath.
      */
     public String getProjectPath() {
-        if (projectPath==null)
-            projectPath = parent.getProjectPath();
-        return projectPath;
-    }
-
-    /**
-     * @param projectPath The projectPath to set.
-     */
-    public void setProjectPath(String projectPath) {
-        this.projectPath = projectPath;
+    		return parent.getProjectPath();
     }
     
     class ClearAction extends AbstractAction {
@@ -240,23 +213,23 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (!ValidatorAndroMDA.validateFile(projectPath)) {
-                parent.showError("error.project.not.exist",projectPath);
+            if (!ValidatorAndroMDA.validateFile(getProjectPath())) {
+                parent.showError("error.project.not.exist",getProjectPath());
                 return;
             }
-            if (!ValidatorAndroMDA.validateFolder(mavenHome)) {
+            if (!ValidatorAndroMDA.validateFolder(getMavenHome())) {
                 parent.showError("error.maven.not.set");
                 return;
             }
             try {
-                String projectRoot = getProjectRoot(projectPath); 
-                if (!ValidatorAndroMDA.validateFile(projectPath+File.pathSeparator+"project.xml")) {
-                    parent.showError("error.maven.project.not.exist",projectPath);
+                String projectRoot = AndroMDAModule.getProjectRoot(getProjectPath()); 
+                if (!ValidatorAndroMDA.validateFile(projectRoot+"project.xml")) {
+                    parent.showError("error.maven.project.not.exist",projectRoot+"project.xml");
                     return;
                 }
                 MavenLauncher launcher = new MavenLauncher();
                 launcher.addGoals(getGoals());
-                launcher.setMavenHome(mavenHome);
+                launcher.setMavenHome(getMavenHome());
                 launcher.setProjectRoot(projectRoot);                
                 launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
                 launcher.setStdErr(new TextAreaOutputStream(mavenError));                
@@ -267,6 +240,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
                 launcher.start();
             } catch (Exception ex) {
                 parent.showError("error.maven.runtime",ex.getMessage());
+                ex.printStackTrace();
             }               
         };
         
