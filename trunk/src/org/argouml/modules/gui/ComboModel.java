@@ -18,13 +18,6 @@ public class ComboModel extends DefaultComboBoxModel {
   private ItemList model;
   
   /**
-   * Constructs a DefaultComboBoxModel object.
-   */
-  public ComboModel() {
-    super();
-  }
-  
-  /**
    * Constructor. Take a string which must be the id of a previously registered
    * itemList in the swixml descriptor.
    * @param arg The id of the itemList from which retrieve the name of the elements
