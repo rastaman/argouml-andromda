@@ -58,7 +58,7 @@ etc.
 
 		<property name="Name" value="ArgoModule-${argo.module.name}" />
 		<property name="name" value="argomodule-${argo.module.name}" />
-		<property name="version" value="0.5.2" />
+		<property name="version" value="${argo.module.version}" />
 		<property name="year" value="2005" />
 
 		<echo message="------------------- ${Name} ${version} [${year}] ----------------" />
@@ -104,7 +104,7 @@ etc.
 		<property name="developer.lib.dir" value="${argo.build.dir}" />
 
 		<!-- Settings for AndroMDA -->
-		<property name="andromda.version" value="3.1-RC1"/>
+		<property name="andromda.version" value="3.1"/>
 		<property name="andromda.home" value="${user.home}/apps/andromda-bin-${andromda.version}"/>
 		
 		<path id="argouml.path">
