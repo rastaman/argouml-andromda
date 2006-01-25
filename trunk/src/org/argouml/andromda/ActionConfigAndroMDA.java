@@ -118,6 +118,10 @@ public class ActionConfigAndroMDA extends UMLAction {
     }
 
     public void display(String namespace) {
+    		if (parent.getProjectPath()==null) {
+                parent.showError("file.not.defined");
+                return;
+    		}
         String andromdaConfig = AndroMDAModule.getProjectRoot(parent.getProjectPath())
                 + "/mda/conf/andromda.xml";
         if (!ValidatorAndroMDA.validateFile(andromdaConfig)) {
