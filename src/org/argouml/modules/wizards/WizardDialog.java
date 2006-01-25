@@ -57,7 +57,7 @@ public class WizardDialog extends Dialog {
 	
 	protected Vector pages = new Vector();
 	
-	protected JPanel jp = new JPanel();
+	protected JPanel buttonsPanel = new JPanel();
 	
 	protected JPanel jp1 = new JPanel();
 	
@@ -115,8 +115,8 @@ public class WizardDialog extends Dialog {
             next = (JButton)swingEngine.find("wizard:next");
             previous = (JButton)swingEngine.find("wizard:previous");
             finish = (JButton)swingEngine.find("wizard:finish");     
-            jp = (JPanel)swingEngine.find("wizard:buttons");
-            this.getContentPane().add(jp, BorderLayout.SOUTH);
+            buttonsPanel = (JPanel)swingEngine.find("wizard:buttons");
+            this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
             this.getContentPane().add(jp1, BorderLayout.CENTER);
             next.addMouseListener(new NextPage());
             previous.addMouseListener(new PreviousPage());
@@ -175,9 +175,7 @@ public class WizardDialog extends Dialog {
 	public void setPage(int index, WizardPage page) {
 		pages.set(index, page);
 	}
-	public WizardPage getPage(int index) {
-		return (WizardPage) pages.get(index);
-	}
+
 	public WizardPage firstPage() {
 		return (WizardPage) pages.firstElement();
 	}
@@ -275,13 +273,14 @@ public class WizardDialog extends Dialog {
         if (jp2!=null)
             jp2.setVisible(false);
         this.getContentPane().removeAll();
-        this.getContentPane().add(jp,BorderLayout.SOUTH);
+        this.getContentPane().add(buttonsPanel,BorderLayout.SOUTH);
         jp2 = (JPanel) pageAt(pageCounter);
         if (jp2!=null)
             jp2.setVisible(true);
         this.getContentPane().add(jp2, BorderLayout.CENTER);
         this.setTitle(_title+" - "+(pageCounter+1)+"/"+pages.size());
-        this.getContentPane().update(jp2.getGraphics());        
+        if (jp2.getGraphics()!=null)
+        		this.getContentPane().update(jp2.getGraphics());        
 	}
 
 	protected class NextPage extends MouseAdapter implements MouseListener {
