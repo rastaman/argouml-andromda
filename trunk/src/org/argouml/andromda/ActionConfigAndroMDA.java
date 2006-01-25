@@ -118,8 +118,7 @@ public class ActionConfigAndroMDA extends UMLAction {
     }
 
     public void display(String namespace) {
-        String andromdaConfig = (String) parent
-                .getAttribute("andromda:projecthome")
+        String andromdaConfig = AndroMDAModule.getProjectRoot(parent.getProjectPath())
                 + "/mda/conf/andromda.xml";
         if (!ValidatorAndroMDA.validateFile(andromdaConfig)) {
             parent.showError("file.not.exist", andromdaConfig);
