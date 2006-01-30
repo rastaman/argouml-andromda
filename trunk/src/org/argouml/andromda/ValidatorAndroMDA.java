@@ -2,13 +2,17 @@ package org.argouml.andromda;
 
 import java.io.File;
 
+/**
+ * Contains methods for validation.
+ * @author lmaitre
+ */
 public class ValidatorAndroMDA {
 
-    public ValidatorAndroMDA() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
+	/**
+	 * Return true if the filename exist and is a file
+	 * @param filename
+	 * @return
+	 */
     public static boolean validateFile(String filename) {
         if (filename != null) {
             File tmp = new File(filename);
@@ -17,6 +21,11 @@ public class ValidatorAndroMDA {
         return false;
     }
 
+    /**
+     * Return true if the filename exist and is a folder
+     * @param filename
+     * @return
+     */
     public static boolean validateFolder(String filename) {
         if (filename != null) {
             File tmp = new File(filename);
@@ -25,7 +34,12 @@ public class ValidatorAndroMDA {
         return false;
     }
     
+    /**
+     * Return true if the string is null or empty
+     * @param str
+     * @return
+     */
     public static boolean isNullOrEmpty(String str) {
-        return str!=null && !"".equals(str);
+        return str==null || "".equals(str);
     }
 }
