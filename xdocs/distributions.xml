@@ -33,8 +33,15 @@ UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
   <body>
     <section name="Distributions">
       <p>
-      	The following distributions of the ArgoUML AndroMDA module are availables:
+		The is 3 types of distributions :      	
       </p>
+      <ul>
+      	<li>Sources distributions,</li>
+      	<li>Binary distributions,</li>
+      	<li>IzPack installer distributions.</li>
+      </ul>
+      <p>Even if the sources and binaries distributions are maintained, it is highly recommended to download the IzPack installer distribution, because it do some post-installation tasks which can be tedious to do manually.</p>
+      
 	<ul>
 		<li><a href="/maven/argouml/dists/argouml-andromda-module-0.4.zip">argouml-andromda-module-0.4.zip</a> - Zipped binary distribution</li>
 	</ul>
