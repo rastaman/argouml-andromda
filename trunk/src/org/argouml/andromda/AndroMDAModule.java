@@ -50,7 +50,7 @@ public class AndroMDAModule implements ModuleInterface {
         }
         //init all things which have properties localized now, before we load the wizard
         //or other component. Each component must fetch his properties when instantiated,
-        //since they can be potentially unloaded later.
+        //since they can be potentially unloaded later. A bit of IoC would perhaps help here (i.e Spring core).
         Map buttons = context.getAllElements("maven:goal");
         RadioBoxTextAreaUpdaterListener radioListener = new RadioBoxTextAreaUpdaterListener(context,"maven:launch:goal:help");
         radioListener.setPrefix("maven.launch.");
@@ -65,12 +65,14 @@ public class AndroMDAModule implements ModuleInterface {
             }
         }
         context.setAttribute("andromda-module:maven:goals",goalsButtons);
+        context.setAttribute("maven:goal:free",context.find("maven:goal:free"));
         ActionManager actionManager = context.getActionManager();
         ActionLaunchAndroMDA launchAction = new ActionLaunchAndroMDA(context);
         actionManager.addAction("andromda:maven:action:launch",
                 launchAction);
+        ActionConfigAndroMDA configAction = new ActionConfigAndroMDA(context);
         actionManager.addAction("andromda:maven:configuration:edit",
-                new ActionConfigAndroMDA(context));
+                configAction);
         actionManager.addAction("andromda:maven:project:settings",
                 new DialogAction(context,"andromda.project.settings",
                         this.getClass().getResource("project-settings.xml")));
@@ -88,7 +90,8 @@ public class AndroMDAModule implements ModuleInterface {
                 .addAction("andromda:project:chooseparentfolder",
                         new ActionChooseFolder(context,
                                 "parentFolder",
-                                "select.parent.folder"));        
+                                "select.parent.folder"));
+        actionManager.addAction("andromda:action:showconsole",null);
         LOG.info("AndroMDA Module created!");
     }
 
