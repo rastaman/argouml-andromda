@@ -320,6 +320,15 @@ etc.
 		<copy todir="${developer.lib.dir}/ext" overwrite="true">
 			<fileset dir="${module.lib.dir}" includes="${commons-exec.jar}" />
 		</copy>
+		<!-- We ship the Argo Profile Launcher jar with the AndroMDA module -->
+		<copy todir="../build">
+			<fileset dir="${module.lib.dir}">
+			    <include name="${commons-exec.jar}"/>
+			</fileset>
+			<fileset dir="build">
+			    <include name="${module.jarfile.name}"/>
+			</fileset>
+		</copy>
 	</target>
 	
     <!-- ================================= 
