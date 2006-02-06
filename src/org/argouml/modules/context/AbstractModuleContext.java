@@ -6,6 +6,7 @@ package org.argouml.modules.context;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Frame;
+import java.awt.Panel;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.argouml.modules.gui.Item;
 import org.argouml.modules.gui.ItemList;
 import org.argouml.modules.gui.SwixMLUtils;
 import org.argouml.ui.ArgoDialog;
+import org.jdom.Document;
 import org.swixml.ConverterLibrary;
 import org.swixml.SwingEngine;
 
@@ -217,5 +219,18 @@ public abstract class AbstractModuleContext implements ModuleContext {
     public Map getAttributes() {
         return attributes;
     }
-    
+
+    public void replace(Document configForm , Container contents) throws Exception {
+    		//I will enjoy debug things like the following on my Dual Core :-)
+    		SwingEngine forked = new SwingEngine();
+    		forked.insert(configForm,contents);
+    		Iterator keys = forked.getIdMap().keySet().iterator();
+    		Map actual = swingEngine.getIdMap();
+    		String id; 
+    		while (keys.hasNext()) {
+    			id = (String) keys.toString();
+    			if (!actual.containsKey(id))
+    				actual.put(id,forked.getIdMap().get(id));
+    		}
+    }
 }
