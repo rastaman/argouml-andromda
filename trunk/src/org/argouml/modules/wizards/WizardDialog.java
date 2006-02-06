@@ -353,4 +353,16 @@ public class WizardDialog extends Dialog {
         pageCounter = 0;
         goToPage(pageCounter);
     }
+    
+	protected class ResetWizard extends MouseAdapter implements MouseListener {
+
+		public ResetWizard() {
+		}
+
+		public void mouseClicked(MouseEvent me) {
+			if (me.getSource() != null) {
+			}
+		}
+	}
+
 }
