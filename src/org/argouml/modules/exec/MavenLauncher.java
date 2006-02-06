@@ -36,13 +36,27 @@ public class MavenLauncher extends Thread {
         ext = System.getProperty("os.name").indexOf("Windows") > -1 ? ".bat" : "";
     }
 
+    private String getGoalsAsString(List goals) {
+    		StringBuffer sb = new StringBuffer();
+    		if (goals!=null) {
+        		Iterator it = goals.iterator();
+        		while (it.hasNext()) {
+        			sb.append(it.next());
+        			if (it.hasNext())
+        				sb.append(",");
+        		}
+    		}
+    		return sb.toString();
+    }
+    
     public void run() {
         try
         {
             File mavenExec = new File(mavenHome + sep + "bin" + sep + "maven" + ext );
             File workDir = new File(projectRoot);
-            PrintWriter out = new PrintWriter(stdOut);            
-            out.println("[ARGOUML] Execute '"+mavenExec.getCanonicalPath()+"' in '"+workDir.getCanonicalPath());
+            PrintWriter out = new PrintWriter(stdOut);
+            out.println("[ARGOUML] Execute '"+mavenExec.getCanonicalPath()+"' in '"+workDir.getCanonicalPath()+"'.");
+            out.println("[ARGOUML] Goals: "+getGoalsAsString(goals));
             out.flush();
             Runtime rt = Runtime.getRuntime();
             Vector commands = new Vector();
