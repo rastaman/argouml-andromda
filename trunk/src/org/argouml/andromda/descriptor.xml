@@ -29,8 +29,8 @@
             <!-- 
                 <menuitem id="andromda:menu:startserver" text="andromda.menu.server.start" action="andromda:action:startserver"/>
                 <menuitem id="andromda:menu:stopserver" text="andromda.menu.server.stop" action="andromda:action:stopserver"/>
-                <menuitem id="andromda:menu:showconsole" text="andromda.menu.console.show" action="andromda:action:showconsole"/>
             -->
+                <checkboxmenuitem id="andromda:menu:showconsole" text="andromda.menu.console.show" action="andromda:action:showconsole"/>
         </menu>
     </menubar>
 
@@ -97,7 +97,7 @@
                     <scrollpane horizontalScrollBarPolicy="0"
                         verticalScrollBarPolicy="0">
                         <textarea id="andromda:mavenoutput" columns="80"
-                            rows="10" lineWrap="true" />
+                            rows="10" lineWrap="true" editable="false"/>
                     </scrollpane>
                 </hbox>
                 <hbox preferredSize="640,150" size="640,150"
@@ -105,7 +105,7 @@
                     <scrollpane horizontalScrollBarPolicy="0"
                         verticalScrollBarPolicy="0">
                         <textarea id="andromda:mavenerror" columns="80"
-                            rows="5" lineWrap="true" />
+                            rows="5" lineWrap="true" editable="false"/>
                     </scrollpane>
                 </hbox>
             </vbox>

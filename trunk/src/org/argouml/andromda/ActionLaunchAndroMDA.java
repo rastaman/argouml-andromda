@@ -117,7 +117,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         dialog.addButton(clear);
         dialog.setContent(mavenPanel);
     }
-
+    
     private void buildGoalsDialog(Frame owner) {
         goalsDialog = new ArgoDialog(owner, parent.localize("maven.launch"), false);
         parent.getActionManager().addAction("andromda:maven:action:run",
@@ -140,6 +140,7 @@ public final class ActionLaunchAndroMDA extends UMLAction {
         			goals.add(tmp.getText());        			
         }
         JTextField freeGoals = (JTextField) parent.find("maven:goal:free");
+        LOG.info("Freegoals are "+freeGoals.getText()+"[!nullOrEmpty="+!ValidatorAndroMDA.isNullOrEmpty(freeGoals.getText())+"]");
         if (!ValidatorAndroMDA.isNullOrEmpty(freeGoals.getText())) {
             goals.addAll(getArguments(freeGoals.getText()));
         }
@@ -227,10 +228,13 @@ public final class ActionLaunchAndroMDA extends UMLAction {
                     parent.showError("error.maven.project.not.exist",projectRoot+"project.xml");
                     return;
                 }
+                if (goalsDialog.isVisible()) {
+                		goalsDialog.setVisible(false);
+                }
                 MavenLauncher launcher = new MavenLauncher();
                 launcher.addGoals(getGoals());
                 launcher.setMavenHome(getMavenHome());
-                launcher.setProjectRoot(projectRoot);                
+                launcher.setProjectRoot(projectRoot);               
                 launcher.setStdOut(new TextAreaOutputStream(mavenOutput));          
                 launcher.setStdErr(new TextAreaOutputStream(mavenError));                
                 //GUI
