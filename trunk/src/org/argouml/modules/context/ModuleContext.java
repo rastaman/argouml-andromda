@@ -88,6 +88,8 @@ public interface ModuleContext {
 
     public void insert(URL ressource, Container container) throws Exception;
 
+    public void replace(org.jdom.Document doc, Container container) throws Exception;
+
     /**
      * Return all elements in this namespace. A namespace in the xml gui descriptor
      * is denotated by &lt;namespacename&gt;:objectid. This method return all elements
