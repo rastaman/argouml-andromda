@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+
+<!-- ===========================================================================
+$ Id $
+// Copyright (c) 2006 The Regents of the University of California. All
+// Rights Reserved. Permission to use, copy, modify, and distribute this
+// software and its documentation without fee, and without a written
+// agreement is hereby granted, provided that the above copyright notice
+// and this paragraph appear in all copies.  This software program and
+// documentation are copyrighted by The Regents of the University of
+// California. The software program and documentation are supplied "AS
+// IS", without any accompanying services from The Regents. The Regents
+// does not warrant that the operation of the program will be
+// uninterrupted or error-free. The end-user understands that the program
+// was developed for research purposes and is advised not to rely
+// exclusively on the program for any reason.  IN NO EVENT SHALL THE
+// UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+// THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE. THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE
+// PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+// CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT,
+// UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+                  ArgoUML Launcher Module build file
+
+This is the build file for building the ArgoUML Launcher module.
+
+For this file to work you need to have argouml and argouml-mdr either checked out 
+alongside this directory and built using the package target or downloaded a release
+and unpacked in a directory argouml/build alongside this one. Like this:
+
+argouml-andromda/launcher/build.xml <- This file.
+argouml/build/argouml-model.jar
+argouml/build/argouml.jar
+argouml/build/argouml-mdr.jar <- The module depend also on ArgoUML-MDR
+argouml/build/log4j.jar
+argouml/build/xml-apis.jar
+argouml/build/xercesImpl.jar
+etc.
+
+============================================================================ -->
+
+<project name="launcher-module" default="usage" basedir=".">
+
+	<!-- =================================================================== -->
+	<!-- Initialization target                                               -->
+	<!-- =================================================================== -->
+
+	<target name="init" description="--> Define properties">
+
+		<tstamp />
+
+		<property file="module.properties" />
+
+		<property name="Name" value="ArgoModule-${argo.module.name}" />
+		<property name="name" value="argomodule-${argo.module.name}" />
+		<property name="version" value="${argo.module.version}" />
+		<property name="year" value="2006" />
+
+		<property name="main.class" value="org.argouml.launcher.ArgoLauncher"/>
+
+		<echo message="------------------- ${Name} ${version} [${year}] ----------------" />
+
+		<property name="argo.root" value="../../argouml" />
+
+		<property name="module.root" value="${basedir}" />
+		<property name="argo.src.dir" value="${argo.root}/src_new" />
+		<property name="module.src.dir" value="src" />
+
+		<property name="argo.build.dir" value="${argo.root}/build" />
+		<property name="argo.build.src" value="${argo.root}/src_new" />
+
+		<property name="jdom.jar" value="jdom-1.0.jar" />
+		<property name="swixml.jar" value="swixml-1.5.jar" />
+		<property name="jaxen.jar" value="jaxen-1.1-beta-8.jar" />
+		<property name="commons-exec.jar" value="exec-1.0-SNAPSHOT.jar" />
+
+		<property name="module.lib.dir" value="../lib" />
+		<property name="module.lib.jars" value="${jdom.jar},${swixml.jar},${jaxen.jar},${commons-exec.jar}" />
+
+		<property name="classpath" value="${module.lib.dir}/${jdom.jar}:${module.lib.dir}/${swixml.jar}:${argo.build.dir}/ocl-argo.jar:${argo.build.dir}/gef.jar:${argo.build.dir}/antlrall.jar:${argo.build.dir}/log4j.jar" />
+		<property name="ant.xml-libs" value="${ANT_HOME}/lib/jaxp.jar:${ANT_HOME}/lib/parser.jar" />
+
+		<property name="packages" value="org.argouml.*" />
+		<property name="manifest" value="manifest.mf" />
+		<property name="manifest.src" value="${module.src.dir}/org/${manifest}" />
+
+		<property name="module.build.dir" value="${module.root}/build" />
+		<property name="module.build.src" value="${module.src.dir}" />
+		<property name="module.build.dest" value="${module.build.dir}/classes" />
+		<property name="argo.build.dest" value="${argo.build.dir}/classes" />
+
+		<property name="argo.jarfile" value="${argo.build.dir}/argouml.jar" />
+		<property name="module.jarfile.name" value="${argo.module.jarfile}.jar" />
+		<property name="module.jarfile" value="${module.build.dir}/${module.jarfile.name}" />
+
+		<property file="${user.home}/.argo.ant.properties" />
+		<property file="${user.home}/.ant.properties" />
+
+		<property name="debug" value="on" />
+		<property name="optimize" value="off" />
+		<property name="deprecation" value="off" />
+		<!--
+		<property name="developer.lib.dir" value="${argo.build.dir}" />
+		-->
+		<property name="developer.lib.dir" value="${user.home}/argouml-dist" />
+		
+		<path id="argouml.path">
+			<fileset dir="${argo.build.dir}">
+				<include name="argouml.jar" />
+				<include name="argouml-model.jar" />
+				<include name="argouml-mdr.jar" />
+				<include name="java-interfaces.jar" />
+				<include name="mdrapi.jar" />
+				<include name="mof.jar" />
+				<include name="nbmdr.jar" />
+				<include name="jmi.jar" />
+				<include name="jmiutils.jar" />
+				<include name="ocl-argo.jar" />
+				<include name="antlrall.jar" />
+				<include name="log4j.jar" />
+				<include name="gef.jar" />
+				<include name="swidgets.jar" />
+				<include name="toolbar.jar" />
+			</fileset>
+		</path>
+	</target>
+
+	<!-- Note this file can only make Ant display values set in the file correctly, -->
+	<!-- but external values in the environment or properties file will be operational.  -->
+
+	<!-- =================================================================== -->
+	<!-- Help on usage                                                       -->
+	<!-- =================================================================== -->
+	<target name="usage" depends="init" description="--> Help">
+		<echo message="" />
+		<echo message="" />
+		<echo message="${Name} Build file" />
+		<echo message="-------------------------------------------------------------" />
+		<echo message="" />
+		<echo message=" available targets are:" />
+		<echo message="" />
+		<echo message="   compile      --> compiles the source code to the tree under ${module.build.dir}" />
+		<echo message="   package      --> generates the ${argo.module.jarfile}.jar file" />
+		<echo message="   run          --> runs ArgoUML ${argo.module.jarfile}.jar" />
+		<echo message="   debug        --> runs ArgoUML ${argo.module.jarfile}.jar" />
+		<echo message="   install      --> merges ./org into ../src_new/org tree" />
+		<echo message="   usage        --> show this message (default)" />
+		<echo message="" />
+		<echo message=" See the comments inside the build.xml file for more details." />
+		<echo message="-------------------------------------------------------------" />
+		<echo message="" />
+		<echo message="" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares the build directory                                        -->
+	<!-- =================================================================== -->
+	<target name="prepare" depends="init">
+		<!-- create directories -->
+		<echo message="Preparing the build directories" />
+		<!-- These must be there already -->
+		<mkdir dir="${module.build.dir}"/>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Compiles the source directory                                       -->
+	<!-- =================================================================== -->
+
+	<target name="compile" depends="prepare" description="--> Compile">
+
+		<echo message="Compiling the sources" />
+
+		<!-- create directories -->
+		<mkdir dir="${module.build.dest}" />
+
+		<javac srcdir="${module.build.src}" destdir="${module.build.dest}" excludes="*.txt,*.bat,*.xml,*.sh" debug="${debug}" deprecation="${deprecation}" optimize="${optimize}">
+			<classpath>
+				<fileset dir="${module.lib.dir}">
+					<include name="${commons-exec.jar}"/>
+				</fileset>
+				<path refid="argouml.path"/>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<!-- =================================================================== -->
+	<!-- Creates the class package                                           -->
+	<!-- =================================================================== -->
+	<target name="package" depends="compile" description="--> Create and package the module">
+		<manifest file="${module.build.dest}/${manifest}">
+			<attribute name="Class-Path" value="argouml.jar ext/${commons-exec.jar}" />
+			<attribute name="Main-Class" value="${main.class}" />
+		</manifest>
+		<!--
+		<antcall target="add-manifest-entry">
+			<param name="entry.name" value="org/argouml/launcher/LauncherModule.class" />
+			<param name="entry.ext" value="module.launcher.ui.launcher" />
+			<param name="plugin.name" value="ArgoUML Launcher Plugin" />
+			<param name="the.manifest" value="${module.build.dest}/${manifest}" />
+		</antcall>
+		-->
+		<copy todir="${module.build.dest}">
+			<fileset dir="${module.src.dir}">
+				<include name="**/*.xml" />
+				<include name="**/*.xsl" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+		<jar jarfile="${module.jarfile}" basedir="${module.build.dest}" includes="org/argouml/**" excludes="${manifest}" manifest="${module.build.dest}/${manifest}" />
+	</target>
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: add-manifest-entry
+          description: Add entries to a manifest file
+         - - - - - - - - - - - - - - - - - -->
+	<target name="add-manifest-entry" depends="init">
+		<manifest file="${the.manifest}" mode="update">
+			<section name="${entry.name}">
+				<attribute name="Extension-name" value="${entry.ext}" />
+				<!-- NOTE: I had to add a 2 at the end of the spec title because otherwise the 
+				module(s) was initialized 2 times (by the moduleloader2 and after by the old 
+				moduleloader -->
+				<attribute name="Specification-Title" value="ArgoUML Dynamic Load Module 2" />
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Vendor" value="University of California" />
+				<attribute name="Implementation-Title" value="${plugin.name}" />
+				<attribute name="Implementation-Version" value="${version} ${TODAY}" />
+				<attribute name="Implementation-Vendor" value="${user.name}" />
+			</section>
+		</manifest>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Run ArgoUML from compiled sources                                   -->
+	<!-- =================================================================== -->
+	<target name="run" depends="install" description="--> Run ArgoUML with the Launcher module">
+		<echo message="--- Executing ${Name} ---" />
+		<java classname="${main.class}" fork="yes" spawn="yes"
+			taskname="argouml-launcher"
+		    	maxmemory="500M" newenvironment="true" dir="${developer.lib.dir}">
+			<sysproperty key="org.netbeans.lib.jmi.Logger"
+	                   value="0"/> 
+			<sysproperty key="org.netbeans.mdr.Logger"
+	                   value="0"/>
+			<classpath>
+				<fileset dir="${developer.lib.dir}">
+					<include name="${module.jarfile.name}" />
+				</fileset>
+				<fileset dir="${developer.lib.dir}">
+					<include name="${commons-exec.jar}" />
+				</fileset>
+				<path refid="argouml.path"/>				
+			</classpath>
+		</java>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Debug ArgoUML from compiled sources                                   -->
+	<!-- =================================================================== -->
+	<target name="debug" depends="install" description="--> Run in debug mode">
+		<echo message="--- Executing ${Name} ---" />
+		<java classname="${main.class}" fork="yes"		          
+			taskname="argouml-launcher"
+		    	maxmemory="500M">
+			<sysproperty key="log4j.configuration"
+	                   value="org/argouml/resource/info_console.lcf"/>
+			<sysproperty key="argouml.model.implementation"
+	                   value="org.argouml.model.mdr.MDRModelImplementation"/>
+			<sysproperty key="org.netbeans.mdr.storagemodel.StorageFactoryClassName"
+	                   value="org.netbeans.mdr.persistence.btreeimpl.btreestorage.BtreeFactory"/>
+			<sysproperty key="org.netbeans.lib.jmi.Logger"
+	                   value="0"/>
+			<sysproperty key="org.netbeans.mdr.Logger"
+	                   value="0"/>
+			<classpath>
+				<!--
+				<fileset dir="${module.build.dir}">
+					<include name="${module.jarfile.name}" />
+				</fileset>
+				-->
+				<fileset dir="${module.lib.dir}">
+					<include name="${swixml.jar}" />
+					<include name="${jdom.jar}" />
+				</fileset>
+				<path refid="argouml.path"/>				
+			</classpath>
+
+		</java>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Clean targets                                                       -->
+	<!-- =================================================================== -->
+	<target name="clean" depends="init" description="--> Clean">
+		<delete file="${developer.lib.dir}/${module.jarfile.name}" />
+		<delete file="${argo.build.dir}/${module.jarfile.name}" />
+		<delete dir="${module.build.dir}" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Move the jar file into the extension directory.                     -->
+	<!-- =================================================================== -->
+	<target name="install" depends="init,clean,package" description="--> Install the module in ArgoUML">
+		<copy todir="${argo.build.dir}" overwrite="true">
+			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
+		</copy>
+		<copy todir="${argo.build.dir}/ext" overwrite="true">
+			<fileset dir="${module.lib.dir}" includes="${commons-exec.jar}" />
+		</copy>
+		<copy todir="${developer.lib.dir}" overwrite="true">
+			<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
+		</copy>
+		<copy todir="${developer.lib.dir}/ext" overwrite="true">
+			<fileset dir="${module.lib.dir}" includes="${commons-exec.jar}" />
+		</copy>
+	</target>
+	
+    <!-- ================================= 
+          target: Dist              
+         ================================= -->
+    <target name="dist" depends="init,clean,package" description="--> Prepare distribution">
+        <zip destfile="${module.build.dir}/${argo.module.jarfile}-${argo.module.version}.zip">
+		<fileset dir="${module.build.dir}" includes="${module.jarfile.name}" />
+		<fileset dir="${module.lib.dir}" includes="*.jar" />
+        </zip>
+    </target>
+
+
+</project>
+
+<!-- End of file -->
